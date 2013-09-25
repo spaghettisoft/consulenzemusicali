@@ -1,0 +1,10 @@
+D/upgrade////
+/search-create.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-packages-create.sql/1.7/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-packages-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-sc-create.sql/1.4/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-sc-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-tables-create.sql/1.6/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/search-tables-drop.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/syndication-create.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat

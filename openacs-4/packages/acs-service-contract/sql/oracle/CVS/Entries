@@ -1,0 +1,15 @@
+D/upgrade////
+/acs-sc-msg-types-create.sql/1.7/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-msg-types-drop.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-object-types-create.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-object-types-drop.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-packages-create.sql/1.15/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-packages-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-tables-create.sql/1.5/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-tables-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-views-create.sql/1.4/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-sc-views-drop.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-service-contract-create.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/acs-service-contract-drop.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/sc-sample-create.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/sc-sample-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat

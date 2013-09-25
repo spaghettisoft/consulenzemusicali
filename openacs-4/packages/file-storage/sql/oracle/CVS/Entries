@@ -1,0 +1,9 @@
+D/upgrade////
+/file-storage-create.sql/1.21/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-drop.sql/1.12/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-notifications-create.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-notifications-drop.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-package-create.sql/1.16/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-rss-create.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-views-create.sql/1.12/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/file-storage-views-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat

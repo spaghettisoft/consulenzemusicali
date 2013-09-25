@@ -1,0 +1,24 @@
+D/oracle////
+D/tcl////
+/README/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/TODO/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/aolserver-errors.pl/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/build-release.sh/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/check-errors-output.sh/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/checkout.sh/1.15/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/config-replace.sh/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/crawl-links.test/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/dotlrn-basic-setup.test/1.9/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/functions.sh/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/install-and-alert.sh/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/install.sh/1.45/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/install.tcl/1.27/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/openacs-install.test/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/post-checkout-script.sh/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/ref-timezones-data.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/ref-timezones-rules.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/run-create.sh/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/tcl-api-test.test/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/updateserver.sh/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/users-data.csv/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/warn-if-installation-errors.sh/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat

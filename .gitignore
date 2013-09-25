@@ -1,0 +1,13 @@
+###########################################################
+# File nel Content Repository: sono tanti e non li volete #
+###########################################################
+
+openacs-4/content-repository-content-files/*
+
+###############
+# File di log #
+###############
+
+openacs-4/log/*
+
+

@@ -1,0 +1,27 @@
+D/upgrade////
+/acs-content-repository-create.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-create.sql/1.29.4.1/Tue Sep 17 21:26:16 2013//Topenacs-5-8-compat
+/content-drop.sql/1.4/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-extlink.sql/1.10/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-folder.sql/1.22/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-image-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-image.sql/1.15/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-item.sql/1.31/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-keyword.sql/1.6/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-package.sql/1.3/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-perms.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-revision.sql/1.16/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-schedule.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-search.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-symlink.sql/1.9/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-template.sql/1.7/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-test.sql/1.5/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-type.sql/1.11/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-update.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-util.sql/1.3/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/content-xml.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/datatype-upgrade.sql/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/doc-package.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/packages-create.sql/1.28/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/types-create.sql/1.5/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/types-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat

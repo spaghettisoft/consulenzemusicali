@@ -1,0 +1,21 @@
+D/tests////
+D/upgrade////
+/acs-subsite-create.sql/1.8/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/acs-subsite-drop.sql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/application-groups-create.sql/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/application-groups-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/email-image-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/email-image.sql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/host-node-map-create.sql/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/host-node-map-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/portraits-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/portraits.sql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/site-node-selection-drop.sql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/site-node-selection.sql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/subsite-callbacks-create.sql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/subsite-callbacks-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/themes-create.sql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/themes-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/user-profiles-create.sql/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/user-profiles-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/user-sc-create.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat

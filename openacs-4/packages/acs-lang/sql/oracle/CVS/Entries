@@ -1,0 +1,7 @@
+D/upgrade////
+/acs-lang-create.sql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/acs-lang-drop.sql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/ad-locales-drop.sql/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/ad-locales.sql/1.37/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/message-catalog-drop.sql/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/message-catalog.sql/1.14/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat

@@ -1,0 +1,31 @@
+D/applications////
+D/attributes////
+D/group-types////
+D/groups////
+D/host-node-map////
+D/object-types////
+D/parties////
+D/rel-segments////
+D/rel-types////
+D/relations////
+D/site-map////
+D/site-nodes////
+D/users////
+/configure.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/configure.tcl/1.12/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/confirm-delete-form.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index-postgresql.xql/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index.adp/1.28/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index.tcl/1.19/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/manage-email-privacy.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/manage-email-privacy.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/permissions-user-add.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/permissions-user-add.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/permissions.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/permissions.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/subsite-add.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/subsite-add.tcl/1.13/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/subsite-convert-type.adp/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/subsite-convert-type.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
