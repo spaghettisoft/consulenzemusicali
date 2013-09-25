@@ -1,0 +1,181 @@
+<master src="/www/blank-master">
+<if @doc@ defined><property name="&doc">doc</property></if>
+
+<style type="text/css">
+  body {
+    font-family:Arial, sans-serif;
+    color:black;
+  }
+  #cm_container {
+      margin-left:12%;
+      margin-right:12%;
+      position:relative;
+      top:2cm;
+  }
+  #cm_group_thumbnail {
+      float:left;
+      width:794px;
+      margin-left: 30px;
+  }
+  .cm_group_name {
+      font-size: 12pt;
+      color:black;
+      text-decoration:none;
+  }
+  .cm_group_name:hover {
+      text-decoration:underline;
+      cursor:pointer;
+  }
+  #cm_groups {
+      float:left;
+      width:179px;
+      height:auto;
+  }
+  .cm_group {
+  }
+  .cm-playlist-players {
+      height:16px;
+  }
+  .cm-playlist-player {
+      float:left;
+      width:60px;
+      height:16px;
+      margin-left:-20px
+  }
+  .cm-playlist-name {
+      float:left;
+      width:100px;
+      margin-left:15px;
+      font-size: 9pt;
+      position:relative;
+      top:3px;
+  }
+  .log {
+      color:black;
+      position:relative;
+      top:507px;
+  }
+  #cm_selected {
+      text-decoration:underline;
+  }
+  #visible_players {
+      position:relative;
+      top:50px;
+  }
+</style>
+
+<script type="text/javascript">
+  $(function() {
+      
+      // ##Fade effect looping on group thumbnails##
+      
+      var content = $('#cm_group_thumbnail');
+      var images = content.find('img');
+      
+      // Animate only if we have more than 1 image
+      if (images.length > 1) {
+	images.hide();
+	
+	var stillDuration = 3000;
+	var fadeDuration = 800;
+	var flag_keep_going = true;
+	
+	function animateImages (index) {
+	    if (!flag_keep_going)
+	      return;
+	    var nextIndex = index + 1;
+	    if (nextIndex >= images.length) {
+		nextIndex = 0;
+	    }
+	    content.find('> :eq(' + index + ')')
+	      .fadeIn(fadeDuration)
+		.delay(stillDuration)
+		  .fadeOut(fadeDuration, function () { 
+		      animateImages(nextIndex) 
+		  });
+	}
+	
+	animateImages(0);
+      }
+      
+      // ##**##
+      
+      
+      // ##Dropdown effect on playlist menus##
+      
+      var players = $('.cm_playlist_players');
+      players.hide();
+      
+      var visiblePlayersContainer = $('#visible_players');
+      
+      function showPlayers(myPlayers, hisPlayers) {
+	var newOwner = myPlayers.parent();
+	if (!newOwner.is('#cm_selected')) {
+	  var prevOwner = $('#cm_selected');
+	  prevOwner.removeAttr('id');
+	  newOwner.attr('id', 'cm_selected');
+	  if (prevOwner.length > 0) {
+	    prevOwner.append(hisPlayers);
+	  }
+	
+	  visiblePlayersContainer.append(myPlayers);
+	  myPlayers.slideDown('slow');
+	}
+      }
+      
+      // ##**##
+      
+      $('.cm_group_name').click(function () {
+	
+	// Stop recurring of animations
+	flag_keep_going = false;
+	
+	// Stop animations running and to be run on all thumbnails
+	var thumbnails = $('#cm_group_thumbnail > img');
+	thumbnails.clearQueue();
+	thumbnails.hide();
+	
+	// Show selected thumbnail
+	$('#thumnail_' + $(this).attr('group_id')).show();
+
+	var myPlayers = $(this).siblings('.cm_playlist_players');
+	var visiblePlayers = visiblePlayersContainer.children();
+	if (visiblePlayers.size() > 0) {
+	    visiblePlayers.slideUp('slow', function () {
+		showPlayers(myPlayers, visiblePlayers);
+	    });
+	} else {
+	    showPlayers(myPlayers);
+	}
+	
+      });
+      
+  });
+</script>
+
+<div id="cm_container">
+  <div id="log">
+    <if @logged_p@ eq 0>
+      <a style="color:black;" class="log" href='@login_url@'>LogIn</a>
+    </if>
+    <else>
+      <a style="color:black;" class="log" href='@logout_url@'>LogOut</a>
+    </else>
+  </div>
+  <div id="cm_groups">
+    <multiple name="groups">
+      <div class="cm_group">
+	<include 
+	  src="/packages/@package_key@/lib/playlists-menu"
+	  group_id="@groups.group_id@"
+	>
+      </div>
+    </multiple>
+    <div id="visible_players"></div>
+  </div>
+  <div id="cm_group_thumbnail">
+    <multiple name="groups">
+      <img id="thumnail_@groups.group_id@" src="@groups.thumbnail_url@" alt="Nessuna immagine per il gruppo selezionato" width="750" border="0">
+    </multiple>
+  </div>
+</div>

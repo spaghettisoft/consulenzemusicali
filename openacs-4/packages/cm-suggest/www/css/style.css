@@ -1,0 +1,72 @@
+body {
+  font-family:Arial, sans-serif;
+  color:black;
+}
+#title {
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:30px;
+}
+#cm_container {
+    margin: 0px auto;
+/*     margin-right:auto; */
+    position:relative;
+    top:30px;
+    width:915px;
+}
+#cm_group_thumbnail {
+    float:left;
+    width:75%;
+    margin-left: 30px;
+}
+.cm_group_name {
+    font-size: 8pt;
+    color:black;
+    text-decoration:none;
+}
+.cm_group_name:hover {
+    text-decoration:underline;
+    cursor:pointer;
+}
+#cm_groups {
+    float:left;
+    width:179px;
+    height:auto;
+}
+.cm_group {
+    height:15px;
+}
+.cm-playlist-players {
+    height:16px;
+}
+.cm-playlist-player {
+    float:left;
+    width:42px;
+/*     height:16px; */
+/*     margin-left:-20px */
+}
+.cm-playlist-name {
+    float:left;
+    width:115px;
+/*     margin-left:15px; */
+    font-size: 8pt;
+    position:relative;
+    bottom:1px;
+}
+.log {
+    font-size: 8pt;
+    color:black;
+    position:relative;
+    top:507px;
+}
+#cm_selected {
+    text-decoration:underline;
+}
+#visible_players {
+    position:relative;
+    top:50px;
+}
+#login {
+    margin-left:60px;
+    font-size:14pt;
+}
