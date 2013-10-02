@@ -4,7 +4,7 @@ ad_library {
     
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
-    @cvs-id $Id: text-html-procs.tcl,v 1.65.6.3 2013/09/05 11:51:00 gustafn Exp $
+    @cvs-id $Id: text-html-procs.tcl,v 1.65.6.7 2013/09/29 20:24:03 gustafn Exp $
 }
 
 
@@ -288,8 +288,7 @@ ad_proc -private util_close_html_tags {
       set frag [string map [list &# "&amp;#"] $html_fragment]
       if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
         # we got an error, so do normal processing
-        ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\n\
-	  checking fragment without tdom"
+        #ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
       } else {
         $doc documentElement root
         set html ""
@@ -646,8 +645,8 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
     # We maintain counter is so that we don't accidentally enter an infinite loop
     set count 0
     while { $i < [string length $html] && ![string equal [string index $html $i] {>}] } {
-        if { [incr count] > 1000 } {
-            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i [expr {$i + 60}]]"
+        if { [incr count] > 3000 } {
+            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
         }
         if { [string range $html $i $i+1] eq "/>" } {
             # This is an XML-style tag ending: <... />
@@ -684,7 +683,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
                 }
                 if { ![regexp -indices -start $i $exp $html match attr_value_idx] } {
                     # No end quote.
-                    set attr_value [string range $html [expr {$i+1}] end]
+                    set attr_value [string range $html $i+1 end]
                     set i [string length $html]
                 } else {
                     set attr_value [string range $html [lindex $attr_value_idx 0] [lindex $attr_value_idx 1]]
@@ -849,7 +848,7 @@ ad_proc -public ad_html_to_text {
 
     for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
         # append everything up to and not including the tag-opening <
-        ad_html_to_text_put_text output [string range $html $last_tag_end [expr {$i - 1}]]
+        ad_html_to_text_put_text output [string range $html $last_tag_end $i-1]
 
         # Check that:
         #  - we're not past the end of the string
@@ -891,7 +890,7 @@ ad_proc -public ad_html_to_text {
         
         set count 0
         while 1 {
-            if {[incr count] > 1000 } {
+            if {[incr count] > 3000 } {
                 # JCD: the programming bug is that an unmatched < in the input runs off forever looking for 
                 # it's closing > and in some long text like program listings you can have lots of quotes 
                 # before you find that >
@@ -941,7 +940,7 @@ ad_proc -public ad_html_to_text {
             incr i
         }
     
-        set full_tag [string range $html $tag_start [expr { $i - 1 }]]
+        set full_tag [string range $html $tag_start $i-1]
         
         if { ![regexp {^(/?)([^\s]+)[\s]*(\s.*)?$} $full_tag match slash tagname attributes] } {
             # A malformed tag -- just delete it
@@ -1283,9 +1282,9 @@ ad_proc util_expand_entities_ie_style { html } {
     for { set i [string first & $html] } { $i != -1 } { set i [string first & $html $i] } {
             
         set match_p 0
-        switch -regexp -- [string index $html [expr {$i+1}]] {
+        switch -regexp -- [string index $html $i+1]] {
             # {
-                switch -regexp -- [string index $html [expr {$i+2}]] {
+                switch -regexp -- [string index $html $i+2] {
                     [xX] {
                         regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
                         set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
@@ -1307,7 +1306,7 @@ ad_proc util_expand_entities_ie_style { html } {
                 }
             }
             [a-zA-Z] {
-                if { [regexp -indices -start [expr {$i}] {\A&([^\s;]+)} $html match entity_idx] } {
+                if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
                     set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
                     if { [info exists entities($entity)] } {
                         set html [string replace $html $i [lindex $match 1] $entities($entity)]
@@ -1378,7 +1377,7 @@ ad_proc wrap_string {input {threshold 80}} {
         }
         # OK, we have a last space pos of some sort
         set real_index_of_space [expr {$start_of_line_index + $last_space_pos}]
-        lappend result_rows [string range $input $start_of_line_index [expr {$real_index_of_space - 1}]]
+        lappend result_rows [string range $input $start_of_line_index $real_index_of_space-1]
         set start_of_line_index [expr {$start_of_line_index + $last_space_pos + 1}]
     }
 }
@@ -1403,8 +1402,7 @@ ad_proc -public ad_html_text_convertable_p {
     # Validate procedure input
     set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
     set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
-    return [expr {[lsearch $valid_froms $from] != -1 &&
-                  [lsearch $valid_tos $to] != -1}]
+    return [expr {$from in $valid_froms && $to in $valid_tos}]
 }
 
 ad_proc -public ad_html_text_convert {
@@ -1689,7 +1687,7 @@ ad_proc -public string_truncate {
 } {
     if { $len > 0 } {
         if { [string length $string] > $len } {
-            set end_index [expr $len-[string length $ellipsis]-1]
+            set end_index [expr {$len-[string length $ellipsis]-1}]
             
             # Back up to the nearest whitespace
             if { ![string is space [string index $string $end_index+1]] } {
@@ -1700,7 +1698,7 @@ ad_proc -public string_truncate {
             
             # If that laves us with an empty string, then ignore whitespace and just truncate mid-word
             if { $end_index == -1 } {
-                set end_index [expr $len-[string length $ellipsis]-1]
+                set end_index [expr {$len-[string length $ellipsis]-1}]
             }
             
             # Chop off extra whitespace at the end
@@ -1772,7 +1770,7 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     if { $html_p eq "t" } {
         return $raw_string
     } else {
-        return [util_convert_plaintext_to_html $raw_string]
+        return [ad_text_to_html $raw_string]
     }
 }
 

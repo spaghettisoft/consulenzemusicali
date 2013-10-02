@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Nov  7 12:14:42 2000
-    @cvs-id $Id: enum-add-2.tcl,v 1.2 2007/01/10 21:22:06 gustafn Exp $
+    @cvs-id $Id: enum-add-2.tcl,v 1.2.10.4 2013/09/09 16:44:19 gustafn Exp $
 
 } {
     attribute_id:integer,notnull
@@ -61,9 +61,9 @@ db_release_unused_handles
 
 if {$operation eq "Add more values"} {
     # redirect to add more values
-    set return_url enum-add?[ad_export_vars {attribute_id return_url}]
+    set return_url enum-add?[export_vars {attribute_id return_url}]
 } elseif { $return_url eq "" } {
-    set return_url one?[ad_export_vars attribute_id]
+    set return_url one?[export_vars attribute_id]
 }
 
 ad_returnredirect $return_url

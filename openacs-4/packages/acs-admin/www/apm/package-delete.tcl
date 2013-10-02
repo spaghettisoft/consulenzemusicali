@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Fri Oct 13 08:40:54 2000
-    @cvs-id $Id: package-delete.tcl,v 1.9 2008/07/29 19:22:23 emmar Exp $
+    @cvs-id $Id: package-delete.tcl,v 1.9.8.6 2013/09/28 12:09:59 gustafn Exp $
 } {
     version_id:naturalnum
 }
@@ -92,22 +92,25 @@ $file_list
 </table>"
 } 
 
-set body "[apm_header -form "action=\"package-delete-2\" method=\"post\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
 
-$warning_text
+set title "Delete"
+set context [list [list "/acs-admin/apm/" "Package Manager"] \
+		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
+		 $title]
 
-<p>Deleting a package removes all record of it from the APM's database.</p>
+set body [subst {
+    <form action='package-delete-2' method='post'>
+    $warning_text
+    <p>Deleting a package removes all record of it from the APM's database.</p>
 
-<p>
+    [export_vars -form {version_id}]
+    $file_list
+   
+    <p>
+    <input type="submit" value="Delete Package">
+    </form>
+}]
 
-[export_form_vars version_id]
-$file_list
-
-<p>
-<input type=submit value=\"Delete Package\">
-</form>
-[ad_footer]"
-
-doc_return 200 text/html $body
+ad_return_template apm
 
 

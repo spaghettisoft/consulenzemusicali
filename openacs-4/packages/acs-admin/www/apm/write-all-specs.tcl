@@ -2,16 +2,20 @@ ad_page_contract {
     Generates package specs for every enabled version.
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 17 April 2000
-    @cvs-id $Id: write-all-specs.tcl,v 1.6 2007/01/10 21:21:59 gustafn Exp $
+    @cvs-id $Id: write-all-specs.tcl,v 1.6.10.2 2013/09/28 17:53:20 gustafn Exp $
 } {
 }
 
-ad_return_top_of_page "[apm_header "Generate Package Specifications"]
+set title "Generate Package Specifications"
+set context [list [list "." "Package Manager"] $title]
 
-Regenerating all package specifications for locally maintained packages.
+ad_return_top_of_page [ad_parse_template -params [list context title] \
+			   "/packages/openacs-default-theme/lib/plain-streaming-head"]
 
-<ul>
-"
+ns_write {
+    Regenerating all package specifications for locally maintained packages.
+    <ul>
+}
 
 db_foreach apm_get_all_packages {
     select version_id, version_name, pretty_name, distribution_uri, v.package_key
@@ -35,9 +39,6 @@ db_foreach apm_get_all_packages {
     }
 }
 
-db_release_unused_handles
-ns_write "</ul>
-
-<a href=\"./\">Return to the Package Manager</a>
-
-[ad_footer]"
+ns_write [subst {</ul>
+<a href="./">Return to the Package Manager</a>
+}]

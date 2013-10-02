@@ -4,25 +4,22 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct  9 00:15:52 2000
-    @cvs-id $Id: packages-install-3.tcl,v 1.14.8.1 2013/08/27 11:44:43 gustafn Exp $
+    @cvs-id $Id: packages-install-3.tcl,v 1.14.8.3 2013/09/28 12:10:00 gustafn Exp $
 } {
 
 }
-
-set pkg_install_list [ad_get_client_property apm pkg_install_list]
-set body ""
-
-append body "[apm_header "Package Installation"]
-<h2>Select Data Model Scripts to Run</h2>
-<p>
-
-Check all the files you want to be loaded into the database.<p>
-<form action=\"packages-install-4\" method=\"post\">
-"
+set title "Package Installation"
+set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
+set body {
+    <h2>Select Data Model Scripts to Run</h2>
+    <p>
+    Check all the files you want to be loaded into the database.<p>
+    <form action="packages-install-4" method="post">
+}
 
 set sql_file_list [list]
 set file_count 0
-foreach pkg_info $pkg_install_list {
+foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 
     set package_key [pkg_info_key $pkg_info]
     set package_path [pkg_info_path $pkg_info]
@@ -59,22 +56,28 @@ foreach pkg_info $pkg_install_list {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
 	    set file_type [lindex $file 1]
-	    append table_rows "  <tr>
-    <td><input type=checkbox checked name=\"sql_file\" value=\"$file_count\"></td>
-    <td>$path</td>
-    <td>[apm_pretty_name_for_file_type $file_type]</td>
-  </tr>"
+	    append table_rows [subst {
+		<tr>
+		<td><input type="checkbox" checked name="sql_file" value="$file_count"></td>
+		<td>$path</td>
+		<td>[apm_pretty_name_for_file_type $file_type]</td>
+		</tr>
+	    }]
 	    incr file_count
 	}
 
         if { $version(auto-mount) eq "" 
 	     && $version(package.type) eq "apm_application" 
 	   } {
-            set mount_html "<input type=\"checkbox\" name=\"mount_p\" value=\"$version(package.key)\" checked> Mount package under the main site at path <input type=\"text\" name=\"mount_path.$version(package.key)\" value=\"$version(package.key)\">"
+            set mount_html [subst {
+		<input type="checkbox" name="mount_p" value="$version(package.key)" checked> 
+		Mount package under the main site at path 
+		<input type="text" name="mount_path.$version(package.key)" value="$version(package.key)">
+	    }]
         } else {
             set mount_html ""
         }
-	append body "
+	append body [subst {
 	Select what data files to load for $version(package-name) $final_version_name
 	<blockquote>
 	<table cellpadding=3 cellspacing=3>
@@ -86,7 +89,8 @@ foreach pkg_info $pkg_install_list {
 	$table_rows
 	</table>
         $mount_html
-       </blockquote> <p>"
+        </blockquote> <p>
+	}]
     }
 }
 
@@ -97,10 +101,9 @@ if {$sql_file_list eq ""} {
     ad_script_abort
 }
 
-append body "
-<input type=submit value=\"Install Packages\">
-</form>
-[ad_footer]
-"
+append body {
+    <input type=submit value="Install Packages">
+    </form>
+}
 
-doc_return 200 text/html $body
+ad_return_template apm

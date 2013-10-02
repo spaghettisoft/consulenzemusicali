@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
 
-# $Id: util-procs.tcl,v 1.26 2013/04/12 16:12:57 gustafn Exp $
+# $Id: util-procs.tcl,v 1.26.2.3 2013/09/13 13:32:10 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -134,7 +134,7 @@ ad_proc -public template::util::is_true { x } {
     @return 0 if the variable can be interpreted as false; 
             1 for true if it can't.
 } {
-  expr [lsearch -exact {0 f false n no off ""} [string tolower $x]] == -1   
+    expr {[string tolower $x] ni {0 f false n no off ""}}
 }
 
 ad_proc -public template::util::lpop { ref } {
@@ -143,10 +143,8 @@ ad_proc -public template::util::lpop { ref } {
 
     @param ref The name of a list in the calling frame on which to operate.
 } {
-
   upvar $ref the_list
-
-  set the_list [lrange $the_list 0 [expr {[llength $the_list] - 2}]]
+  set the_list [lrange $the_list 0 end-1]
 }
 
 ad_proc -public template::util::lnest { listref value next args } {
@@ -229,7 +227,7 @@ ad_proc -public template::util::set_to_list { set args } {
   for { set i 0 } { $i < [ns_set size $set] } { incr i } {
 
     set key [ns_set key $set $i]
-    if { [lsearch -exact $args $key] != -1 } { continue }
+    if { $key in $args } { continue }
 
     lappend result $key [ns_set value $set $i]
   }
@@ -595,15 +593,13 @@ ad_proc -public template::util::clear_cookie { name { domain "" } } {
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 } 
 
-ad_proc -public template::util::quote_html {
+ad_proc -deprecated -public template::util::quote_html {
   html
 } {
   Quote possible HTML tags in the contents of the html parameter.  
 } {
 
-  regsub -all \" [ns_quotehtml $html] \\&quot\; html
-
-  return $html
+  return [ad_quotehtml $html]
 }
 
 ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
@@ -619,7 +615,7 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 
     for { set i 1 } { $i <= $rowcount } { incr i} {
         upvar $multirow_ref:$i arr
-        set arr($column_ref) [template::util::quote_html [set arr($column_ref)]]
+        set arr($column_ref) [ad_quotehtml [set arr($column_ref)]]
     }
 
 }

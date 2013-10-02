@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author oumi@arsdigita.com
     @creation-date 2000-02-07
-    @cvs-id $Id: new.tcl,v 1.12 2010/01/13 10:48:45 emmar Exp $
+    @cvs-id $Id: new.tcl,v 1.12.6.4 2013/09/09 16:44:25 gustafn Exp $
 
 } {
     { user_type:notnull "user" }
@@ -91,7 +91,7 @@ if { $user_type_exact_p eq "f" && \
 
     # Sub user-types exist... select one
     set user_type_exact_p "t"
-    set export_url_vars [ad_export_vars -exclude user_type $export_var_list ]
+    set export_url_vars [export_vars -exclude user_type $export_var_list ]
 
     party::types_valid_for_rel_type_multirow -datasource_name object_types -start_with $user_type -rel_type $add_with_rel_type
 
@@ -251,7 +251,7 @@ The user was added by $creation_name from [ad_conn url]."
 	    ns_sendmail [template::element::get_value add_user email] \
 		    $notification_address \
 		    "Welcome to [ad_system_name]" \
-		    "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_url_vars row_id]
+		    "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_vars -url {row_id}]
 
 After confirming your email, here's how you can log in at [ad_url]:
 

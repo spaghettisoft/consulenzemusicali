@@ -628,7 +628,7 @@ ad_proc -public ad_page_contract {
 		if { [string index $flag end] ne ")" } {
 		    return -code error "Missing or misplaced end parenthesis for flag '$flag' on argument '$name'"
 		}
-		set flag_parameters [string range $flag [expr {$left_paren + 1}] [expr {[string length $flag]-2}]]
+		set flag_parameters [string range $flag $left_paren+1 [string length $flag]-2]
 		set flag [string range $flag 0 $left_paren-1]
 
 		lappend flag_list $flag
@@ -715,7 +715,7 @@ ad_proc -public ad_page_contract {
 	set root_dir [nsv_get acs_properties root_directory]
 	set script [info script]
 	set root_length [string length $root_dir]
-	if { ![string compare $root_dir [string range $script 0 $root_length-1 ]] } {
+	if { $root_dir eq [string range $script 0 $root_length-1 ] } {
 	    set script [string range $script $root_length+1 end]
 	}
 
@@ -880,7 +880,7 @@ ad_proc -public ad_page_contract {
                 set formal_name [join [lrange $actual_name_v 0 $i] "."]
                 if { [info exists apc_internal_filter($formal_name:array)] } {
                     set found_p 1
-                    set variable_to_set var([join [lrange $actual_name_v [expr {$i+1}] end] "."])
+                    set variable_to_set var([join [lrange $actual_name_v $i+1 end] "."])
                     break
                 }
             }
@@ -983,11 +983,11 @@ ad_proc -public ad_page_contract {
 		    set array_list ""
 		    foreach arrayvar [ns_cache names util_memoize] {
 			if [regexp [list [ad_conn session_id] [ad_conn package_id] "$formal_name."] $arrayvar] {
-			    set arrayvar [lindex $arrayvar [expr {[llength $arrayvar] - 1}]]
+			    set arrayvar [lindex $arrayvar [llength $arrayvar]-1]
 			    if { $array_list ne "" } {
 				append array_list " "
 			    }
-			    set arrayvar_formal [string range $arrayvar [expr {[string first "." $arrayvar] + 1}] [string length $arrayvar]]
+			    set arrayvar_formal [string range $arrayvar [string first "." $arrayvar]+1 [string length $arrayvar]]
 			    append array_list "{$arrayvar_formal} {[ad_get_client_property [ad_conn package_id] $arrayvar]}"
 			}
 		    }
@@ -1135,7 +1135,7 @@ ad_proc -public ad_page_contract {
     }
 
     # Set the __submit_button_variable. This is used in double click protection.
-    if {[exists_and_not_null __submit_button_name] && [info exists __submit_button_value]} {
+    if {[info exists __submit_button_name] && $__submit_button_name ne "" && [info exists __submit_button_value]} {
 	uplevel 1 [list set $__submit_button_name $__submit_button_value]
     }
 
@@ -1148,7 +1148,7 @@ ad_proc -public ad_page_contract_get_variables { } {
     empty list.  
 } {
     global ad_page_contract_variables
-    if { [exists_and_not_null ad_page_contract_variables] } {
+    if { [info exists ad_page_contract_variables] && $ad_page_contract_variables ne "" } {
 	return $ad_page_contract_variables
     } 
     return [list]
@@ -2030,25 +2030,14 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
   @author Chrisitan Brechbuehler <christian@arsdigita.com>
   @creation-date 13 Aug 2000
 } {
-  # copied from defs-procs.tcl: ad_return_complaint
-
-  doc_return 200 text/html "[ad_header_with_extra_stuff \
-                             "[_ acs-tcl.lt_Problem_with_a_Templa]" "" ""]
-    
-<h2>[_ acs-tcl.lt_Problem_with_a_Page_o]</h2>
-
-<hr>
-
-[_ acs-tcl.lt_We_had_a_problem_proc]
-	
-<ul>
-  <li>$error
-</ul>
-	
-<p>
-	
-[_ acs-tcl.Sorry]
-	
-[ad_footer]
-"
+    set complaint_template [parameter::get_from_package_key \
+				-package_key "acs-tcl" \
+				-parameter "ReturnComplaint" \
+				-default "/packages/acs-admin/www/apm/apm.adpacs-tcl/lib/ad-return-complaint"]
+    set exception_count 1
+    set exception_text $error
+    ns_return 200 text/html [ad_parse_template \
+                                 -params [list [list exception_count $exception_count] \
+                                              [list exception_text $exception_text]] \
+				 $complaint_template]
 }

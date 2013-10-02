@@ -1,5 +1,5 @@
 <master>
-<property name=title>@title;noquote@</property>
+<property name="doc(title)">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
 @dimensional_slider;noquote@
@@ -9,7 +9,7 @@
 <table cellspacing="0" cellpadding="0">
   <multiple name="procs_files">
   <tr valign=top>
-    <td><b><a href="procs-file-view?version_id=@version_id@&amp;path=@procs_files.full_path@">@procs_files.path@</a></b></td>
+    <td><b><a href="@procs_files.view@?version_id=@version_id@&amp;path=@procs_files.full_path@">@procs_files.path@</a></b></td>
     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>@procs_files.first_sentence@&nbsp;</td>
   </tr>

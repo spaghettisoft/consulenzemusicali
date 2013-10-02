@@ -1,12 +1,12 @@
 D/doc////
-/index.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.tcl/1.3.16.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
 /reference-data-list-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /reference-data-list-postgresql.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/reference-data-list.adp/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /reference-data-list.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/table-detail.adp/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /table-detail.tcl/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/view-one-reference.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /view-one-reference.tcl/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /view-one-reference.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index.adp/1.4.20.1/Tue Oct  1 23:26:30 2013//Topenacs-5-8-compat
+/reference-data-list.adp/1.3.20.1/Tue Oct  1 23:26:30 2013//Topenacs-5-8-compat
+/table-detail.adp/1.3.20.1/Tue Oct  1 23:26:31 2013//Topenacs-5-8-compat
+/view-one-reference.adp/1.2.22.1/Tue Oct  1 23:26:31 2013//Topenacs-5-8-compat

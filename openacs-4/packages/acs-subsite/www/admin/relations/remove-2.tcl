@@ -5,7 +5,7 @@ ad_page_contract {
     
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2000-12-16
-    @cvs-id $Id: remove-2.tcl,v 1.2 2007/01/10 21:22:08 gustafn Exp $
+    @cvs-id $Id: remove-2.tcl,v 1.2.10.4 2013/09/09 16:44:24 gustafn Exp $
 } {
     rel_id:integer,notnull
     { operation "" }
@@ -28,7 +28,7 @@ if {$operation eq "Yes, I really want to remove this relation"} {
 } else {
     if { $return_url eq "" } {
 	# redirect to the relation by default, if we haven't deleted it
-	set return_url "one?[ad_export_vars rel_id]"
+	set return_url "one?[export_vars rel_id]"
     }
 }
 

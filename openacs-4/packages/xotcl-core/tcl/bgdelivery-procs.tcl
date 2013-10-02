@@ -4,10 +4,10 @@ ad_library {
 
     @author Gustaf Neumann (neumann@wu-wien.ac.at)
     @creation-date 19 Nov 2005
-    @cvs-id $Id: bgdelivery-procs.tcl,v 1.47 2013/03/21 21:58:05 gustafn Exp $
+    @cvs-id $Id: bgdelivery-procs.tcl,v 1.47.2.4 2013/09/30 11:38:40 gustafn Exp $
 }
 
-if {[info command ::thread::mutex] eq ""} {
+if {[info commands ::thread::mutex] eq ""} {
   ns_log notice "libthread does not appear to be available, NOT loading bgdelivery"
   return
 }
@@ -50,7 +50,7 @@ if {![string match *contentsentlength* $msg]} {
   fileSpooler proc deliver_ranges {ranges client_data filename fd channel} {
     set first_range [lindex $ranges 0]
     set remaining_ranges [lrange $ranges 1 end]
-    foreach {from to size} $first_range break
+    lassign $first_range from to size
     if {$remaining_ranges eq ""} {
       # A single delivery, which is as well the last; when finished
       # with this chunk, terminate delivery
@@ -113,7 +113,7 @@ if {![string match *contentsentlength* $msg]} {
     # This method should not be necessary. However, under unclear conditions,
     # some fcopies seem to go into a stasis. After 2000 seconds, we will kill it.
     foreach {index entry} [array get ::running] {
-      foreach {key elapsed} $entry break
+      lassign $entry key elapsed
       set t [ns_time diff [ns_time get] $elapsed]
       if {[ns_time seconds $t] > 2000} {
         if {[regexp {^([^,]+),([^,]+),(.+)$} $index _ channel fd filename]} {
@@ -259,7 +259,7 @@ if {![string match *contentsentlength* $msg]} {
 	my close -sync true
       }
     } else {
-      set chunk [string range $content 0 [expr {$blocksize-1}]]
+      set chunk [string range $content 0 $blocksize-1]
       set content [string range $content $blocksize end]
       puts -nonewline $channel $chunk
       my log "write [string length $chunk] bytes ([string length $content] buffered)"
@@ -526,7 +526,7 @@ bgdelivery ad_proc returnfile {
                       && ([string match {*start=[1-9]*} $query] || [string match {*end=[1-9]*} $query])
                       && [info command h264open] ne ""}]
 
-  if {[info command ns_driversection] ne ""} {
+  if {[info commands ns_driversection] ne ""} {
       set use_writerThread [ns_config [ns_driversection] writerthreads 0]
   } else {
       set use_writerThread 0
@@ -670,13 +670,13 @@ bgdelivery ad_proc returnfile {
   if {$use_h264} {
     #my log "MP4 q=[::xo::cc actual_query], h=[ns_set array [ns_conn outputheaders]]"
     my do -async ::h264Spooler spool -delete $delete -channel $ch -filename $filename \
-        -context [list [::xo::cc requestor],[::xo::cc url] [ns_conn start]] \
+        -context [list [::xo::cc requestor],[::xo::cc url],$query [ns_conn start]] \
         -query $query \
         -client_data $client_data
   } else {
     #my log "FILE SPOOL $filename"
     my do -async ::fileSpooler spool -ranges $ranges -delete $delete -channel $ch -filename $filename \
-        -context [list [::xo::cc requestor],[::xo::cc url] [ns_conn start]] \
+        -context [list [::xo::cc requestor],[::xo::cc url],$query [ns_conn start]] \
         -client_data $client_data
   }
   #

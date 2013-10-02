@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Dec 12 11:23:12 2000
-    @cvs-id $Id: delete-2.tcl,v 1.2 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: delete-2.tcl,v 1.2.10.4 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     segment_id:integer,notnull
@@ -27,7 +27,7 @@ if {$operation eq "Yes, I really want to delete this segment"} {
 	    select s.group_id from rel_segments s where s.segment_id = :segment_id
 	} -default ""]
 	if { $group_id ne "" } {
-	    set return_url "../groups/one?[ad_export_vars group_id]"
+	    set return_url "../groups/one?[export_vars group_id]"
 	}
     }
 
@@ -38,7 +38,7 @@ if {$operation eq "Yes, I really want to delete this segment"} {
 } 
 
 if { $return_url eq "" } {
-    set return_url "one?[ad_export_vars {segment_id}]"
+    set return_url "one?[export_vars {segment_id}]"
 }
 
 ad_returnredirect $return_url

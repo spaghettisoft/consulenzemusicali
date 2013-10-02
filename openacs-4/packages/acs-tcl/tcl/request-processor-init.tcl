@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 30 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $Id: request-processor-init.tcl,v 1.15 2013/04/08 15:50:25 gustafn Exp $
+    @cvs-id $Id: request-processor-init.tcl,v 1.15.2.1 2013/09/29 12:03:22 gustafn Exp $
 }
 
 # These procedures are dynamically defined at startup to alleviate
@@ -112,7 +112,7 @@ ad_after_server_initialization filters_register {
 
     set filter_index 0
     foreach filter_info $filters {
-	util_unlist $filter_info priority kind method path \
+	lassign $filter_info priority kind method path \
 		proc arg debug critical description script
 
 	# Figure out how to invoke the filter, based on the number of arguments.
@@ -149,7 +149,7 @@ ad_after_server_initialization procs_register {
 
     set proc_index 0
     foreach proc_info $procs {
-	util_unlist $proc_info method path proc arg debug noinherit description script
+	lassign $proc_info method path proc arg debug noinherit description script
 
 	if { $noinherit eq "t" } {
 	    set noinherit_switch "-noinherit"

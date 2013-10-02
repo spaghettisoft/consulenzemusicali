@@ -63,14 +63,14 @@ ad_proc -public cr_write_content {
             if { $string_p } {
                 return $text
             }
-            ReturnHeaders $mime_type
-            ns_write $text
+            ns_return 200 $mime_type $text
         }
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
 	    if {$filename eq ""} {
-		ad_return -code error "No content for the revision $revision_id. This seems to be an error which occured during the upload of the file"
+		ad_return -code error "No content for the revision $revision_id.\
+		This seems to be an error which occured during the upload of the file"
 	    } else {
 		if { $string_p } {
 		    set fd [open $filename "r"]
@@ -92,7 +92,7 @@ ad_proc -public cr_write_content {
 			ns_set put [ns_conn outputheaders] "Content-Length" 0
 			ns_return 200 text/plain {}
 		    } else {
-                        if {[info command ad_returnfile_background] eq "" || [security::secure_conn_p]} {
+                        if {[info commands ad_returnfile_background] eq "" || [security::secure_conn_p]} {
                             ns_returnfile 200 $mime_type $filename
                         } else {
                             ad_returnfile_background 200 $mime_type $filename
@@ -243,9 +243,10 @@ ad_proc -public cr_import_content {
 
                 # the AOLserver jpegsize command has some bugs where the height comes 
                 # through as 1 or 2 
-                if { $what_aolserver_told_us ne "" && \
-                      [lindex $what_aolserver_told_us 0] > 10 && \
-                      [lindex $what_aolserver_told_us 1] > 10 } {
+                if { $what_aolserver_told_us ne "" 
+		     && [lindex $what_aolserver_told_us 0] > 10
+		     && [lindex $what_aolserver_told_us 1] > 10 
+		 } {
                     set original_width [lindex $what_aolserver_told_us 0]
                     set original_height [lindex $what_aolserver_told_us 1]
                 } else {

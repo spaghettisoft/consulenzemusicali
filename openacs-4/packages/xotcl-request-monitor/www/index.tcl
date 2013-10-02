@@ -2,7 +2,7 @@ ad_page_contract {
   present usage statistics, active users, etc
 
   @author Gustaf Neumann
-  @cvs-id $Id: index.tcl,v 1.22 2013/04/13 09:14:23 gustafn Exp $
+  @cvs-id $Id: index.tcl,v 1.22.2.1 2013/09/30 11:39:39 gustafn Exp $
 } -query {
   {jsGraph 1}
 } -properties {
@@ -265,7 +265,7 @@ if {[ns_info name] eq "NaviServer"}  {
 
 array set thread_avgs [throttle thread_avgs]
 
-if {[info command ::tlf::system_activity] ne ""} {
+if {[info commands ::tlf::system_activity] ne ""} {
   array set server_stats [::tlf::system_activity]
   set current_exercise_activity $server_stats(activity)
   set current_system_activity "$server_stats(activity) exercises last 15 mins, "
@@ -284,7 +284,7 @@ set authUsers24     [lindex $active24 1]
 set activeIP24      [lindex $active24 0]
 set activeTotal24   [expr {$authUsers24 + $activeIP24}]
 
-if {[info command ::dotlrn_community::get_community_id] ne ""} {
+if {[info commands ::dotlrn_community::get_community_id] ne ""} {
   set nr [throttle users nr_active_communities]
   set active_community_string "in <a href='./active-communities'>$nr communities</a> "
 } else {

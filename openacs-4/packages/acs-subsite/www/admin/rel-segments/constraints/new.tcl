@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Mon Dec 11 11:45:21 2000
-    @cvs-id $Id: new.tcl,v 1.4 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: new.tcl,v 1.4.10.4 2013/09/09 16:44:23 gustafn Exp $
 
 } {
     rel_segment:notnull,integer
@@ -33,7 +33,7 @@ ad_page_contract {
 
 }
 
-set return_url_enc [ad_urlencode "[ad_conn url]?[ad_export_vars {rel_segment constraint_name rel_side required_rel_segment return_url}]"]
+set return_url_enc [ad_urlencode "[ad_conn url]?[export_vars {rel_segment constraint_name rel_side required_rel_segment return_url}]"]
 
 set context [list [list "../" "Relational segments"] [list "../one?segment_id=$rel_segment" "One Segment"] "Add constraint"]
 

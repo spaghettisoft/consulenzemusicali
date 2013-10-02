@@ -84,7 +84,7 @@ but you'll never need to use it.) The new API routines set local
 variables automatically. For instance: 
 </p><pre class="programlisting">
 
-db_1row select_names "select first_names, last_name from users where user_id = [ad_get_user_id]"
+db_1row select_names "select first_names, last_name from users where user_id = [ad_conn user_id]"
 doc_body_append "Hello, $first_names $last_name!"
 
 </pre><p>
@@ -93,7 +93,7 @@ any rows (no such user exists). If this isn't what you want, you can
 write: 
 </p><pre class="programlisting">
 
-if { [db_0or1row select_names "select first_names, last_name from users where user_id = [ad_get_user_id]"] } {
+if { [db_0or1row select_names "select first_names, last_name from users where user_id = [ad_conn user_id]"] } {
     doc_body_append "Hello, $first_names $last_name!"
 } else {
     # Executed if the query returns no rows.
@@ -728,4 +728,4 @@ db_with_handle db {
 			The nsv containing the list is initialized by the bootstrap script and should
 			never be referenced directly by user code.
 			Returns the current rdbms type and version.
-		</p></dd></dl></div><div class="cvstag">($Id: db-api-detailed.html,v 1.47.2.1 2013/08/21 10:19:21 gustafn Exp $)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Package Manager Design </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> OpenACS Internationalization Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/db-api-detailed.html#comments">View comments on this page at openacs.org</a></center></body></html>
+		</p></dd></dl></div><div class="cvstag">($Id: db-api-detailed.html,v 1.47.2.6 2013/09/09 16:50:33 gustafn Exp $)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apm-design.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="i18n-requirements.html">Next</a></td></tr><tr><td width="40%" align="left">Package Manager Design </td><td width="20%" align="center"><a accesskey="u" href="kernel-doc.html">Up</a></td><td width="40%" align="right"> OpenACS Internationalization Requirements</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/db-api-detailed.html#comments">View comments on this page at openacs.org</a></center></body></html>

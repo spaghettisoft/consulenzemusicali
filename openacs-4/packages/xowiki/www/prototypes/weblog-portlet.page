@@ -1,5 +1,5 @@
 # -*- tcl-*-
-# $Id: weblog-portlet.page,v 1.22 2013/08/12 19:27:07 gustafn Exp $
+# $Id: weblog-portlet.page,v 1.22.2.2 2013/09/12 20:57:34 gustafn Exp $
 ::xowiki::Object new -title "Weblog" -text {
   #
   # A sample Weblog object.
@@ -21,7 +21,7 @@
   #
   Class create EntryRenderer -instproc render {} {
     my instvar package_id name title creator creation_user pretty_date description 
-    my log "--W entry [self] [my name] package_id $package_id"
+    #my log "--W entry [self] [my name] package_id $package_id"
     [my set __parent] instvar weblog_obj
 
     # We get the instance_attributes, if these are available. For the
@@ -73,7 +73,7 @@
   
   my proc content {} {
     my get_parameters
-    my log "--get_parameters returned package_id=$package_id"
+    #my log "--get_parameters returned package_id=$package_id"
     set page [my info parent]
 
     if {[$page exists __including_page]} {

@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Mon Dec 11 11:30:53 2000
-    @cvs-id $Id: delete.tcl,v 1.2 2002/09/06 21:50:03 jeffd Exp $
+    @cvs-id $Id: delete.tcl,v 1.2.26.4 2013/09/09 16:44:23 gustafn Exp $
 
 } {
     role:notnull
@@ -17,9 +17,9 @@ ad_page_contract {
     export_vars:onevalue
 }
 
-set context [list [list "../" "Relationship types"] [list "" "Roles"] [list one?[ad_export_vars role] "One role"] "Delete role"]
+set context [list [list "../" "Relationship types"] [list "" "Roles"] [list one?[export_vars role] "One role"] "Delete role"]
 
-set export_vars [ad_export_vars -form {role return_url}]
+set export_vars [export_vars -form {role return_url}]
 
 set pretty_name [db_string select_role_pretty_name {
     select r.pretty_name from acs_rel_roles r where r.role = :role

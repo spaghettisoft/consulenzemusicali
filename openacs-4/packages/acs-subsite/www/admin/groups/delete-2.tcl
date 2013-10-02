@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Fri Dec  8 14:41:36 2000
-    @cvs-id $Id: delete-2.tcl,v 1.2 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: delete-2.tcl,v 1.2.10.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_id:integer,notnull
@@ -25,11 +25,11 @@ if {$operation eq "Yes, I really want to delete this group"} {
 	set group_type [group::delete $group_id]
     }
     if { $return_url eq "" && $group_type ne "" } {
-	set return_url "../group-types/one?[ad_export_vars group_type]"
+	set return_url "../group-types/one?[export_vars group_type]"
     }
 } else {
     if { $return_url eq "" } {
-	set return_url "one?[ad_export_vars group_id]"
+	set return_url "one?[export_vars group_id]"
     }
 }
 

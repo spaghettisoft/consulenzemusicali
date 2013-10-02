@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Dec 10 16:40:11 2000
-    @cvs-id $Id: mapping-remove.tcl,v 1.2 2002/09/06 21:50:03 jeffd Exp $
+    @cvs-id $Id: mapping-remove.tcl,v 1.2.26.4 2013/09/09 16:44:23 gustafn Exp $
 
 } {
     { group_rel_type_id:naturalnum "" }
@@ -31,7 +31,7 @@ if { ![db_0or1row select_info {
     return
 }
 
-set export_vars [ad_export_vars -form {group_rel_type_id return_url}]
-set context [list [list "" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Remove relation type"]
+set export_vars [export_vars -form {group_rel_type_id return_url}]
+set context [list [list "" "Group types"] [list one?[export_vars {group_type}] "One type"] "Remove relation type"]
 
 ad_return_template

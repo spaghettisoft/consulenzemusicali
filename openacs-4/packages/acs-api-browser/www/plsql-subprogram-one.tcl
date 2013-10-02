@@ -8,7 +8,7 @@ ad_page_contract {
 
     @author Michael Yoon (michael@arsdigita.com)
     @creation-date 2000-03-05
-    @cvs-id $Id: plsql-subprogram-one.tcl,v 1.3 2002/09/06 21:49:54 jeffd Exp $
+    @cvs-id $Id: plsql-subprogram-one.tcl,v 1.3.26.1 2013/09/09 16:44:18 gustafn Exp $
 } {
     name
     type
@@ -33,12 +33,12 @@ order by line" {
 switch $type {
     "PACKAGE" {
 	set type "PACKAGE BODY"
-	set package_slider_list [list "package" "<a href=\"[ad_conn url]?[export_url_vars type name]\">package body</a>"]
+	set package_slider_list [list "package" "<a href=\"[ad_conn url]?[export_vars -url {type name}]\">package body</a>"]
     }
 
     "PACKAGE BODY" {
 	set type "PACKAGE"
-	set package_slider_list [list "<a href=\"[ad_conn url]?[export_url_vars type name]\">package</a>" "package body"]
+	set package_slider_list [list "<a href=\"[ad_conn url]?[export_vars -url {type name}]\">package</a>" "package body"]
     }
 
     default {

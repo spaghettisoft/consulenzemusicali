@@ -5,7 +5,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date 2000-12-16
-    @cvs-id $Id: remove.tcl,v 1.2 2002/09/06 21:50:04 jeffd Exp $
+    @cvs-id $Id: remove.tcl,v 1.2.26.5 2013/09/09 16:44:24 gustafn Exp $
 } {
     rel_id:integer,notnull
     { return_url "" }
@@ -57,13 +57,13 @@ if { [relation_segment_has_dependant -rel_id $rel_id] } {
 	  from rc_violations_by_removing_rel r
 	 where r.rel_id = :rel_id
     } {
-	template::multirow append dependants $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [ad_export_vars {rel_id return_url}]
+	template::multirow append dependants $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [export_vars {rel_id return_url}]
     }
     ad_return_template remove-dependants-exist
     return
 }
 
 
-set export_vars [export_form_vars rel_id return_url]
+set export_vars [export_vars -form {rel_id return_url}]
 
 ad_return_template

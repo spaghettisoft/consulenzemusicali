@@ -19,7 +19,7 @@ ad_library {
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying this software.
 #
-    @cvs-id $Id: xml-1-dom-procs.tcl,v 1.3.10.1 2013/09/05 11:51:00 gustafn Exp $
+    @cvs-id $Id: xml-1-dom-procs.tcl,v 1.3.10.2 2013/09/29 11:50:55 gustafn Exp $
 }
 
 package provide dom 1.6
@@ -485,7 +485,7 @@ proc dom::document {method token args} {
 		return -code error "wrong number of arguments"
 	    }
 
-	    foreach {name extid dtd entities notations} $args break
+	    lassign $args name extid dtd entities notations
 	    set result [CreateDocType $token $name $extid $dtd $entities $notations]
 	}
 

@@ -4,7 +4,7 @@
 
     @creation-date 2006-04-10
     @author Gustaf Neumann
-    @cvs-id $Id: xowiki-www-procs.tcl,v 1.320 2013/08/12 19:46:50 gustafn Exp $
+    @cvs-id $Id: xowiki-www-procs.tcl,v 1.320.2.2 2013/09/30 11:37:18 gustafn Exp $
 }
 
 ::xo::library require xowiki-procs
@@ -466,7 +466,7 @@ namespace eval ::xowiki {
     # determine the delivery method
     #
     set use_bg_delivery [expr {![catch {ns_conn contentsentlength}] && 
-                               [info command ::bgdelivery] ne ""}]
+                               [info commands ::bgdelivery] ne ""}]
     #
     # The package where the object is coming from might be different
     # from the package on which it is delivered. Use the latter one
@@ -723,7 +723,7 @@ namespace eval ::xowiki {
       #
       # we have to valiate and save the form data
       #
-      foreach {validation_errors category_ids} [my get_form_data $form_fields] break
+      lassign [my get_form_data $form_fields] validation_errors category_ids
 
       if {$validation_errors != 0} {
         #my msg "$validation_errors errors in $form_fields"
@@ -1239,7 +1239,7 @@ namespace eval ::xowiki {
 
     # the menubar is work in progress
     set mb [$context_package_id get_parameter "MenuBar" 0]
-    if {$mb ne "0" && [info command ::xowiki::MenuBar] ne ""} {
+    if {$mb ne "0" && [info commands ::xowiki::MenuBar] ne ""} {
 
       set clipboard_size [::xowiki::clipboard size]
       set clipboard_label [expr {$clipboard_size ? "Clipboard ($clipboard_size)" : "Clipboard"}]
@@ -1388,7 +1388,7 @@ namespace eval ::xowiki {
       #
 	
       set header_stuff [::xo::Page header_stuff]
-      if {[info command ::template::head::add_meta] ne ""} {
+      if {[info commands ::template::head::add_meta] ne ""} {
 	set meta(language) [my lang]
 	set meta(description) [my description]
 	set meta(keywords) ""
@@ -1623,14 +1623,14 @@ namespace eval ::xowiki {
     #my msg "mapped category ids=$category_ids"
 
     foreach category_tree $category_trees {
-      foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $category_tree break
+      lassign $category_tree tree_id tree_name subtree_id assign_single_p require_category_p
 
       set options [list] 
       #if {!$require_category_p} {lappend options [list "--" ""]}
       set value [list]
       foreach category [::xowiki::Category get_category_infos \
                             -subtree_id $subtree_id -tree_id $tree_id] {
-        foreach {category_id category_name deprecated_p level} $category break
+        lassign $category category_id category_name deprecated_p level
         if {$category_id in $category_ids} {lappend value $category_id}
         set category_name [ad_quotehtml [lang::util::localize $category_name]]
         if { $level>1 } {
@@ -1868,7 +1868,7 @@ namespace eval ::xowiki {
         }
       }
       if {[string match *.* $att]} {
-        foreach {container component} [split $att .] break
+        lassign [split $att .] container component
         lappend containers($container) $component
       }
     }
@@ -2051,7 +2051,7 @@ namespace eval ::xowiki {
 
   FormPage instproc field_names {{-form ""}} {
     my instvar package_id
-    foreach {form_vars needed_attributes} [my field_names_from_form -form $form] break
+    lassign [my field_names_from_form -form $form] form_vars needed_attributes
     #my msg "form=$form, form_vars=$form_vars needed_attributes=$needed_attributes"
     my array unset __field_in_form
     my array unset __field_needed

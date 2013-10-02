@@ -179,7 +179,7 @@ namespace eval ::xowiki::includelet {
     set root_folder [::xo::db::CrClass get_instance_from_db -item_id $root_folder_id]
     set root_folder_is_current [expr {$current_folder_id == [$root_folder item_id]}]
 
-    set mb [info command ::__xowiki__MenuBar]
+    set mb [info commands ::__xowiki__MenuBar]
     if {$mb ne ""} {
       #
       # We have a menubar. Add folder-specific content to the
@@ -370,7 +370,7 @@ namespace eval ::xowiki::includelet {
       if {$is_current} {
 	$node open_tree
 
-	if {[info command ::__xowiki__MenuBar] ne "" 
+	if {[info commands ::__xowiki__MenuBar] ne "" 
 	    && [::__xowiki__MenuBar exists submenu_pages(folder)]} {
 	  set owner [::__xowiki__MenuBar set submenu_owner(folder)]
 	  $subnode add_pages -full true \
@@ -575,7 +575,7 @@ namespace eval ::xowiki::includelet {
 	}
       }
 
-      foreach {att order} [split $orderby ,] break
+      lassign [split $orderby ,] att order
       $t orderby -order [expr {$order eq "asc" ? "increasing" : "decreasing"}] $att
       set resources_list "[$t asHTML]"
       

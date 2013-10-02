@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 Nov 2000
-    @cvs-id $Id: index.tcl,v 1.30.6.3 2013/09/06 17:37:19 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.30.6.4 2013/09/11 10:16:33 gustafn Exp $
 } {
     {folder_id:integer [fs_get_root_folder]}
     {n_past_days:integer "99999"}
@@ -59,7 +59,7 @@ if {!$delete_p} {
 
 set package_id [ad_conn package_id]
 
-set show_administer_permissions_link_p [parameter::get -package_id $package_id -parameter "ShowAdministerPermissionsLinkP" -default ]
+set show_administer_permissions_link_p [parameter::get -package_id $package_id -parameter "ShowAdministerPermissionsLinkP" -default 1]
 set n_contents [fs::get_folder_contents_count -folder_id $folder_id -user_id $user_id]
 
 form create n_past_days_form

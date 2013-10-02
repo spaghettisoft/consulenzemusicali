@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Nov  7 12:14:42 2000
-    @cvs-id $Id: add-2.tcl,v 1.3 2007/01/10 21:22:06 gustafn Exp $
+    @cvs-id $Id: add-2.tcl,v 1.3.10.4 2013/09/09 16:44:19 gustafn Exp $
 
 } {
     object_type:notnull,trim
@@ -57,9 +57,9 @@ db_transaction {
 
 # If we're an enumeration, redirect to start adding possible values.
 if {$datatype eq "enumeration"} {
-    ad_returnredirect enum-add?[ad_export_vars {attribute_id return_url}]
+    ad_returnredirect enum-add?[export_vars {attribute_id return_url}]
 } elseif { $return_url eq "" } {
-    ad_returnredirect add?[ad_export_vars {object_type}]
+    ad_returnredirect add?[export_vars {object_type}]
 } else {
     ad_returnredirect $return_url
 }

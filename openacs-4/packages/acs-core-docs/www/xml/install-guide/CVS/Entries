@@ -3,7 +3,6 @@
 /configuring.xml/1.12/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /credits.xml/1.12/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /database-maintenance.xml/1.8/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
-/macinstall.xml/1.6/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /maintenance.xml/1.30/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /openacs.xml/1.31/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /oracle.xml/1.21/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
@@ -17,4 +16,5 @@
 /software.xml/1.25/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /upgrade.xml/1.40/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /win2kinstall.xml/1.10/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
+/macinstall.xml/1.6.12.1/Tue Oct  1 23:26:19 2013//Topenacs-5-8-compat
 D

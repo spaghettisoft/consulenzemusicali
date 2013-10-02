@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Mon Dec 11 12:00:12 2000
-    @cvs-id $Id: delete-2.tcl,v 1.3 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: delete-2.tcl,v 1.3.10.4 2013/09/09 16:44:23 gustafn Exp $
 
 } {
     rel_type:notnull,rel_type_dynamic_p
@@ -17,7 +17,7 @@ ad_page_contract {
 if { $operation ne "Yes, I really want to delete this relationship type" } {
     # set the return_url to something useful if we are not deleting
     if { $return_url eq "" } {
-	set return_url "one?[ad_export_vars rel_type]"
+	set return_url "one?[export_vars rel_type]"
     }
 } else {
     db_1row select_type_info {

@@ -3,7 +3,7 @@
 --
 -- @author rhs@mit.edu
 -- @creation-date 2000-08-22
--- @cvs-id $Id: groups-body-create.sql,v 1.33 2011/07/07 10:46:02 gustafn Exp $
+-- @cvs-id $Id: groups-body-create.sql,v 1.33.2.1 2013/09/17 20:15:45 gustafn Exp $
 --
 
 --------------
@@ -1156,6 +1156,10 @@ BEGIN
    LOOP
        PERFORM rel_segment__delete(row.segment_id);
    end loop;
+
+   --Lets clear the groups table first
+   delete from groups
+   where group_id = delete__group_id;
 
    PERFORM party__delete(delete__group_id);
 

@@ -7,7 +7,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Mon Dec 11 13:51:21 2000
-    @cvs-id $Id: new-2.tcl,v 1.4.22.1 2013/09/06 16:01:45 gustafn Exp $
+    @cvs-id $Id: new-2.tcl,v 1.4.22.5 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     group_id:integer,notnull
@@ -39,7 +39,7 @@ permission::require_permission -object_id $group_id -privilege "read"
 
 set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] "Add segment"]
 
-set export_vars [ad_export_vars -form {group_id rel_type return_url}]
+set export_vars [export_vars -form {group_id rel_type return_url}]
 
 db_1row select_basic_info {
     select acs_group.name(:group_id) as group_name,

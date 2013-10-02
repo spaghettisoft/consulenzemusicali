@@ -2,7 +2,7 @@ ad_page_contract {
 
     @author Rafael Schloming (rhs@mit.edu)
     @creation-date 2000-09-09
-    @cvs-id $Id: new.tcl,v 1.5 2005/03/01 00:01:23 jeffd Exp $
+    @cvs-id $Id: new.tcl,v 1.5.16.1 2013/09/09 16:44:24 gustafn Exp $
 
 } {
     parent_id:integer,notnull
@@ -65,4 +65,4 @@ if {[lsearch $expand $parent_id] == -1} {
     lappend expand $parent_id
 }
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

@@ -11,7 +11,7 @@ ad_library {
   @author Karl Goldstein
   @author Stanislav Freidin
 
-  @cvs-id $Id: parse-procs.tcl,v 1.48.2.1 2013/08/23 09:42:27 gustafn Exp $
+  @cvs-id $Id: parse-procs.tcl,v 1.48.2.2 2013/09/29 18:35:20 gustafn Exp $
 }
 
 namespace eval template {}
@@ -294,7 +294,7 @@ ad_proc -public template::adp_level { { up "" } } {
     if {$up eq ""} {
       set result [lindex $parse_level end]
     } else {
-      set result [lindex $parse_level [expr {[llength $parse_level] - $up}]]
+      set result [lindex $parse_level [llength $parse_level]-$up]
     }
   }
 

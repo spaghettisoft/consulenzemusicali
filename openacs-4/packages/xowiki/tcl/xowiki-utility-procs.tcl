@@ -3,7 +3,7 @@
 
     @creation-date 2006-08-08
     @author Gustaf Neumann
-    @cvs-id $Id: xowiki-utility-procs.tcl,v 1.31 2013/08/12 19:46:50 gustafn Exp $
+    @cvs-id $Id: xowiki-utility-procs.tcl,v 1.31.2.2 2013/09/30 11:37:18 gustafn Exp $
 }
 
 namespace eval ::xowiki {
@@ -38,7 +38,7 @@ namespace eval ::xowiki {
   ::xotcl::Object create tidy
   tidy proc clean {text} {
     if {[[::xo::cc package_id] get_parameter tidy 0] 
-        && [info command ::util::which] ne ""} { 
+        && [info commands ::util::which] ne ""} { 
       set tidycmd [::util::which tidy]
       if {$tidycmd ne ""} {
 	set in_file [ns_tmpnam]
@@ -61,7 +61,7 @@ namespace eval ::xowiki {
   ::xotcl::Object create virus
   virus proc check {fn} {
     if {[[::xo::cc package_id] get_parameter clamav 1]
-        && [info command ::util::which] ne ""} { 
+        && [info commands ::util::which] ne ""} { 
       set clamscanCmd [::util::which clamscan]
       if {$clamscanCmd ne "" && [file readable $fn]} {
 	if {[catch {exec $clamscanCmd $fn }]} {return 1}
@@ -198,7 +198,7 @@ namespace eval ::xowiki {
       "
       foreach tuple [::xo::db_list_of_lists get_revisions $sql] {
 	#::xotcl::Object msg "tuple = $tuple"
-	foreach {name package_id item_id revision_id last_modified} $tuple break 
+	lassign $tuple name package_id item_id revision_id last_modified 
 	set time [clock scan [::xo::db::tcl_date $last_modified tz_var]]
 	if {$time > $older_than} continue
 	::xotcl::Object log "...will delete $name doit=$doit $last_modified"
@@ -229,7 +229,7 @@ namespace eval ::xowiki {
       
       foreach tuple [::xo::db_list_of_lists get_revisions $sql] {
 	#::xotcl::Object msg "tuple = $tuple"
-	foreach {name item_id revision_id last_modified user package_id} $tuple break 
+	lassign $tuple name item_id revision_id last_modified user package_id 
 	set time [clock scan [::xo::db::tcl_date $last_modified tz_var]]
 	if {$time > $older_than} continue
 	#::xotcl::Object msg "compare time $time with $older_than => [expr {$time < $older_than}]"
@@ -499,7 +499,7 @@ namespace eval ::xowiki {
     #my log npo=[array get npo]=>to='$to'
     set renames [list]
     foreach tuple $pages {
-      foreach {old_page_order page_id item_id name} $tuple break
+      lassign $tuple old_page_order page_id item_id name
       if {[info exists npo($old_page_order)]} {
         #
         # We have a name in the translation list
@@ -584,7 +584,7 @@ namespace eval ::xowiki {
 
   my ad_proc user_is_active {{-asHTML:boolean false} uid} {
   } {
-    if {[info command ::throttle] ne "" && 
+    if {[info commands ::throttle] ne "" && 
 	[::throttle info methods user_is_active] ne ""} {
       set active [throttle user_is_active $uid]
       if {$asHTML} {

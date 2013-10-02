@@ -3,7 +3,7 @@ ad_library {
 
   @creation-date 2006-02-02
   @author Gustaf Neumann
-  @cvs-id $Id: chat-procs.tcl,v 1.20 2013/07/29 08:50:26 gustafn Exp $  
+  @cvs-id $Id: chat-procs.tcl,v 1.20.2.2 2013/09/30 11:38:40 gustafn Exp $  
 }
 
 namespace eval ::xo {
@@ -60,8 +60,8 @@ namespace eval ::xo {
     my log "-- msg=$msg"
     
     if {$get_new 
-	&& [info command ::thread::mutex] ne "" 
-	&& [info command ::bgdelivery] ne ""} { 
+	&& [info commands ::thread::mutex] ne "" 
+	&& [info commands ::bgdelivery] ne ""} { 
       # we could use the streaming interface
       my broadcast_msg [Message new -volatile -time [clock seconds] \
 			    -user_id $user_id -msg $msg -color $color]
@@ -104,7 +104,7 @@ namespace eval ::xo {
     if {[nsv_get $array-seen newest]>$last} {
       #my log "--c must check $session_id: [nsv_get $array-seen newest] > $last"
       foreach {key value} [nsv_array get $array] {
-	foreach {timestamp secs user msg color} $value break
+	lassign $value timestamp secs user msg color
 	if {$timestamp > $last} {
 	  my add [Message new -time $secs -user_id $user -msg $msg -color $color]
 	} else {
@@ -122,7 +122,7 @@ namespace eval ::xo {
   Chat instproc get_all {} {
     my instvar array now session_id
     foreach {key value} [nsv_array get $array] {
-      foreach {timestamp secs user msg color} $value break
+      lassign $value timestamp secs user msg color
       if {[my check_age $key [expr {($now - $timestamp) / 1000}]]} {
 	my add [Message new -time $secs -user_id $user -msg $msg -color $color]
       }

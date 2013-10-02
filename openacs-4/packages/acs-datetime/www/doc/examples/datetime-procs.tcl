@@ -6,12 +6,13 @@ ad_page_contract {
 
     @author  ron@arsdigita.com
     @creation-date 2000/12/01
-    @cvs-id  $Id: datetime-procs.tcl,v 1.2 2002/09/10 22:22:08 jeffd Exp $
+    @cvs-id  $Id: datetime-procs.tcl,v 1.2.24.1 2013/09/24 08:35:23 gustafn Exp $
 } -properties {
     dt_examples:multirow
 }
 
-set title "ACS DateTime Examples"
+set title "Date and Time Functions"
+set context [list [list . "ACS DateTime Examples"] $title]
 
 set example_list {
     "dt_systime"

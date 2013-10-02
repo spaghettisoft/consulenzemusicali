@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
      
-# $Id: widget-procs.tcl,v 1.50 2008/09/08 18:50:15 daveb Exp $
+# $Id: widget-procs.tcl,v 1.50.8.1 2013/09/13 12:02:23 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -401,7 +401,7 @@ ad_proc -public template::widget::input {
 		}
 
         if { [info exists element(value)] } {
-            append output " value=\"[template::util::quote_html $element(value)]\""
+            append output " value=\"[ad_quotehtml $element(value)]\""
         } 
 
         foreach name [array names attributes] {
@@ -655,7 +655,7 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[template::util::quote_html $value]\""
+                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[ad_quotehtml $value]\""
                     if { [info exists values($value)] } {
                         append output " checked=\"checked\""
                     }
@@ -680,7 +680,7 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <option value=\"[template::util::quote_html $value]\""
+                    append output " <option value=\"[ad_quotehtml $value]\""
                     if { [info exists values($value)] } {
                         append output " selected=\"selected\""
                     }

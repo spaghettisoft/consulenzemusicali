@@ -5,7 +5,7 @@ ad_library {
 
     @author Various (acs@arsdigita.com)
     @creation-date 13 April 2000
-    @cvs-id $Id: utilities-procs.tcl,v 1.133.2.4 2013/09/05 11:51:00 gustafn Exp $
+    @cvs-id $Id: utilities-procs.tcl,v 1.133.2.23 2013/09/29 20:24:03 gustafn Exp $
 }
 
 namespace eval util {}
@@ -24,7 +24,11 @@ proc proc_source_file_full_path {proc_name} {
     }
 }
 
-ad_proc util_report_library_entry {{extra_message ""}} "Should be called at beginning of private Tcl library files so that it is easy to see in the error log whether or not private Tcl library files contain errors." {
+ad_proc util_report_library_entry {{extra_message ""}} {
+    Should be called at beginning of private Tcl library files so
+    that it is easy to see in the error log whether or not 
+    private Tcl library files contain errors.
+} {
     set tentative_path [info script]
     regsub -all {/\./} $tentative_path {/} scrubbed_path
     if { $extra_message eq ""  } {
@@ -198,7 +202,7 @@ ad_proc -public get_referrer {} {
 #  Database-related code
 ##
 
-ad_proc ad_dbclick_check_dml { 
+ad_proc -deprecated ad_dbclick_check_dml { 
     {
 	-bind  ""
     }
@@ -273,7 +277,7 @@ ad_proc -public util_AnsiDatetoPrettyDate {sql_date} {
 	# was "8.0"
 
 	set trimmed_month [string trimleft $month 0]
-	set pretty_month [lindex $allthemonths [expr {$trimmed_month - 1}]]
+	set pretty_month [lindex $allthemonths $trimmed_month-1]
 
 	set trimmed_day [string trimleft $day 0]
 
@@ -446,9 +450,9 @@ ad_proc -public db_html_select_value_options {
 
     foreach option $options {
 	if { [lindex $option $value_index] in $select_option } {
-	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
+	    append select_options "<option value=\"[ad_quotehtml [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
 	} else {
-	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
+	    append select_options "<option value=\"[ad_quotehtml [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
 	}
     }
     return $select_options
@@ -491,7 +495,7 @@ ad_proc -public export_vars {
     <p>
     
     This will export the three variables <code>foo</code>, <code>bar</code> and <code>baz</code> as 
-    hidden HTML form fields. It does exactly the same as <code>[export_form_vars foo bar baz]</code>.
+    hidden HTML form fields. It does exactly the same as <code>[export_vars -form {foo bar baz}]</code>.
 
     <p>
 
@@ -832,9 +836,9 @@ ad_proc -public export_vars {
     }
 
     # Prepend with the base URL
-    if { [exists_and_not_null base] } {
+    if { [info exists base] && $base ne "" } {
         if { $export_string ne "" } {
-            if { [string match {*[?]*} $base] } {
+            if { [string first ? $base] > -1 } {
                 # The base already has query vars
                 set export_string "${base}&${export_string}"
             } else { 
@@ -847,7 +851,7 @@ ad_proc -public export_vars {
     }
     
     # Append anchor
-    if { [exists_and_not_null anchor] } {
+    if { ([info exists anchor] && $anchor ne "") } {
         append export_string "\#$anchor"
     }
     
@@ -887,7 +891,7 @@ ad_proc -deprecated ad_export_vars {
 
     Example:
 
-    <blockquote><pre>doc_body_append [ad_export_vars { msg_id user(email) { order_by date } }]</pre></blockquote>
+    <blockquote><pre>doc_body_append [export_vars { msg_id user(email) { order_by date } }]</pre></blockquote>
     will export the variable <code>msg_id</code> and the value <code>email</code> from the array <code>user</code>,
     and it will export a variable named <code>order_by</code> with the value <code>date</code>.
 
@@ -908,7 +912,7 @@ ad_proc -deprecated ad_export_vars {
 
     A more involved example:
     <blockquote><pre>set my_vars { msg_id user(email) order_by }
-doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</pre></blockquote>
+doc_body_append [export_vars -override { order_by $new_order_by } $my_vars]</pre></blockquote>
 
     @param form set this parameter if you want the variables exported as hidden form variables,
     as opposed to URL variables, which is the default.
@@ -954,8 +958,7 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
 				set export($arg) $var
 			    } else {
 				# convert the parenthesis into a dot before setting
-				set export([string range $arg 0 [expr { $left_paren - 1}]].[string \
-					range $arg [expr { $left_paren + 1}] end-1]) $var
+				set export([string range $arg 0 $left_paren-1].[string range $arg $left_paren+1 end-1]) $var
 			    }
 			}
 		    }
@@ -968,8 +971,7 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
 			    set export($name) [lindex [uplevel list \[subst [list $value]\]] 0]
 			} else {
 			    # convert the parenthesis into a dot before setting
-			    set export([string range $arg 0 [expr { $left_paren - 1}]].[string \
-				    range $arg [expr { $left_paren + 1}] end-1]) \
+			    set export([string range $arg 0 $left_paren-1].[string range $arg $left_paren+1 end-1]) \
 				    [lindex [uplevel list \[subst [list $value]\]] 0]
 			}
 		    }
@@ -1020,7 +1022,7 @@ ad_proc -deprecated export_form_vars {
     export_vars is now the prefered interface.
     <p>
 
-    Example usage: <code>[export_form_vars -sign foo bar:multiple baz]</code>
+    Example usage: <code>[export_vars -form -sign {foo bar:multiple baz}]</code>
 
     @param sign If this flag is set, all the variables output will be
     signed using <a
@@ -1123,7 +1125,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     }
 }
 
-ad_proc export_url_vars {
+ad_proc -deprecated export_url_vars {
     -sign:boolean
     args 
 } {
@@ -1815,7 +1817,7 @@ ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of
     ns_write $entire_string_to_write
 }
 
-ad_proc -public ReturnHeaders {{content_type text/html}} {
+ad_proc -private ReturnHeaders {{content_type text/html}} {
    We use this when we want to send out just the headers
    and then do incremental writes with ns_write.  This way the user
    doesn't have to wait for streamed output (useful when doing
@@ -1846,6 +1848,7 @@ Content-Type: $content_type\r\n"
 
 ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
     Returns HTTP headers plus the top of the user-visible page.  
+    To be used with streaming HTML output
 } {
     ReturnHeaders $content_type
     if { $first_part_of_page ne "" } {
@@ -2180,14 +2183,13 @@ ad_proc -public ad_schedule_proc {
     }
 }
 
-ad_proc util_ReturnMetaRefresh { url { seconds_delay 0 } } {
+ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 } } {
     Ugly workaround to deal with IE5.0 bug handling
     multipart/form-data using                                                                                  
     Meta Refresh page instead of a redirect.                                                                                                                   
     
 } {
-    ReturnHeaders
-    ns_write "
+    ad_return_top_of_page "
     <head>
     <meta http-equiv=\"refresh\" content=\"$seconds_delay;URL=$url\">
     <script type=\"text/javascript\">
@@ -2299,10 +2301,12 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
-    if { [string is false $html_p] } {
-      	util_user_message -message $message
-    } else {
-      	util_user_message -message $message -html
+    if {$message ne ""} {
+	if { [string is false $html_p] } {
+	    util_user_message -message $message
+	} else {
+	    util_user_message -message $message -html
+	}
     }
 
     if { [util_complete_url_p $target_url] } {
@@ -2440,26 +2444,28 @@ ad_proc -public util_driver_info {
         set driver [ad_conn driver]
     }
 
+    set section [ns_driversection -driver $driver]
+
     switch $driver {
         nssock {
             set result(proto) http
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set result(port) [ns_config -int $section Port]
         }
         nsunix {
             set result(proto) http
             set result(port) {}
         }
         nsssl - nsssle {
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
+            set result(port) [ns_config -int $section Port]
             set result(proto) https
         }
         nsopenssl {
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
+            set result(port) [ns_config -int $section ServerPort]
             set result(proto) https
         }
         default {
             ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set result(port) [ns_config -int $section Port]
             set result(proto) http
         }
     }
@@ -2544,7 +2550,7 @@ ad_proc -public util_current_directory {{}} {
 } {
    set path [ad_conn url]
 
-   set lastchar [string range $path [expr {[string length $path]-1}] end]
+   set lastchar [string range $path end end]
    if {$lastchar eq "/" } {
         return $path
    } else { 
@@ -2553,7 +2559,7 @@ ad_proc -public util_current_directory {{}} {
         if {$file_dirname eq "/" } {
             return /
         } else {
-            return  $file_dirname/
+            return $file_dirname/
         }
    }
 }
@@ -2562,8 +2568,8 @@ ad_proc -public util_current_directory {{}} {
 ad_proc -public ad_call_proc_if_exists { proc args } {
     Calls a procedure with particular arguments, only if the procedure is defined.
 } {
-    if { [llength [info commands $proc]] == 1 } {
-	eval $proc $args
+    if { [info commands $proc] ne "" } {
+	$proc {*}$args
     }
 }
 
@@ -3059,7 +3065,7 @@ ad_proc -public util_text_to_url {
 
 }
 
-ad_proc -public util_unlist { list args } {
+ad_proc -public -deprecated util_unlist { list args } {
 
     Places the <i>n</i>th element of <code>list</code> into the variable named by
     the <i>n</i>th element of <code>args</code>.
@@ -4245,7 +4251,7 @@ ad_proc -public util::interval_pretty {
     set result {}
     if { $seconds > 0 } {
         set hrs [expr {$seconds / (60*60)}]
-        set mins [expr ($seconds / 60) % 60]
+        set mins [expr {($seconds / 60) % 60}]
         set secs [expr {$seconds % 60}]
         if { $hrs > 0 } { append result "${hrs}h " }
         if { $hrs > 0 || $mins > 0 } { append result "${mins}m " }
@@ -4660,7 +4666,7 @@ ad_proc util::catch_exec {command result_var} {
         switch -exact -- [lindex $::errorCode 0] {
 
             CHILDKILLED {
-                foreach { - pid sigName msg } $::errorCode break
+                lassign $::errorCode  - pid sigName msg 
 
                 # A child process, whose process ID was $pid,                   
                 # died on a signal named $sigName.  A human-                    
@@ -4672,7 +4678,7 @@ ad_proc util::catch_exec {command result_var} {
 
             CHILDSTATUS {
 
-                foreach { - pid code } $::errorCode break
+                lassign $::errorCode  - pid code 
 
                 # A child process, whose process ID was $pid,                   
                 # exited with a non-zero exit status, $code.
@@ -4681,7 +4687,7 @@ ad_proc util::catch_exec {command result_var} {
 
             CHILDSUSP {
 
-                foreach { - pid sigName msg } $::errorCode break
+                lassign $::errorCode  - pid sigName msg 
 
                 # A child process, whose process ID was $pid,                   
                 # has been suspended because of a signal named                  
@@ -4694,7 +4700,7 @@ ad_proc util::catch_exec {command result_var} {
 
             POSIX {
 
-                foreach { - errName msg } $::errorCode break
+                lassign $::errorCode  - errName msg 
 
                 # One of the kernel calls to launch the command                 
                 # failed.  The error code is in $errName, and a                 

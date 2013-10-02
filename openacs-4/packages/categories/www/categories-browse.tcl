@@ -36,8 +36,8 @@ set user_id [auth::require_login]
 set page_title "Browse categories"
 
 set context_bar [list "Browse categories"]
-set url_vars [export_url_vars tree_ids:multiple category_ids:multiple subtree_p letter join package_id]
-set form_vars [export_form_vars tree_ids:multiple orderby subtree_p letter package_id]
+set url_vars [export_vars -url {tree_ids:multiple category_ids:multiple subtree_p letter join package_id}]
+set form_vars [export_vars -form {tree_ids:multiple orderby subtree_p letter package_id}]
 
 db_transaction {
     # use temporary table to use only bind vars in queries
@@ -55,7 +55,7 @@ template::util::list_to_lookup $category_ids category_selected
 foreach tree_id $tree_ids {
     set tree_name [category_tree::get_name $tree_id]
     foreach category [category_tree::get_tree $tree_id] {
-	util_unlist $category category_id category_name deprecated_p level
+	lassign $category category_id category_name deprecated_p level
 	set indent ""
 	if {$level>1} {
 	    set indent "[string repeat "&nbsp;" [expr {2*$level -4}]].."

@@ -1,8 +1,9 @@
-<!-- $Id: datetime-widgets.adp,v 1.4 2003/09/22 19:44:28 lars Exp $ -->
+<!-- $Id: datetime-widgets.adp,v 1.4.20.4 2013/09/24 08:35:23 gustafn Exp $ -->
 
-<master src="master">
+<master>
 
-<property name="title">@title;noquote@</property>
+<property name="doc(title)">@title@</property>
+<property name="context">@context@</property>
 
 <p>There is one main procedure to generate date and time widgets:
 
@@ -26,7 +27,7 @@ widgets:</p>
 <multiple name="dt_examples">
     <tr align=left>
         <td><code>@dt_examples.procedure@</code></td>
-        <td>@dt_examples.result@</td>
+        <td>@dt_examples.result;noquote@</td>
     </tr>
 </multiple>
 

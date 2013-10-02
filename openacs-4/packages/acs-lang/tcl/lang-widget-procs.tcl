@@ -7,7 +7,7 @@ ad_library {
 
     @author Don Baccus (dhogaza@pacifier.com)
     @creation-date November 3, 2006
-    @cvs-id $Id: lang-widget-procs.tcl,v 1.7 2008/12/11 16:18:39 emmar Exp $
+    @cvs-id $Id: lang-widget-procs.tcl,v 1.7.8.1 2013/09/13 12:08:13 gustafn Exp $
 }
 
 namespace eval template {}
@@ -66,7 +66,7 @@ ad_proc -public template::widget::select_locales {
             set label [lindex $option 0]
             set value [lindex $option 1]
 
-            set value [template::util::quote_html $value]
+            set value [ad_quotehtml $value]
             append output " <option lang=\"[string range $value 0 1]\" value=\"$value\""
             if { [info exists values($value)] } {
                 append output " selected=\"selected\""

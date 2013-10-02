@@ -1,7 +1,7 @@
 ad_page_contract {
     @author Neophytos Demetriou <k2pts@cytanet.com.cy>
     @creation-date September 01, 2001
-    @cvs-id $Id: search.tcl,v 1.37.2.1 2013/08/26 07:57:14 gustafn Exp $
+    @cvs-id $Id: search.tcl,v 1.37.2.3 2013/09/30 10:58:54 gustafn Exp $
 } {
     q:trim
     {t:trim ""}
@@ -14,7 +14,7 @@ ad_page_contract {
     {object_type ""}
 } -validate {
     keywords_p {
-        if {![exists_and_not_null q]} {
+        if {![info exists q] || $q eq ""} {
             ad_complain "#search.lt_You_must_specify_some#"
         }
     }
@@ -43,8 +43,7 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
 }
 
 if { [array get info] eq "" } {
-    ReturnHeaders
-    ns_write "[_ search.lt_FtsEngineDriver_not_a]"
+    ns_return 200 text/html [_ search.lt_FtsEngineDriver_not_a]
     ad_script_abort
 }
 
@@ -119,9 +118,12 @@ if {[callback::impl_exists -impl $driver -callback search::search]} {
     # FIXME do this in the intermedia driver!
 #    set final_query_string [db_string final_query_select "select site_wide_search.im_convert(:q) from dual"]
 
-    array set result [lindex [callback -impl $driver search::search -query $q -offset $offset -limit $limit -user_id $user_id -df $df -extra_args [list package_ids $search_package_id object_type $object_type]] 0]
+    array set result [lindex [callback -impl $driver search::search -query $q -offset $offset -limit $limit \
+				  -user_id $user_id -df $df \
+				  -extra_args [list package_ids $search_package_id object_type $object_type]] 0]
 } else {
-    array set result [acs_sc::invoke -contract FtsEngineDriver -operation search -call_args $params -impl $driver]
+    array set result [acs_sc::invoke -contract FtsEngineDriver -operation search \
+			  -call_args $params -impl $driver]
 }
 set tend [clock clicks -milliseconds]
 
@@ -131,7 +133,8 @@ if { $t eq [_ search.Feeling_Lucky] && $result(count) > 0} {
     if {[callback::impl_exists -impl $object_type -callback search::url]} {
 	set url [callback -impl $object_type search::url -object_id $object_id]
     } else {
-	set url [acs_sc::invoke -contract FtsContentProvider -operation url -call_args [list $object_id] -impl $object_type]
+	set url [acs_sc::invoke -contract FtsContentProvider -operation url \
+		     -call_args [list $object_id] -impl $object_type]
     }
     ad_returnredirect $url
     ad_script_abort
@@ -142,7 +145,7 @@ if { $offset >= $result(count) } { set offset [expr {($result(count) / $limit) *
 set low  [expr {$offset + 1}]
 set high [expr {$offset + $limit}]
 if { $high > $result(count) } { set high $result(count) }
-if { $info(automatic_and_queries_p) && ([lsearch -exact $q and] > 0) } {
+if { $info(automatic_and_queries_p) && "and" in $q } {
     set and_queries_notice_p 1
 } else {
     set and_queries_notice_p 0
@@ -174,16 +177,20 @@ for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
             set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
         } else {
             ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
-            array set datasource [acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]
-            set url_one [acs_sc::invoke -contract FtsContentProvider -operation url -call_args [list $object_id] -impl $object_type]
+            array set datasource [acs_sc::invoke -contract FtsContentProvider -operation datasource \
+				      -call_args [list $object_id] -impl $object_type]
+            set url_one [acs_sc::invoke -contract FtsContentProvider -operation url \
+			     -call_args [list $object_id] -impl $object_type]
         }
         search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
         if {[callback::impl_exists -impl $driver -callback search::summary]} {
             set title_summary [lindex [callback -impl $driver search::summary -query $q -text $datasource(title)] 0]
             set txt_summary [lindex [callback -impl $driver search::summary -query $q -text $txt] 0]
         } else {
-            set title_summary [acs_sc::invoke -contract FtsEngineDriver -operation summary -call_args [list $q $datasource(title)] -impl $driver]
-            set txt_summary [acs_sc::invoke -contract FtsEngineDriver -operation summary -call_args [list $q $txt] -impl $driver]
+            set title_summary [acs_sc::invoke -contract FtsEngineDriver -operation summary \
+				   -call_args [list $q $datasource(title)] -impl $driver]
+            set txt_summary [acs_sc::invoke -contract FtsEngineDriver -operation summary \
+				 -call_args [list $q $txt] -impl $driver]
         }
     } errmsg]} {
         ns_log error "search.tcl object_id $object_id object_type $object_type error $errmsg"

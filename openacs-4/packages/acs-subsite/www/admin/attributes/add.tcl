@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Nov  7 12:14:42 2000
-    @cvs-id $Id: add.tcl,v 1.2 2002/09/06 21:49:57 jeffd Exp $
+    @cvs-id $Id: add.tcl,v 1.2.26.4 2013/09/09 16:44:19 gustafn Exp $
 
 } {
     object_type:notnull,trim
@@ -25,7 +25,7 @@ ad_page_contract {
 }
 
 set context [list "Add attribute"]
-set export_vars [ad_export_vars -form {object_type return_url}]
+set export_vars [export_vars -form {object_type return_url}]
 
 set object_pretty_name [db_string object_pretty_name {
     select t.pretty_name 

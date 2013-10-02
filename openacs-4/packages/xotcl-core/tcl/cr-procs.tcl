@@ -3,7 +3,7 @@
 
   @author Gustaf Neumann
   @creation-date 2007-08-13
-  @cvs-id $Id: cr-procs.tcl,v 1.50 2013/07/29 08:39:07 gustafn Exp $
+  @cvs-id $Id: cr-procs.tcl,v 1.50.2.2 2013/09/29 18:51:10 gustafn Exp $
 }
 
 namespace eval ::xo::db {
@@ -1182,7 +1182,7 @@ namespace eval ::xo::db {
     set lines [t1 children]
     for {set i 0} {$i < [llength $lines]-1} {incr i} {
       set e [lindex $lines $i]
-      set n [lindex $lines [expr {$i+1}]]
+      set n [lindex $lines $i+1]
       set revision_id [$e set payload(revision_id)]
       set compare_revision_id [$n set payload(revision_id)]
       $e set diff.href [export_vars -base $base {{m diff} compare_revision_id revision_id}]
@@ -1583,7 +1583,7 @@ namespace eval ::xo::db {
     return [list $arrays $scalars]
   }
   CrCache::Item instproc set_non_persistent_vars {vars} {
-    foreach {arrays scalars} $vars break
+    lassign $vars arrays scalars
     foreach {var value} $arrays {my array set $var $value}
     foreach {var value} $scalars {my set $var $value}
   }

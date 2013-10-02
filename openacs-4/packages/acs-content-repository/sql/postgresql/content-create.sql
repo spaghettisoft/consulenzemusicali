@@ -4,7 +4,7 @@
 -- Copyright (C) 1999-2000 ArsDigita Corporation
 -- Author: Karl Goldstein (karlg@arsdigita.com)
 
--- $Id: content-create.sql,v 1.60 2012/08/06 18:06:13 michaels Exp $
+-- $Id: content-create.sql,v 1.60.2.1 2013/09/16 09:49:28 gustafn Exp $
 
 -- This is free software distributed under the terms of the GNU Public
 -- License.  Full text of the license is available from the GNU Project:
@@ -100,6 +100,8 @@ comment on table cr_locales is '
   territory and character set.  (Languages are associated with default
   territories and character sets when not defined).  The formats
   for numbers, currency, dates, etc. are determined by the territory.
+
+  The cr_locales table is deprecated for OpenACS 5.2, and will be removed in OpenACS 6 (TIP #66)
 ';
 
 insert into cr_locales (

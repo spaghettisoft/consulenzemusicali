@@ -3,7 +3,7 @@
 
     @creation-date 2006-02-02
     @author Gustaf Neumann
-    @cvs-id $Id: chat-procs.tcl,v 1.17 2013/07/29 08:56:44 gustafn Exp $
+    @cvs-id $Id: chat-procs.tcl,v 1.17.2.1 2013/09/30 11:37:17 gustafn Exp $
 }
 namespace eval ::xowiki {
   ::xo::ChatClass create Chat -superclass ::xo::Chat
@@ -79,7 +79,7 @@ namespace eval ::xowiki {
       # Check, whether we have the tcllibthread and a sufficiently new
       # aolserver/naviserver supporting bgdelivery transfers.
       #
-      if {[info command ::thread::mutex] ne "" &&
+      if {[info commands ::thread::mutex] ne "" &&
           ![catch {ns_conn contentsentlength}]} {
 	#
         # scripted streaming should work everywhere

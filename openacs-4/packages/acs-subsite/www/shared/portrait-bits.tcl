@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author philg@mit.edu
     @creation-date 26 Sept 1999
-    @cvs-id $Id: portrait-bits.tcl,v 1.9 2009/03/31 15:00:13 emmar Exp $
+    @cvs-id $Id: portrait-bits.tcl,v 1.9.8.1 2013/09/28 15:14:52 gustafn Exp $
 } {
     user_id:integer
     {item_id ""}
@@ -15,7 +15,7 @@ ad_page_contract {
 if {$item_id eq ""} {
     if { ![db_0or1row get_item_id ""] } {
 	#    ad_return_error "Couldn't find portrait" "Couldn't find a portrait for User $user_id"
-	ad_return_string_as_file -string "" -mime_type "image/jpeg" -filename ""
+	#ad_return_string_as_file -string "" -mime_type "image/jpeg" -filename ""
 	return
     }
 }    

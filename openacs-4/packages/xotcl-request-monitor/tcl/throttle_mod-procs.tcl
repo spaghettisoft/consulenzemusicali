@@ -219,7 +219,7 @@
       if {[my exists active($requestKey)]} {
 	# if more than one request for this key is already active, 
 	# return blocking time
-	foreach {to cnt} [my set active($requestKey)] break
+	lassign [my set active($requestKey)] to cnt
 	set retMs [expr {$cnt>[my startThrottle] ? 500 : 0}]
 	# cancel the timeout
 	after cancel $to
@@ -288,7 +288,6 @@
   }
   ThrottleTrace instproc throttle_check args {
     catch {
-      if {[my exists traceCounter]} {my incr traceCounter} {my set traceCounter 0}
       my incr traceCounter
       my log "CALL [my set traceCounter] [self args]"
     }
@@ -381,13 +380,13 @@
     lappend trend $n
     set lt [llength $trend]
     if {$lt > [my nr_trend_elements]} {
-      set trend [lrange $trend [expr {$lt-[my nr_trend_elements]}] end]
+      set trend [lrange $trend $lt-[my nr_trend_elements] end]
     }
     #
     # stats keeps nr_stats_elements highest values with time stamp
     #
     lappend stats [list $timestamp $n]
-    set stats [lrange [lsort -real -decreasing -index 1 $stats] 0 [expr {[my nr_stats_elements] - 1}]]
+    set stats [lrange [lsort -real -decreasing -index 1 $stats] 0 [my nr_stats_elements]-1]
   }
   Counter instproc finalize {n} {
     after cancel [my set to]
@@ -423,7 +422,7 @@
   
   Counter user_count_day -timeoutMs [expr {60000*60}] -logging 1
   user_count_day proc end {} {
-    foreach {auth ip} [throttle users nr_users_per_day] break
+    lassign [throttle users nr_users_per_day] auth ip
     set now [clock format [clock seconds]]
     # The counter logs its intrinsic value (c) anyhow, which are the
     # authenticated users. We also want to record the number of
@@ -484,13 +483,8 @@
     if {$has_param} {set url $url?...}
 
     ### Add statistics in detail
-    if {[my exists stat($url)]} {
-      my incr stat($url) $ms
-      my incr cnt($url)
-    } else {
-      my set stat($url) $ms
-      my set cnt($url) 1
-    }
+    my incr stat($url) $ms
+    my incr cnt($url)
   } -instproc last100  {} {
     my array get last100
   } -instproc flush_url_stats {} {
@@ -515,7 +509,7 @@
 	my unset stat($url)
 	my unset cnt($url)
       }
-      set result [lrange $result 0 [expr {$max-1}]]
+      set result [lrange $result 0 $max-1]
       return $result
     }
     return ""
@@ -561,7 +555,7 @@
     used to obtain various kinds of information.
 
     @author Gustaf Neumann
-    @cvs-id $Id: throttle_mod-procs.tcl,v 1.41 2013/07/29 07:45:26 gustafn Exp $
+    @cvs-id $Id: throttle_mod-procs.tcl,v 1.41.2.6 2013/09/30 11:39:39 gustafn Exp $
   }
 
   Users ad_proc active {-full:switch}  {
@@ -741,9 +735,7 @@
       }
     }
     set counter active($key)
-    if {[catch {my incr $counter}]} {
-      my set $counter 1
-    }
+    my incr $counter
     if {[my set $counter] == 1} {
       # we could combine this test with the incr, but in
       # Tcl 8.5, incr on unknown variables does not throw errors
@@ -755,19 +747,13 @@
     if {[catch {my lappend urls($key) $entry}]} {
       my set urls($key) [list $entry]
     }
-    if {[catch {$class incr hits($key)}]} {
-      $class set hits($key) 1
-    }
+    $class incr hits($key)
   }
 
   Users instproc add_view {uid} {
     #my log "#### add_view $uid"
     set key views($uid)
-    if {[my exists $key]} {
-      my incr $key
-    } else {
-      my set $key 1
-    }
+    my incr $key
   }
   Users proc views_per_minute {uid} {
     set mins 0
@@ -794,7 +780,7 @@
   Users proc expSmooth {ts key} {
     set mins [expr {$ts/60}]
     if {[my exists expSmooth($key)]} {
-      foreach {_ aggval lastmins hits} [my set expSmooth($key)] break
+      lassign [my set expSmooth($key)] _ aggval lastmins hits
       set mindiff [expr {$mins-$lastmins}]
       if {$mindiff == 0} {
 	incr hits
@@ -1059,7 +1045,7 @@
    <a href='/xotcl/show-object?object=%3a%3athrottle+do+%3a%3aCounter'>Counter</a>, 
   <a href='/xotcl/show-object?object=%3a%3athrottle+do+%3a%3aMaxCounter'>MaxCounter</a>, ...
   @author Gustaf Neumann
-  @cvs-id $Id: throttle_mod-procs.tcl,v 1.41 2013/07/29 07:45:26 gustafn Exp $
+  @cvs-id $Id: throttle_mod-procs.tcl,v 1.41.2.6 2013/09/30 11:39:39 gustafn Exp $
 }
 
 throttle proc ms {-start_time} {
@@ -1085,7 +1071,7 @@ throttle proc get_context {} {
     # ordinary request, ad_conn is initialized
     set package_id [ad_conn package_id]
     ::xo::ConnectionContext require -package_id $package_id -url $url
-    if {[info command dotlrn_community::get_community_id] ne "" &&
+    if {[info commands dotlrn_community::get_community_id] ne "" &&
       $package_id ne ""} {
       my set community_id [dotlrn_community::get_community_id \
 			       -package_id $package_id]
@@ -1118,10 +1104,9 @@ throttle ad_proc check {} {
   my get_context
   #my log "### check"
 
-  foreach {toMuch ms repeat} \
-      [my throttle_check $requestor $pa $url \
-	   [ns_conn start] [ns_guesstype [ns_conn url]] $community_id] \
-      break
+  lassign [my throttle_check $requestor $pa $url \
+	       [ns_conn start] [ns_guesstype [ns_conn url]] $community_id] \
+      toMuch ms repeat
   if {$repeat} {
     my add_statistics repeat $requestor $pa $url $query
     return -1

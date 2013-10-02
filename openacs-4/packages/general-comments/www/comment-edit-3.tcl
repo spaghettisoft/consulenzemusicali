@@ -6,7 +6,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: comment-edit-3.tcl,v 1.4.14.2 2013/09/06 17:37:19 gustafn Exp $
+    @cvs-id $Id: comment-edit-3.tcl,v 1.4.14.3 2013/09/09 16:44:27 gustafn Exp $
 } {
     comment_id:integer,notnull
     title
@@ -53,5 +53,5 @@ db_transaction {
 
 }
 
-ad_returnredirect "view-comment?[export_url_vars comment_id return_url]"
+ad_returnredirect "view-comment?[export_vars -url {comment_id return_url}]"
     

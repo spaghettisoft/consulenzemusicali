@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Mon Jan  8 16:31:12 2001
-    @cvs-id $Id: groups-display.tcl,v 1.3 2002/09/06 21:49:58 jeffd Exp $
+    @cvs-id $Id: groups-display.tcl,v 1.3.26.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_type:notnull
@@ -18,7 +18,7 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars group_type] "One type"] "Groups"]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[export_vars group_type] "One type"] "Groups"]
 set group_type_enc [ad_urlencode $group_type]
 
 if { ![db_0or1row select_type_info {

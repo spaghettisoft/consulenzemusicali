@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Dec 12 11:23:12 2000
-    @cvs-id $Id: delete.tcl,v 1.3 2002/09/06 21:50:01 jeffd Exp $
+    @cvs-id $Id: delete.tcl,v 1.3.26.5 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     segment_id:integer,notnull
@@ -28,10 +28,10 @@ db_1row select_segment_info {
      where s.segment_id = :segment_id
 }
 
-set export_vars [export_form_vars segment_id]
+set export_vars [export_vars -form {segment_id}]
 set context [list \
      [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] \
-     [list one?[ad_export_vars segment_id] "One segment"] \
+     [list one?[export_vars segment_id] "One segment"] \
      "Remove segment"]
 
 ad_return_template

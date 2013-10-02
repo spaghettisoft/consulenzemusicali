@@ -8,7 +8,7 @@ ad_page_contract {
     @author Lars Pind (lars@pinds.com)
     @creation-date 1 July 2000
     
-    @cvs-id $Id: content-page-view.tcl,v 1.5 2010/11/25 09:17:23 gustafn Exp $
+    @cvs-id $Id: content-page-view.tcl,v 1.5.4.3 2013/09/14 12:36:13 gustafn Exp $
 } {
     version_id:integer,optional
     source_p:integer,optional,trim
@@ -20,7 +20,7 @@ ad_page_contract {
 }
 
 set context [list]
-set url_vars [export_url_vars path version_id]
+set url_vars [export_vars -url {path version_id}]
 set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 
@@ -38,12 +38,14 @@ if { ![info exists version_id] && \
 }
 
 if { [info exists version_id] } {
-    db_1row package_info_from_version_id {
+    db_0or1row package_info_from_version_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
+    if {[info exists pretty_name]} {
+        lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
+    }
 }
 
 
@@ -59,6 +61,7 @@ if {[regsub -all {[.][.]/} $filename "" shortened_filename]} {
 
 if {![file exists $filename] || [file isdirectory $filename]} {
     set file_contents "file '$filename' not found"
+    multirow create xql_links link
 } else {
     if { $source_p } {
         if {[catch {

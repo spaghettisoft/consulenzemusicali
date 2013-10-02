@@ -5,7 +5,7 @@ ad_library {
     @creation-date 13 Apr 2000
     @author Bryan Quinn (bquinn@arsdigita.com)
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id $Id: apm-procs.tcl,v 1.94.2.3 2013/09/06 12:06:50 gustafn Exp $
+    @cvs-id $Id: apm-procs.tcl,v 1.94.2.5 2013/09/28 12:10:01 gustafn Exp $
 }
 
 namespace eval apm {}
@@ -122,6 +122,13 @@ ad_proc -public apm_ns_write_callback { string } {
     ns_write $string
 }
 
+ad_proc -public apm_body_callback { string } {
+    This callback uses the document api to append more text to the stream.
+} {
+    append ::__apm_body $string
+}
+
+
 ad_proc -public apm_doc_body_callback { string } {
     This callback uses the document api to append more text to the stream.
 } {
@@ -135,7 +142,7 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
 
 } {
     $callback $message
-    ns_log $severity $message
+    ns_log $severity [ad_html_to_text -- $message]
 }   
 
 ad_proc apm_one_package_descendents {

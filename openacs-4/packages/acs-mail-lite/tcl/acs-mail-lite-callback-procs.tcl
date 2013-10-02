@@ -7,7 +7,7 @@ ad_library {
     @author Malte Sussdorff (sussdorff@sussdorff.de)
     @creation-date 2005-06-15
     @arch-tag: d9aec4df-102d-4b0d-8d0e-3dc470dbe783
-    @cvs-id $Id: acs-mail-lite-callback-procs.tcl,v 1.22 2009/03/18 22:41:15 emmar Exp $
+    @cvs-id $Id: acs-mail-lite-callback-procs.tcl,v 1.22.8.1 2013/09/29 12:03:22 gustafn Exp $
 }
 
 ad_proc -public -callback acs_mail_lite::send {
@@ -99,7 +99,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     set to [acs_mail_lite::parse_email_address -email $email(to)]
     ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to"
 
-    util_unlist [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
+    lassign [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     
     # If no user_id found or signature invalid, ignore message
     if {$user_id eq ""} {

@@ -7,7 +7,7 @@ ad_page_contract {
 
     @author rhs@mit.edu
     @creation-date 2000-09-13
-    @cvs-id $Id: package-new.tcl,v 1.12 2007/01/10 21:22:08 gustafn Exp $
+    @cvs-id $Id: package-new.tcl,v 1.12.10.1 2013/09/09 16:44:24 gustafn Exp $
 
 } {
     {new_package_id:integer ""}
@@ -67,4 +67,4 @@ db_transaction {
     }
 }
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

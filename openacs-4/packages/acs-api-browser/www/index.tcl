@@ -8,7 +8,7 @@ ad_page_contract {
     @about_package_key a package-key
     @author Jon Salz (jsalz@mit.edu)
     @author Lars Pind (lars@pinds.com)
-    @cvs-id $Id: index.tcl,v 1.6 2013/05/16 08:41:46 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.6.2.1 2013/09/15 08:31:00 gustafn Exp $
 } {
     about_package_key:optional
 } -properties {
@@ -23,6 +23,11 @@ set title "API Browser"
 set context [list]
 
 if  { [info exists about_package_key] } {
+
+    # create multirows to make property-passing happy
+    multirow create installed_packages
+    multirow create disabled_packages
+    multirow create uninstalled_packages
 
     if { [db_0or1row get_local_package_version_id {} ] } {
         rp_form_update version_id $version_id

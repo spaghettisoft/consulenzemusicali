@@ -1,7 +1,7 @@
 ad_page_contract {
     Display information about one procedure.
     
-    @cvs-id $Id: proc-view.tcl,v 1.6.16.1 2013/08/27 12:20:34 gustafn Exp $
+    @cvs-id $Id: proc-view.tcl,v 1.6.16.3 2013/09/13 13:01:03 gustafn Exp $
 } {
     proc
     source_p:optional,integer,trim
@@ -20,17 +20,19 @@ set title $proc
 
 set context [list]
 if { [exists_and_not_null version_id] } {
-    db_1row package_info_from_package_id {
+    db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id&kind=procs" "$pretty_name $version_name"]
+    if {[info exists package_id]} {
+        lappend context [list "package-view?version_id=$version_id&kind=procs" "$pretty_name $version_name"]
+    }
 }
 lappend context [list $proc]
 
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
-set return_url [ns_urlencode [ad_conn url]?[export_url_vars proc version_id]]
+set return_url [ns_urlencode [ad_conn url]?[export_vars -url {proc version_id}]]
 set error_msg ""
 
 if { ![info exists source_p] } {

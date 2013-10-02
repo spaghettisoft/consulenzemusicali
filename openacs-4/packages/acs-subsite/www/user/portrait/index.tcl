@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author philg@mit.edu
     @creation-date September 26, 1999
-    @cvs-id $Id: index.tcl,v 1.10.8.1 2013/09/06 16:01:47 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.10.8.2 2013/09/09 16:44:26 gustafn Exp $
 } {
     {return_url "" }
     {user_id ""}
@@ -45,8 +45,8 @@ if { $current_user_id == $user_id } {
     set admin_p 0
 }
 
-set export_vars      [export_url_vars user_id]
-set export_edit_vars [export_url_vars user_id return_url]
+set export_vars      [export_vars -url {user_id}]
+set export_edit_vars [export_vars -url {user_id return_url}]
 
 if {![db_0or1row user_info "select 
   first_names, 

@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Dec 10 16:50:58 2000
-    @cvs-id $Id: rel-type-add.tcl,v 1.4 2011/04/15 11:43:48 emmar Exp $
+    @cvs-id $Id: rel-type-add.tcl,v 1.4.4.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_type:trim,notnull
@@ -21,7 +21,7 @@ ad_page_contract {
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 
 set doc(title) [_ acs-subsite.Add_a_permissible_relationship_type]
-set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite.Group_Types]] [list one?[ad_export_vars {group_type}] $group_type] $doc(title)]
+set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite.Group_Types]] [list one?[export_vars {group_type}] $group_type] $doc(title)]
 
 
 # Select out all the relationship types that are not currently
@@ -49,6 +49,6 @@ db_multirow primary_rels select_primary_relations {
 }
 
 
-set export_vars [ad_export_vars -form {group_type return_url}]
+set export_vars [export_vars -form {group_type return_url}]
 
 ad_return_template

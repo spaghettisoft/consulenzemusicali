@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
     @arch-tag: dc56be97-e611-4f34-a5b6-264b46a6ad7b
-    @cvs-id $Id: content-keyword-procs.tcl,v 1.4 2005/01/21 14:25:07 jeffd Exp $
+    @cvs-id $Id: content-keyword-procs.tcl,v 1.4.16.1 2013/09/30 17:44:27 gustafn Exp $
 }
 
 namespace eval ::content::keyword {}
@@ -181,10 +181,10 @@ ad_proc -public content::keyword::new {
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date ]
     }
-    if {[exists_and_not_null object_type]} {
+    if {[info exists object_type] && $object_type ne ""} {
         lappend var_list [list object_type $object_type ]
     }
     return [package_exec_plsql -var_list $var_list content_keyword new]

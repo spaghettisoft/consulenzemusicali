@@ -2,7 +2,7 @@ ad_page_contract {
     Adds a dependency to a version of a package. 
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 17 April 2000
-    @cvs-id $Id: version-dependency-remove.tcl,v 1.5 2010/10/17 21:06:07 donb Exp $
+    @cvs-id $Id: version-dependency-remove.tcl,v 1.5.4.1 2013/09/09 16:44:17 gustafn Exp $
 } {
     {version_id:integer}
     {dependency_id:integer}
@@ -32,5 +32,5 @@ db_transaction {
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
 }
 
-ad_returnredirect "version-dependencies?[export_url_vars version_id]"
+ad_returnredirect "version-dependencies?[export_vars -url {version_id}]"
 

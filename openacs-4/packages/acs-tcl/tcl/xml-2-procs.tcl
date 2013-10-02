@@ -31,7 +31,7 @@ ad_library {
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
-    @cvs-id $Id: xml-2-procs.tcl,v 1.2 2007/01/10 21:22:12 gustafn Exp $
+    @cvs-id $Id: xml-2-procs.tcl,v 1.2.10.1 2013/09/30 11:22:01 gustafn Exp $
 }
 
 package provide xml 1.9
@@ -114,7 +114,7 @@ proc xml::parser {args} {
 	set name parser[incr ParserCounter]
     }
 
-    if {[info command [namespace current]::$name] != {}} {
+    if {[info commands [namespace current]::$name] ne {}} {
 	return -code error "unable to create parser object \"[namespace current]::$name\" command"
     }
 

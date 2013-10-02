@@ -3,7 +3,7 @@
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Author: Stanislav Freidin (sfreidin@arsdigita.com)
 #
-# $Id: date-procs.tcl,v 1.48 2011/02/28 01:21:25 donb Exp $
+# $Id: date-procs.tcl,v 1.48.4.1 2013/09/13 11:44:17 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -706,7 +706,6 @@ ad_proc -public template::util::negative { value } {
     return 0
   } else {
     return [expr {[template::util::leadingTrim $value] < 0}]
-    return [expr {$value < 0}]
   }
 }
 

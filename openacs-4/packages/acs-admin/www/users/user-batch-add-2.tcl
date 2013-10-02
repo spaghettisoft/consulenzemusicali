@@ -1,6 +1,6 @@
 ad_page_contract {
     Interface for specifying a list of users to sign up as a batch
-    @cvs-id $Id: user-batch-add-2.tcl,v 1.6 2009/07/12 01:08:22 donb Exp $
+    @cvs-id $Id: user-batch-add-2.tcl,v 1.6.6.1 2013/09/30 11:12:56 gustafn Exp $
 } -query {
     userlist
     from
@@ -25,7 +25,7 @@ set title "Adding new users in bulk"
 while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
     # remove each row as it's handled
     set remove_count [string length $row]
-    set userlist [string range $userlist [expr {$remove_count + 1}] end]
+    set userlist [string range $userlist $remove_count+1 end]
     set row [split $row ,]
     set email [string trim [lindex $row 0]]
     set first_names [string trim [lindex $row 1]]

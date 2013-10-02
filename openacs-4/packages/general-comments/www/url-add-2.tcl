@@ -6,7 +6,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: url-add-2.tcl,v 1.4.14.2 2013/09/06 17:37:19 gustafn Exp $
+    @cvs-id $Id: url-add-2.tcl,v 1.4.14.3 2013/09/09 16:44:28 gustafn Exp $
 } {
     attach_id:integer,notnull
     parent_id:integer,notnull
@@ -45,7 +45,7 @@ db_exec_plsql insert_comment {
     end;
 }
 
-ad_returnredirect "view-comment?comment_id=$parent_id&[export_url_vars return_url]"
+ad_returnredirect "view-comment?comment_id=$parent_id&[export_vars -url {return_url}]"
 
 
 

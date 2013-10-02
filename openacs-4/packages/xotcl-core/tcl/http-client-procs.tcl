@@ -5,7 +5,7 @@ ad_library {
 
   @author Gustaf Neumann, Stefan Sobernig
   @creation-date 2007-10-05
-  @cvs-id $Id: http-client-procs.tcl,v 1.29 2011/09/07 17:12:04 gustafn Exp $
+  @cvs-id $Id: http-client-procs.tcl,v 1.29.6.2 2013/09/30 11:38:41 gustafn Exp $
 }
 
 namespace eval ::xo {
@@ -293,7 +293,7 @@ namespace eval ::xo {
     }
     if {$protocol eq "https"} {
       package require tls
-      if {[info command ::tls::import] eq ""} {
+      if {[info commands ::tls::import] eq ""} {
         error "https request require the Tcl module TLS to be installed\n\
              See e.g. http://tls.sourceforge.net/"
       }
@@ -580,7 +580,7 @@ namespace eval ::xo {
       set to_send [expr {$total_bytes - $bytes_sent}]
       set block_size [expr {$to_send < 4096 ? $to_send : 4096}]
       set next_block_size [expr {$bytes_sent + $block_size}]
-      set block [string range $post_data $bytes_sent [expr {$next_block_size-1}]]
+      set block [string range $post_data $bytes_sent $next_block_size-1]
       my notify request_data $block
       puts -nonewline $S $block
       set bytes_sent $next_block_size

@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
 #
-# $Id: element-procs.tcl,v 1.32.2.2 2013/09/05 11:38:46 gustafn Exp $
+# $Id: element-procs.tcl,v 1.32.2.3 2013/09/29 18:49:59 gustafn Exp $
 #
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -726,7 +726,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
 
     upvar #$level formgroup:$i formgroup
     
-    set option [lindex $options [expr {$i - 1}]]
+    set option [lindex $options $i-1]
     set value [lindex $option 1]
 
     if { ![info exists values($value)] } {

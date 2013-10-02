@@ -2,7 +2,7 @@ ad_page_contract {
     Displays last requests of a user
 
     @author Gustaf Neumann (adapted for interaction with controlling thread)
-    @cvs-id $Id: last-requests.tcl,v 1.6 2008/09/12 20:12:08 gustafn Exp $
+    @cvs-id $Id: last-requests.tcl,v 1.6.2.1 2013/09/17 19:29:57 gustafn Exp $
 } -query {
   request_key
   {all:optional 1}
@@ -60,7 +60,7 @@ set last_timestamp [clock seconds]
 
 set hidden 0
 foreach element [lsort -index 0 -decreasing $requests] {
-  foreach {timestamp url pa} $element break
+  lassign $element timestamp url pa
   if {!$all} {
     set exclude 0
     foreach pattern $hide_patterns {

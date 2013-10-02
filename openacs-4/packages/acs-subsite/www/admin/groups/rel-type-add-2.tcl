@@ -7,7 +7,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Jan  2 12:10:17 2001
-    @cvs-id $Id: rel-type-add-2.tcl,v 1.4 2010/10/04 21:59:20 victorg Exp $
+    @cvs-id $Id: rel-type-add-2.tcl,v 1.4.4.4 2013/09/09 16:44:21 gustafn Exp $
 
 } {
     group_id:integer,notnull
@@ -67,10 +67,10 @@ if { [db_string segment_exists_p {
       from dual
 }] } {
     if { $return_url eq "" } {
-	set return_url one?[ad_export_vars group_id]
+	set return_url one?[export_vars group_id]
     }
     ad_returnredirect $return_url 
 } else {
-    ad_returnredirect constraints-create?[ad_export_vars {group_id rel_type return_url}]
+    ad_returnredirect constraints-create?[export_vars {group_id rel_type return_url}]
 }
 

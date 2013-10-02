@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
     @arch-tag: ddc736fb-cb5f-41fe-a854-703df26e8e03
-    @cvs-id $Id: content-revision-procs.tcl,v 1.25 2009/07/12 01:08:23 donb Exp $
+    @cvs-id $Id: content-revision-procs.tcl,v 1.25.6.2 2013/09/30 17:44:27 gustafn Exp $
 }
 
 namespace eval ::content::revision {}
@@ -92,10 +92,10 @@ ad_proc -public ::content::revision::new {
 	set creation_ip [ad_conn peeraddr]
     }
 
-    if {![exists_and_not_null content_type]} {
+    if {![info exists content_type] || $content_type eq ""} {
 	set content_type [::content::item::content_type -item_id $item_id]
     }
-    if {![exists_and_not_null storage_type]} {
+    if {$storage_type eq ""} {
 	set storage_type [db_string get_storage_type ""]
     }
     if {![info exists package_id]} {
@@ -104,7 +104,7 @@ ad_proc -public ::content::revision::new {
     set attribute_names ""
     set attribute_values ""
 
-    if { [exists_and_not_null attributes] } {
+    if { [info exists attributes] && $attributes ne "" } {
 	set type_attributes [package_object_attribute_list $content_type]
 	set valid_attributes [list]
 	# add in extended attributes for this type, ingore
@@ -112,13 +112,14 @@ ad_proc -public ::content::revision::new {
 	# parameters to this procedure
 	
 	foreach type_attribute $type_attributes {
-	    if {"cr_revisions" ne [lindex $type_attribute 1] \
-                && "acs_objects" ne [lindex $type_attribute 1] } {
+	    if {"cr_revisions" ne [lindex $type_attribute 1] 
+                && "acs_objects" ne [lindex $type_attribute 1] 
+	    } {
 		lappend valid_attributes [lindex $type_attribute 2]
 	    }
 	}
 	foreach attribute_pair $attributes {
-            foreach {attribute_name attribute_value} $attribute_pair {break}
+            lassign $attribute_pair attribute_name attribute_value
 	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
 
                 # first add the column name to the list

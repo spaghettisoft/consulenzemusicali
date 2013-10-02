@@ -3,7 +3,7 @@ ad_library {
     
     @creation-date 2003-09-05
     @author Lars Pind (lars@collaboraid.biz)
-    @cvs-id $Id: sync-procs.tcl,v 1.34.6.1 2013/08/25 20:00:12 gustafn Exp $
+    @cvs-id $Id: sync-procs.tcl,v 1.34.6.2 2013/09/30 18:26:48 gustafn Exp $
 }
 
 namespace eval auth {}
@@ -511,7 +511,7 @@ ad_proc -public auth::sync::purge_jobs {
 } {
     Purge jobs that are older than KeepBatchLogDays days.
 } {
-    if { ![exists_and_not_null num_days] } {
+    if { $num_days eq "" } {
         set num_days [parameter::get_from_package_key \
                           -parameter KeepBatchLogDays \
                           -package_key "acs-authentication" \

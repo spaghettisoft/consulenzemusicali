@@ -17,7 +17,7 @@ ad_page_contract {
 
     @author philg@mit.edu
     @creation-date 12/19/98
-    @cvs-id $Id: display-sql.tcl,v 1.5 2007/01/10 21:22:03 gustafn Exp $
+    @cvs-id $Id: display-sql.tcl,v 1.5.10.1 2013/09/09 16:44:18 gustafn Exp $
 } {
     url:notnull
     {package_key ""}
@@ -48,7 +48,7 @@ if {$db eq ""} {
     set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/*/$url" "[acs_package_root_dir $package_key]/sql/$url"]
     foreach f $files { 
         regexp {([^/]*)/([^/]*)$} $f match db url
-        append text "<li> <a href=\"display-sql?[export_url_vars db url package_key]\">$db</a></li>"
+        append text "<li> <a href=\"display-sql?[export_vars -url {db url package_key}]\">$db</a></li>"
     }
     if {$files eq ""} { 
         append text "<li> No sql file found."

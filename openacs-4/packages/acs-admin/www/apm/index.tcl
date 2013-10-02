@@ -4,7 +4,7 @@ ad_page_contract {
     @param orderyby The parameter to order everything in the page by.
     @param owned_by Display packages owned by whom.
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id $Id: index.tcl,v 1.24.8.2 2013/09/04 11:25:32 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.24.8.3 2013/09/29 11:10:38 gustafn Exp $
 } {
     { orderby "package_key" }
     { owned_by "everyone" }
@@ -19,7 +19,7 @@ set user_id [ad_conn user_id]
 
 # Determine the user's email address.  If its not registered, put in a default.  
 set my_email [db_string email_by_user_id {
-    select email  from parties where party_id = :user_id
+    select email from parties where party_id = :user_id
 } -default "me"]
 
 set dimensional_list {

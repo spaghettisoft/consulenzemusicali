@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Wed Nov  8 19:29:22 2000
-    @cvs-id $Id: new.tcl,v 1.6 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: new.tcl,v 1.6.10.4 2013/09/09 16:44:21 gustafn Exp $
 
 } {
     group_type:notnull
@@ -100,7 +100,7 @@ if { $group_type_exact_p eq "f" && \
 
     # Sub rel-types exist... select one
     set group_type_exact_p "t"
-    set export_url_vars [ad_export_vars -exclude group_type $export_var_list ]
+    set export_url_vars [export_vars -exclude group_type $export_var_list ]
 
     party::types_valid_for_rel_type_multirow -datasource_name object_types -start_with $group_type -rel_type $add_with_rel_type
 

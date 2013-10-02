@@ -10,7 +10,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: delete-attachment-2.tcl,v 1.5.8.1 2013/09/06 16:01:49 gustafn Exp $
+    @cvs-id $Id: delete-attachment-2.tcl,v 1.5.8.2 2013/09/09 16:44:27 gustafn Exp $
 } {
     attach_id:integer,notnull
     parent_id:integer,notnull
@@ -73,7 +73,7 @@ permission::require_permission -object_id $attach_id -privilege delete
 #/ i18n
 #}
 
-ad_returnredirect "view-comment?comment_id=$parent_id&[export_url_vars return_url]"
+ad_returnredirect "view-comment?comment_id=$parent_id&[export_vars -url {return_url}]"
 
 
 

@@ -3,7 +3,7 @@
 
     @creation-date 2007-06-22
     @author Gustaf Neumann
-    @cvs-id $Id: form-field-procs.tcl,v 1.239 2013/08/12 19:46:49 gustafn Exp $
+    @cvs-id $Id: form-field-procs.tcl,v 1.239.2.4 2013/09/30 11:37:17 gustafn Exp $
 }
 
 namespace eval ::xowiki::formfield {
@@ -122,7 +122,7 @@ namespace eval ::xowiki::formfield {
   }
 
   FormField instproc validation_check {validator_method value} {
-    return [my $validator_method $value]
+      return [my uplevel [list my $validator_method $value]]
   }
 
   FormField instproc validate {obj} {
@@ -169,7 +169,9 @@ namespace eval ::xowiki::formfield {
         # a message key based on the class and the name of the validator.
         #
         set cl [namespace tail [lindex $proc_info 0]]
-        return [_ xowiki.$cl-validate_$validator [list value $value errorMsg $errorMsg]]
+	#my msg "__langPkg?[info exists __langPkg]"
+	if {![info exists __langPkg]} {set __langPkg "xowiki"}
+        return [_ $__langPkg.$cl-validate_$validator [list value $value errorMsg $errorMsg]]
         #return [::lang::message::lookup "" xowiki.$cl-validate_$validator %errorMsg% [list value $value errorMsg $errorMsg] 1]
       }
     }
@@ -296,8 +298,8 @@ namespace eval ::xowiki::formfield {
       help_text=* {my help_text [lindex [split $s =] 1]}
       *=*         {
         set p [string first = $s]
-        set attribute [string range $s 0 [expr {$p-1}]]
-        set value [string range $s [expr {$p+1}] end]
+        set attribute [string range $s 0 $p-1]
+        set value [string range $s $p+1 end]
         set definition_class [lindex [my procsearch $attribute] 0]
 	set method [my info methods $attribute]
         if {[string match "::xotcl::*" $definition_class] || $method eq ""} {
@@ -1439,7 +1441,7 @@ namespace eval ::xowiki::formfield {
   }
   code_listing instproc pretty_value {v} {
     [my object] do_substitutions 0
-    if {[info command api_tclcode_to_html] ne ""} {
+    if {[info commands api_tclcode_to_html] ne ""} {
       set html [api_tclcode_to_html [my value]]
       regsub -all "\n?\r</FONT></EM>" $html </FONT></EM> html
       return "<pre class='code'>$html</pre>"
@@ -2189,7 +2191,7 @@ namespace eval ::xowiki::formfield {
     }
     if {[my exists multiple] && [my set multiple]} {
       foreach o [my set options] {
-        foreach {label value} $o break
+        lassign $o label value
         set labels($value) [my localize $label]
       }
       set values [list]
@@ -2197,7 +2199,7 @@ namespace eval ::xowiki::formfield {
       return [join $values {, }]
     } else {
       foreach o [my set options] {
-        foreach {label value} $o break
+        lassign $o label value
         if {$value eq $v} {return [my localize $label]}
       }
     }
@@ -2231,7 +2233,7 @@ namespace eval ::xowiki::formfield {
 
     foreach category [::xowiki::Category get_category_infos \
                           -subtree_id $subtree_id -tree_id $tree_id] {
-      foreach {category_id category_name deprecated_p level} $category break
+      lassign $category category_id category_name deprecated_p level
       set category_name [ad_quotehtml [lang::util::localize $category_name]]
       my set category_label($category_id) $category_name
       if { $level>1 } {
@@ -2264,7 +2266,7 @@ namespace eval ::xowiki::formfield {
   radio instproc render_input {} {
     set value [my value]
     foreach o [my options] {
-      foreach {label rep} $o break
+      lassign $o label rep
       set atts [my get_attributes disabled {CSSclass class}]
       if {[my exists forced_name]} {set name [my forced_name]} {set name [my name]}
       lappend atts id [my id]:$rep name $name type radio value $rep
@@ -2306,7 +2308,7 @@ namespace eval ::xowiki::formfield {
     # maybe we can push this up to enumeration....
     set value [my value]
     foreach o [my options] {
-      foreach {label rep} $o break
+      lassign $o label rep
       set atts [my get_attributes disabled {CSSclass class}]
       lappend atts id [my id]:$rep name [my name] type checkbox value $rep
       if {$rep in $value} {lappend atts checked checked}
@@ -2342,7 +2344,7 @@ namespace eval ::xowiki::formfield {
     }
     ::html::select $atts {
       foreach o $options {
-        foreach {label rep} $o break
+        lassign $o label rep
         set atts [my get_attributes disabled]
         lappend atts value $rep
         #my msg "lsearch {[my value]} $rep ==> [lsearch [my value] $rep]"
@@ -2382,7 +2384,7 @@ namespace eval ::xowiki::formfield {
         
         set js ""
         foreach o [my options] {
-          foreach {label rep} $o break
+          lassign $o label rep
           set js_label [::xowiki::Includelet js_encode $label]
           set js_rep   [::xowiki::Includelet js_encode $rep]
           append js "YAHOO.xo_sel_area.DDApp.values\['$js_label'\] = '$js_rep';\n"
@@ -2410,7 +2412,7 @@ namespace eval ::xowiki::formfield {
           ::html::ul -id [my id]_candidates -class region {
             #my msg [my options]
             foreach o [my options] {
-              foreach {label rep} $o break
+              lassign $o label rep
               # Don't show current values under candidates
               if {[info exists __values($rep)]} continue
               ::html::li -class candidates {::html::t $rep}
@@ -2469,7 +2471,7 @@ namespace eval ::xowiki::formfield {
     my set options [my get_labels $v]
     if {[my multiple]} {
       foreach o [my set options] {
-        foreach {label value} $o break
+        lassign $o label value
         set href [$package_id pretty_link -parent_id $parent_id $value]
         set labels($value) "<a href='$href'>$label</a>"
       }
@@ -2489,7 +2491,7 @@ namespace eval ::xowiki::formfield {
       }
     } else {
       foreach o [my set options] {
-        foreach {label value} $o break
+        lassign $o label value
         #my log "comparing '$value' with '$v'"
         if {$value eq $v} {
           if {[my as_box]} {
@@ -3243,7 +3245,7 @@ namespace eval ::xowiki::formfield {
         if {$c ni [my components]} {my lappend components $c}
         continue
       }
-      foreach {class code trim_zeros} [my set format_map($element)] break
+      lassign [my set format_map($element)] class code trim_zeros
       #
       # create for each component a form field
       #

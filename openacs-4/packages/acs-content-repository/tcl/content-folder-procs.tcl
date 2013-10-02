@@ -6,7 +6,7 @@ ad_library {
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
-    @cvs-id $Id: content-folder-procs.tcl,v 1.14 2008/03/05 20:16:38 donb Exp $
+    @cvs-id $Id: content-folder-procs.tcl,v 1.14.8.1 2013/09/30 17:44:27 gustafn Exp $
     
 }
 
@@ -60,7 +60,7 @@ ad_proc -public ::content::folder::new {
     foreach var [list folder_id name label description parent_id context_id package_id] {
 	lappend var_list [list $var [set $var]]
     }
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date]
     }
     set folder_id [package_instantiate_object \

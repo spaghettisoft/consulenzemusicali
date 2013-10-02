@@ -1,17 +1,13 @@
 /alerts-oracle.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /alerts-postgresql.xql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/alerts.adp/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /alerts.tcl/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /alerts.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /hide-email.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /hide-email.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/home.adp/1.25/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /home.tcl/1.26/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/set-on-vacation-to-null.adp/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /set-on-vacation-to-null.tcl/1.2.10.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
 /set-on-vacation-to-null.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/set-on-vacation-until.adp/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /set-on-vacation-until.tcl/1.3.22.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
 /set-on-vacation-until.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /toggle-dont-spam-me-p-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -19,11 +15,15 @@
 /toggle-dont-spam-me-p.tcl/1.2.26.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
 /unsubscribe-2-oracle.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /unsubscribe-2-postgresql.xql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/unsubscribe-2.adp/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /unsubscribe-2.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /unsubscribe-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /unsubscribe-postgresql.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/unsubscribe.adp/1.9/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /unsubscribe.tcl/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /unsubscribe.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/alerts.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/home.adp/1.25.10.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/set-on-vacation-to-null.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/set-on-vacation-until.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/unsubscribe-2.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/unsubscribe.adp/1.9.8.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
 D

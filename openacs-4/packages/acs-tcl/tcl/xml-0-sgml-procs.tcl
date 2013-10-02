@@ -33,7 +33,7 @@ ad_library {
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
-    @cvs-id $Id: xml-0-sgml-procs.tcl,v 1.3 2007/01/10 21:22:12 gustafn Exp $
+    @cvs-id $Id: xml-0-sgml-procs.tcl,v 1.3.10.3 2013/09/29 19:28:13 gustafn Exp $
 }
 
 package provide sgml 1.7
@@ -616,7 +616,7 @@ proc sgml::ParseEvent:ElementOpen {tag attr opts args} {
 		# the message "unterminated attribute value", the attribute list it
 		# did manage to parse and the remainder of the attribute list.
 
-		foreach {msg attlist brokenattr} $attr break
+		lassign $attr msg attlist brokenattr
 
 		upvar text elemText
 		if {[string first > $elemText] >= 0} {
@@ -635,7 +635,7 @@ proc sgml::ParseEvent:ElementOpen {tag attr opts args} {
 			set attr {}
 			set attlist {}
 		    } else {
-			eval lappend attlist $attr
+			lappend attlist {*}$attr
 		    }
 
 		    set attr $attlist
@@ -1242,7 +1242,7 @@ proc sgml::CModelMakeTransitionTable {state st} {
 	    	    if {$var($pos) == {}} {
 	    	    	lappend U $accepting
 	    	    } else {
-	    	    	eval lappend U $var($pos)
+	    	    	lappend U {*}$var($pos)
 	    	    }
 		}
 	    }
@@ -1279,10 +1279,10 @@ proc sgml::followpos {state st firstpos lastpos} {
 	:seq {
 	    for {set i 1} {$i < [llength [lindex $st 1]]} {incr i} {
 	    	followpos $state [lindex [lindex $st 1] $i]			\
-			[lindex [lindex $firstpos 0] [expr {$i - 1}]]	\
-			[lindex [lindex $lastpos 0] [expr {$i - 1}]]
-	    	foreach pos [lindex [lindex [lindex $lastpos 0] [expr {$i - 1}]] 1] {
-		    eval lappend var($pos) [lindex [lindex [lindex $firstpos 0] $i] 1]
+			[lindex [lindex $firstpos 0] $i-1]	\
+			[lindex [lindex $lastpos 0] $i-1]
+	    	foreach pos [lindex [lindex [lindex $lastpos 0] $i-1] 1] {
+		    lappend var($pos) {*}[lindex [lindex [lindex $firstpos 0] $i] 1]
 		    set var($pos) [makeSet $var($pos)]
 	    	}
 	    }
@@ -1290,8 +1290,8 @@ proc sgml::followpos {state st firstpos lastpos} {
 	:choice {
 	    for {set i 1} {$i < [llength [lindex $st 1]]} {incr i} {
 		followpos $state [lindex [lindex $st 1] $i]			\
-			[lindex [lindex $firstpos 0] [expr {$i - 1}]]	\
-			[lindex [lindex $lastpos 0] [expr {$i - 1}]]
+			[lindex [lindex $firstpos 0] $i-1]	\
+			[lindex [lindex $lastpos 0] $i-1]
 	    }
 	}
 	default {
@@ -1306,7 +1306,7 @@ proc sgml::followpos {state st firstpos lastpos} {
 	}
 	* {
 	    foreach pos [lindex $lastpos 1] {
-		eval lappend var($pos) [lindex $firstpos 1]
+		lappend var($pos) {*}[lindex $firstpos 1]
 		set var($pos) [makeSet $var($pos)]
 	    }
 	}
@@ -1380,7 +1380,7 @@ proc sgml::firstpos {cs firstpos nullable} {
 	    set result [lindex [lindex $firstpos 0] 1]
 	    for {set i 0} {$i < [llength $nullable]} {incr i} {
 	    	if {[lindex [lindex $nullable $i] 1]} {
-	    	    eval lappend result [lindex [lindex $firstpos [expr {$i + 1}]] 1]
+	    	    lappend result {*}[lindex [lindex $firstpos $i+1] 1]
 		} else {
 		    break
 		}
@@ -1388,7 +1388,7 @@ proc sgml::firstpos {cs firstpos nullable} {
 	}
 	:choice {
 	    foreach child $firstpos {
-		eval lappend result $child
+		lappend result {*}$child
 	    }
 	}
     }
@@ -1415,7 +1415,7 @@ proc sgml::lastpos {cs lastpos nullable} {
 	    set result [lindex [lindex $lastpos end] 1]
 	    for {set i [expr {[llength $nullable] - 1}]} {$i >= 0} {incr i -1} {
 		if {[lindex [lindex $nullable $i] 1]} {
-		    eval lappend result [lindex [lindex $lastpos $i] 1]
+		    lappend result {*}[lindex [lindex $lastpos $i] 1]
 		} else {
 		    break
 		}
@@ -1423,7 +1423,7 @@ proc sgml::lastpos {cs lastpos nullable} {
 	}
 	:choice {
 	    foreach child $lastpos {
-		eval lappend result $child
+		lappend result {*}$child
 	    }
 	}
     }

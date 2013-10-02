@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
 
-# $Id: form-procs.tcl,v 1.45 2013/04/12 16:12:57 gustafn Exp $
+# $Id: form-procs.tcl,v 1.45.2.1 2013/09/13 12:02:23 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -873,7 +873,7 @@ ad_proc -public template::form::export {} {
 
     append export_data "
       <div><input type=\"hidden\" name=\"$key\" 
-             value=\"[template::util::quote_html $value]\"></div>"
+             value=\"[ad_quotehtml $value]\"></div>"
   }
 
   return $export_data

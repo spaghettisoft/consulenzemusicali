@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Fri Dec  8 14:32:28 2000
-    @cvs-id $Id: delete.tcl,v 1.2 2002/09/06 21:49:59 jeffd Exp $
+    @cvs-id $Id: delete.tcl,v 1.2.26.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_id:integer,notnull
@@ -23,9 +23,9 @@ ad_page_contract {
     }
 }
 
-set context [list [list "" "Groups"] [list one?[ad_export_vars {group_id}] "One Group"] "Nuke group"]
+set context [list [list "" "Groups"] [list one?[export_vars {group_id}] "One Group"] "Nuke group"]
 set group_name [db_string object_name {select acs_object.name(:group_id) from dual}]
-set export_form_vars [ad_export_vars -form {group_id}]
+set export_form_vars [export_vars -form {group_id}]
 
 db_1row select_counts {
     select (select count(*) from group_element_map where group_id = :group_id) as elements,

@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Fri Jan 12 20:52:33 2001
-    @cvs-id $Id: rels-list.tcl,v 1.2 2002/09/06 21:50:03 jeffd Exp $
+    @cvs-id $Id: rels-list.tcl,v 1.2.26.4 2013/09/09 16:44:23 gustafn Exp $
 
 } {
     rel_type:notnull
@@ -19,7 +19,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 
-set context [list [list "" "Relationship types"] [list one?[ad_export_vars rel_type] "One type"] "Relations"]
+set context [list [list "" "Relationship types"] [list one?[export_vars rel_type] "One type"] "Relations"]
 
 if { ![db_0or1row select_pretty_name {
     select t.pretty_name as rel_type_pretty_name

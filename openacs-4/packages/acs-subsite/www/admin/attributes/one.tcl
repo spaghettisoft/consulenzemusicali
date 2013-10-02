@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Nov 12 17:59:39 2000
-    @cvs-id $Id: one.tcl,v 1.3 2007/01/10 21:22:06 gustafn Exp $
+    @cvs-id $Id: one.tcl,v 1.3.10.4 2013/09/09 16:44:19 gustafn Exp $
 
 } {
     attribute_id:naturalnum,notnull
@@ -20,7 +20,7 @@ ad_page_contract {
 }
 set context [list "One attribute"]
 
-set url_vars [ad_export_vars {attribute_id return_url}]
+set url_vars [export_vars {attribute_id return_url}]
 
 # Note we really do want all the columns here for this generic display
 # Stuff it into a column array to avoid writing all these damn column

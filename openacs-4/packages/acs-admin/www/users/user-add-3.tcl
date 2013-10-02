@@ -1,7 +1,7 @@
 ad_page_contract {
     Sends email confirmation to user after they've been created
 
-    @cvs-id $Id: user-add-3.tcl,v 1.6.6.1 2013/08/27 11:44:44 gustafn Exp $
+    @cvs-id $Id: user-add-3.tcl,v 1.6.6.2 2013/09/09 16:44:17 gustafn Exp $
 } -query {
     email
     message
@@ -19,7 +19,7 @@ ad_page_contract {
 set admin_user_id [ad_conn user_id]
 
 set context [list [list "./" "Users"] "New user notified"]
-set export_vars [export_url_vars user_id]
+set export_vars [export_vars -url {user_id}]
 
 set admin_email [db_string get_admin_email {}]
 set subject "You have been added as a user to [ad_system_name] at [ad_url]"

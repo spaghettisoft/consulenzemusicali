@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct  9 00:22:31 2000
-    @cvs-id $Id: packages-install-4.tcl,v 1.16 2007/01/10 21:21:59 gustafn Exp $
+    @cvs-id $Id: packages-install-4.tcl,v 1.16.10.2 2013/09/28 18:17:36 gustafn Exp $
 } {
     {sql_file:multiple ""}
     {mount_p:multiple ""} 
@@ -15,12 +15,18 @@ set pkg_install_list [ad_get_client_property apm pkg_install_list]
 set pkg_enable_list [ad_get_client_property apm pkg_enable_list]
 set sql_file_paths [ad_get_client_property apm sql_file_paths]
 
-ReturnHeaders
-ns_write "[apm_header  "Package Installation"]
-<h2>Installing packages...</h2>
-<p>
-<ul>
-"
+set title "Package Installation"
+set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
+
+ad_return_top_of_page [ad_parse_template -params [list context title] \
+			   "/packages/openacs-default-theme/lib/plain-streaming-head"]
+
+ns_write {
+    <h2>Installing packages...</h2>
+    <p>
+    <ul>
+}
+
 
 # We have a set of SQL files that need to be sourced at the appropriate time.
 set sql_files [list]
@@ -60,7 +66,10 @@ foreach pkg_info $pkg_install_list {
     }
 
     # Mount path of package
-    if { [lsearch $mount_p $package_key] != -1 && [info exists mount_path($package_key)] && $mount_path($package_key) ne "" } {
+    if { $package_key in $mount_p 
+	 && [info exists mount_path($package_key)] 
+	 && $mount_path($package_key) ne "" 
+     } {
         set selected_mount_path $mount_path($package_key)
     } else {
         set selected_mount_path ""
@@ -84,9 +93,7 @@ foreach pkg_info $pkg_install_list {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
-        ns_write "</ul>
-[ad_footer]"
-
+        ns_write "</ul>\n"
         ad_script_abort
     }
 
@@ -94,16 +101,15 @@ foreach pkg_info $pkg_install_list {
 }
 
 if {$installed_count < 1} {
-    ns_write "</ul>
-    All packages in this directory have already been installed.
-    Please return to the <a href=\"index\">index</a>.<p>
-    [ad_footer]"
-    return
+    ns_write {
+	</ul>
+	All packages in this directory have already been installed.
+	Please return to the <a href="index">index</a>.<p>
+    }
 } else {
-
-ns_write "</ul><p>
-Done installing packages.
-<p>You should restart the server now to make installed and upgraded packages available. <a href=\"../server-restart\">Click here</a> to restart the server now.</p>
-[ad_footer]
-"
+    ns_write {</ul><p>
+	Done installing packages.
+	<p>You should restart the server now to make installed and upgraded packages available. 
+	<a href="../server-restart">Click here</a> to restart the server now.</p>
+    }
 }

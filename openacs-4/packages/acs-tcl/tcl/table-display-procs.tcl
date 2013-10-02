@@ -1,7 +1,7 @@
 ad_library {
     This is the table, dimensional bar and sort tools.
     an example of their use can be found in /acs-examples
-    @cvs-id $Id: table-display-procs.tcl,v 1.20 2009/02/13 20:28:08 jeffd Exp $
+    @cvs-id $Id: table-display-procs.tcl,v 1.20.8.7 2013/09/29 19:23:18 gustafn Exp $
 }
     
 # Dimensional selection bars.
@@ -382,7 +382,7 @@ ad_proc -deprecated ad_table {
 	    
 	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
 		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets [expr {$Tpost_data - 1}]]
+		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1]
 	    } elseif { $Tpost_data } { 
 		# past the end of the fake data drop out.
 		break
@@ -436,8 +436,8 @@ ad_proc -deprecated ad_table {
 	    # generate the row band color 
             if { $Tband_count >= $Trows_per_band } {
                 set Tband_count 0
-                set Tband_color [expr ($Tband_color + 1) % $Tn_bands ]
-                set Tband_class [expr ($Tband_class + 1) % $Tn_band_classes ]
+                set Tband_color [expr {($Tband_color + 1) % $Tn_bands} ]
+                set Tband_class [expr {($Tband_class + 1) % $Tn_band_classes} ]
             }
             # do this check since we would like the ability to band with
             # page background as well
@@ -485,7 +485,7 @@ ad_proc -deprecated ad_table {
 	    # so on next row we can say things like if $Pvar != $var not blank
 	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
 		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets [expr {$Tpost_data - 1}]] P
+		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1] P
 	    } else { 
 		set_variables_after_query_not_selection $selection P
 	    }
@@ -606,25 +606,25 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         append html "<form method=\"get\" action=\"/tools/table-custom\">"
         append html "<input type=\"submit\" value=\"Delete this view\">"
         append html "<input type=\"hidden\" name=\"delete_the_view\" value=\"1\">"
-        append html "[export_form_vars item_group item]"
+        append html "[export_vars -form {item_group item}]"
         if {$return_url ne ""} {
-            append html "[export_form_vars return_url]"
+            append html "[export_vars -form {return_url}]"
         }
         append html "</form>"
     }
 
     append html "<form method=get action=\"/tools/table-custom\">" 
     if {$return_url ne ""} {
-        append html "[export_form_vars return_url]"
+        append html "[export_vars -form {return_url}]"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
 
-    append html "[export_form_vars item_group]"
+    append html "[export_vars -form {item_group}]"
     if {$item ne ""} {
         set item_original $item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
         append html "<input type=\"submit\" value=\"Save new view\">"
@@ -634,7 +634,7 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
     append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {$item ne ""} {
         set item_original item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the view</em></td></tr>"
     }
 
@@ -731,25 +731,25 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
         append html "<form method=\"get\" action=\"/tools/sort-custom\">"
         append html "<input type=\"submit\" value=\"Delete this sort\">"
         append html "<input type=\"hidden\" name=\"delete_the_sort\" value=\"1\">"
-        append html "[export_form_vars item_group item]"
+        append html "[export_vars -form {item_group item}]"
         if {$return_url ne ""} {
-            append html "[export_form_vars return_url]"
+            append html "[export_vars -form {return_url}]"
         }
         append html "</form>"
     }
 
     append html "<form method=get action=\"/tools/sort-custom\">" 
     if {$return_url ne ""} {
-        append html "[export_form_vars return_url]"
+        append html "[export_vars -form {return_url}]"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
 
-    append html "[export_form_vars item_group]"
+    append html "[export_vars -form {item_group}]"
     if {$item ne ""} {
         set item_original $item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
         append html "<input type=\"submit\" value=\"Save new sort\">"
@@ -759,7 +759,7 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
     append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {$item ne ""} {
         set item_original item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the sort</em></td></tr>"
     }
 
@@ -962,13 +962,13 @@ ad_proc ad_custom_form {return_url item_group item} {
 } {
     append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
     if {$return_url ne ""} {
-        append html "[export_form_vars return_url]\n"
+        append html "[export_vars -form {return_url}]\n"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
     set item_original $item
-    append html "[export_form_vars item_group item item_original]\n"
+    append html "[export_vars -form {item_group item item_original}]\n"
     append html "<input type=\"submit\" value=\"Save settings\">"
 }
 
@@ -990,9 +990,9 @@ ad_proc ad_dimensional_settings {define current} {
 	}
         foreach val [lindex $opt 3] { 
             if {$picked eq [lindex $val 0] } { 
-                append html "<option selected=\"selected\" value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]</option>\n"
+                append html "<option selected=\"selected\" value=\"[ad_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             } else { 
-                append html "<option value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]</option>\n"
+                append html "<option value=\"[ad_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             }
         }
         append html "</select></td></tr>\n"

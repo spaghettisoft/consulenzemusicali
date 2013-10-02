@@ -8,7 +8,6 @@
 /category-form.tcl/1.10/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-form.xql/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-link-add-2.adp/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/category-link-add-2.tcl/1.7/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-link-add-2.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-link-add-3-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-link-add-3-postgresql.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -35,7 +34,6 @@
 /category-parent-change-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-parent-change-postgresql.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-parent-change.adp/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/category-parent-change.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-phase-in.tcl/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-phase-out.tcl/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /category-usage-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -46,7 +44,6 @@
 /index-postgresql.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.adp/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.tcl/1.11/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/master.adp/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /master.tcl/1.10.4.1/Tue Sep 17 21:26:27 2013//Topenacs-5-8-compat
 /object-map-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /object-map-postgresql.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -74,7 +71,6 @@
 /tree-copy-oracle.xql/1.1.1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-copy-postgresql.xql/1.1.1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-copy-view.adp/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/tree-copy-view.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-copy.adp/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-copy.tcl/1.11/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-delete-2.tcl/1.7/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -87,16 +83,20 @@
 /tree-map-2.tcl/1.7/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-map-2.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-map.adp/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/tree-map.tcl/1.9/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/tree-order-update.tcl/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-order-update.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-unmap-2.tcl/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-unmap.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-unmap.tcl/1.7/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-usage.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/tree-usage.tcl/1.9/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /tree-view.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/tree-view.tcl/1.16/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /trees-code.adp/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /trees-code.tcl/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/category-link-add-2.tcl/1.7.4.1/Tue Oct  1 23:27:36 2013//Topenacs-5-8-compat
+/category-parent-change.tcl/1.4.4.1/Tue Oct  1 23:27:37 2013//Topenacs-5-8-compat
+/master.adp/1.6.4.1/Tue Oct  1 23:27:37 2013//Topenacs-5-8-compat
+/tree-copy-view.tcl/1.4.2.1/Tue Oct  1 23:27:37 2013//Topenacs-5-8-compat
+/tree-map.tcl/1.9.2.1/Tue Oct  1 23:27:37 2013//Topenacs-5-8-compat
+/tree-order-update.tcl/1.5.4.1/Tue Oct  1 23:27:37 2013//Topenacs-5-8-compat
+/tree-usage.tcl/1.9.2.1/Tue Oct  1 23:27:38 2013//Topenacs-5-8-compat
+/tree-view.tcl/1.16.2.1/Tue Oct  1 23:27:38 2013//Topenacs-5-8-compat
 D

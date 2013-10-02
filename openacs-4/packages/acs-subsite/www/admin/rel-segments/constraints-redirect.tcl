@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Thu Jan  4 11:20:37 2001
-    @cvs-id $Id: constraints-redirect.tcl,v 1.2 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: constraints-redirect.tcl,v 1.2.10.4 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     segment_id:naturalnum,notnull
@@ -17,10 +17,10 @@ ad_page_contract {
 set operation [string trim [string tolower $operation]]
 
 if {$operation eq "yes"} {
-    ad_returnredirect "constraints/new?rel_segment=$segment_id&[ad_export_vars return_url]"
+    ad_returnredirect "constraints/new?rel_segment=$segment_id&[export_vars return_url]"
 } else {
     if { $return_url eq "" } {
-	set return_url "one?[ad_export_vars segment_id]"
+	set return_url "one?[export_vars segment_id]"
     }
     ad_returnredirect $return_url
 }

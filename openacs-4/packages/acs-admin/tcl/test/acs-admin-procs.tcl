@@ -3,19 +3,7 @@ ad_library {
 
     @author Joel Aufrecht
     @creation-date 2 Nov 2003
-    @cvs-id $Id: acs-admin-procs.tcl,v 1.3.20.1 2013/08/27 11:44:43 gustafn Exp $
-}
-
-aa_register_case -cats smoke acs_admin_trivial_smoke_test {
-    Minimal smoke test for acs-admin package.
-} {    
-
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-            set header_result [apm_header]
-	    aa_true "apm_header returns a non-null string?" [expr {$header_result ne ""}]
-        }
+    @cvs-id $Id: acs-admin-procs.tcl,v 1.3.20.2 2013/09/28 15:40:57 gustafn Exp $
 }
 
 aa_register_case -cats {api smoke} apm_higher_version_installed_p {

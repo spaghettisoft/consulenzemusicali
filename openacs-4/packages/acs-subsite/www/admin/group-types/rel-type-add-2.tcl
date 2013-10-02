@@ -7,7 +7,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Dec 10 16:57:10 2000
-    @cvs-id $Id: rel-type-add-2.tcl,v 1.3 2010/10/04 21:59:20 victorg Exp $
+    @cvs-id $Id: rel-type-add-2.tcl,v 1.3.4.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_type:trim,notnull
@@ -50,7 +50,7 @@ if { [catch {
 db_release_unused_handles
 
 if { $return_url eq "" } {
-    set return_url "one?[ad_export_vars {group_type}]"
+    set return_url "one?[export_vars {group_type}]"
 }
 
 ad_returnredirect $return_url

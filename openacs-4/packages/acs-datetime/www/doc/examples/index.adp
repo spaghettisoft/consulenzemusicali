@@ -1,6 +1,6 @@
-<!-- $Id: index.adp,v 1.2 2003/09/22 19:44:28 lars Exp $ -->
+<!-- $Id: index.adp,v 1.2.20.1 2013/09/24 07:42:13 gustafn Exp $ -->
 
-<%= [ad_header "ACS DateTime Examples"] %>
+<master>
 
 <h2>ACS DateTime Examples</h2>
 
@@ -17,4 +17,3 @@ part of the <a href="../">ACS DateTime</a> documentation
 
 </ul>
 
-<%= [ad_footer] %>

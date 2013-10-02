@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Dec 10 16:45:32 2000
-    @cvs-id $Id: rel-type-remove-2.tcl,v 1.2 2007/01/10 21:22:06 gustafn Exp $
+    @cvs-id $Id: rel-type-remove-2.tcl,v 1.2.10.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_rel_type_id:naturalnum,notnull
@@ -21,7 +21,7 @@ if { $return_url eq "" } {
 	from group_type_rels g 
 	where g.group_rel_type_id = :group_rel_type_id
     }
-    set return_url one?[ad_export_vars {group_type}]
+    set return_url one?[export_vars {group_type}]
 }
 
 if {$operation eq "Yes, I really want to remove this relationship type"} {

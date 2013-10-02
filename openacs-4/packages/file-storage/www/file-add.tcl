@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 Nov 2000
-    @cvs-id $Id: file-add.tcl,v 1.17.2.1 2013/09/06 16:24:55 gustafn Exp $
+    @cvs-id $Id: file-add.tcl,v 1.17.2.2 2013/09/09 16:44:26 gustafn Exp $
 } {
     file_id:integer,optional,notnull
     folder_id:integer,optional,notnull
@@ -277,7 +277,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
     if {[exists_and_not_null return_url]} {
 	ad_returnredirect $return_url
     } else {
-	ad_returnredirect "./?[export_url_vars folder_id]"
+	ad_returnredirect "./?[export_vars -url {folder_id}]"
     }
     ad_script_abort
 

@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date September 11 2000
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @cvs-id $Id: apm-install-procs.tcl,v 1.108.2.4 2013/09/07 08:37:59 gustafn Exp $
+    @cvs-id $Id: apm-install-procs.tcl,v 1.108.2.8 2013/09/29 14:55:32 gustafn Exp $
 }
 
 namespace eval apm {}
@@ -261,7 +261,7 @@ ad_proc -private apm_dependency_check {
     foreach spec_file $spec_files {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
-	    if { ([string equal $package(initial-install-p) "t"] || !$initial_install_p) && \
+	    if { ($package(initial-install-p) eq "t" || !$initial_install_p) && \
                     [apm_package_supports_rdbms_p -package_key $package(package.key)] } {
                 lappend install_pend [pkg_info_new \
                                          $package(package.key) \
@@ -277,7 +277,7 @@ ad_proc -private apm_dependency_check {
             # either we're already installing it, or it can't be installed
             set counter 0
             foreach pkg_info $pkg_info_all {
-                if { [string equal [pkg_info_key $pkg_info] $package(package.key)] } {
+                if { [pkg_info_key $pkg_info] eq $package(package.key) } {
                     set pkg_info_all [lreplace $pkg_info_all $counter $counter]
                     break
                 }
@@ -296,7 +296,7 @@ ad_proc -private apm_dependency_check {
     while { $updated_p } {
 
         # Inner loop tries to add another package from the install_pend list
-        while { $updated_p && [exists_and_not_null install_pend]} {
+        while { $updated_p && [info exists install_pend] && $install_pend ne ""} {
             set install_in_provides [list]
             set new_install_pend [list]
             set updated_p 0
@@ -316,8 +316,8 @@ ad_proc -private apm_dependency_check {
                         set satisfied_p 0
                         # Check to see if we've recorded it already
                         set errmsg "Requires [lindex $req 0] of version >= [lindex $req 1]."
-                        if { ![info exists install_error([pkg_info_key $pkg_info])] || \
-                                [lsearch -exact $install_error([pkg_info_key $pkg_info]) $errmsg] == -1} {
+                        if { ![info exists install_error([pkg_info_key $pkg_info])] || 
+			     $errmsg ni $install_error([pkg_info_key $pkg_info])} {
                             lappend install_error([pkg_info_key $pkg_info]) $errmsg
                         }
                         lappend new_install_pend $pkg_info
@@ -343,7 +343,7 @@ ad_proc -private apm_dependency_check {
 
         set updated_p 0
         
-        if { [exists_and_not_null install_pend] && [llength $pkg_info_all] > 0 } {
+        if { [info exists install_pend] && $install_pend ne "" && [llength $pkg_info_all] > 0 } {
             # Okay, there are some packages that could not be installed
             
             # Let's find a package, which
@@ -356,7 +356,7 @@ ad_proc -private apm_dependency_check {
                     set counter 0
                     foreach pkg_info_add $pkg_info_all {
                         # Will this package do anything to change whether this requirement has been satisfied?
-                        if { [string equal [pkg_info_key $pkg_info_add] [lindex $req 0]] &&
+                        if { [pkg_info_key $pkg_info_add] eq [lindex $req 0] &&
                              [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
                                 [lindex $req 0] [lindex $req 1]] == 1 } {
 
@@ -390,7 +390,7 @@ ad_proc -private apm_dependency_check {
         
     set install_order(order) $install_in
     # Update all of the packages that cannot be installed.
-    if { [exists_and_not_null install_pend] } {
+    if { [info exists install_pend] && $install_pend ne "" } {
 	foreach pkg_info $install_pend {
 	    lappend install_in [pkg_info_new [pkg_info_key $pkg_info] [pkg_info_spec $pkg_info] \
 				    [pkg_info_embeds $pkg_info] [pkg_info_extends $pkg_info] \
@@ -906,15 +906,15 @@ ad_proc -private apm_package_install {
         global errorInfo
         ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
 
-	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
+	apm_callback_and_log -severity Error $callback [subst {<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
 [ad_quotehtml $errmsg]
 </blockquote></pre>
 
 <p>
-<b><font color=\"red\">NOTE:</font></b> If the error comes from a sql script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually souced sql scipts unchecked on the previous page. 
+<b><font color="red">NOTE:</font></b> If the error comes from a sql script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually souced sql scipts unchecked on the previous page. 
 </p>
-"
+}]
 	return 0
     }
 
@@ -1065,9 +1065,8 @@ ad_proc -private apm_package_install_version {
 
 
 ad_proc -private apm_package_deinstall {
-    {
-	-callback apm_dummy_callback
-    } package_key
+    {-callback apm_dummy_callback} 
+    package_key
 } {
 
     Deinstalls a package from the filesystem.
@@ -1252,8 +1251,8 @@ ad_proc -private apm_package_install_data_model {
 	set file_path [lindex $item 0]
 	set file_type [lindex $item 1]
 	ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
-	if {$file_type eq "data_model_create" || \
-		$file_type eq "data_model_upgrade" } {
+	if {$file_type eq "data_model_create" || 
+	    $file_type eq "data_model_upgrade" } {
 	    if { !$ul_p } {
 		apm_callback_and_log $callback "<ul>\n"
 		set ul_p 1
@@ -1749,7 +1748,7 @@ ad_proc -private apm_data_model_scripts_find {
         set file_db_type [apm_guess_db_type $package_key $path]
 	apm_log APMDebug "apm_data_model_scripts_find: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
-	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
+	if {$file_type in $types_to_retrieve} {
             set list_item [list $path $file_type $package_key]
 	    if {$file_type eq "data_model_upgrade"} {
                 # Upgrade script
@@ -1796,7 +1795,7 @@ ad_proc -private apm_query_files_find {
         # is defined, which we interpret to mean a file containing queries that work with all of our
         # supported databases.
 
-	if {[lsearch -exact "query_file" $file_type] != -1 && \
+	if {"query_file" eq $file_type && 
             ($file_db_type eq "" || [db_type] eq $file_db_type )} {
             ns_log Debug "apm_query_files_find: Adding $path to the list of query files."
             lappend query_file_list $path
@@ -2087,8 +2086,8 @@ ad_proc -private apm_get_package_repository {
             if { ![info exists installed_version($version(package.key))] } {
                 # Package is not installed
                 set version(install_type) install
-            } elseif { [string equal $version(name) $installed_version($version(package.key))] || \
-                           [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
+            } elseif { $version(name) eq $installed_version($version(package.key)) || 
+		       [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
                 # This version or a higher version already installed
                 set version(install_type) already_installed
             } else {
@@ -2115,8 +2114,8 @@ ad_proc -private apm_get_package_repository {
                     if { ![info exists installed_version($version(package.key))] } {
                         # Package is not installed
                         set version(install_type) install
-                    } elseif { [string equal $version(name) $installed_version($version(package.key))] || \
-                                   [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
+                    } elseif { $version(name) eq $installed_version($version(package.key)) || 
+			       [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
                         # This version or a higher version already installed
                         set version(install_type) already_installed
                     } else {
@@ -2394,10 +2393,10 @@ ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_n
 ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
     set error_message ""
     if { $maturity ne "" } {
-        if { ![regexp {^-?[0-9]+$} $maturity] } {
+        if { ![string is integer $maturity] } {
             set error_message "Maturity must be integer"
-        } elseif { $maturity < -1 || $maturity > 3 } {
-            set error_message "Maturity must be integer between -1 and 3"
+        } elseif { $maturity < -1 || $maturity > 4 } {
+            set error_message "Maturity must be integer between -1 and 4"
         }
     }
 
@@ -2410,10 +2409,10 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
 
     @author Peter Marklund
 } {
-    if {[exists_and_not_null maturity]} {
+    if { $maturity ne "" } {
 
-        if { !($maturity >= -1 && $maturity <= 3) } {
-            error "Maturity must be between -1 and 3 but is \"$maturity\""
+        if { !($maturity >= -1 && $maturity <= 4) } {
+            error "Maturity must be between -1 and 4 but is \"$maturity\""
         }
 
         set maturity_key(-1) "#acs-tcl.maturity_incompatible#"
@@ -2421,6 +2420,7 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
         set maturity_key(1) "#acs-tcl.maturity_immature#"
         set maturity_key(2) "#acs-tcl.maturity_mature#"
         set maturity_key(3) "#acs-tcl.maturity_mature_and_standard#"
+        set maturity_key(4) "#acs-tcl.maturity_deprecated#"
 
         set result [lang::util::localize $maturity_key($maturity)]
 

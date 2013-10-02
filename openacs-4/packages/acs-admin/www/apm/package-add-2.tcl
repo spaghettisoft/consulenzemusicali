@@ -3,7 +3,7 @@ ad_page_contract {
     
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 17 April 2000
-    @cvs-id $Id: package-add-2.tcl,v 1.10 2010/10/17 21:06:07 donb Exp $
+    @cvs-id $Id: package-add-2.tcl,v 1.10.4.1 2013/09/28 12:09:59 gustafn Exp $
 } {
     package_key
     pretty_name
@@ -145,5 +145,4 @@ db_transaction {
     ad_script_abort
 }
 
-db_release_unused_handles
 ad_returnredirect "version-view?version_id=$version_id"

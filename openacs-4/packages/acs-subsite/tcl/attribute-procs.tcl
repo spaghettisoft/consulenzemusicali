@@ -7,7 +7,7 @@ ad_library {
 
     @author mbryzek@arsdigita.com
     @creation-date Thu Dec  7 10:30:57 2000
-    @cvs-id $Id: attribute-procs.tcl,v 1.11 2012/12/08 18:20:36 gustafn Exp $
+    @cvs-id $Id: attribute-procs.tcl,v 1.11.2.4 2013/09/09 16:44:18 gustafn Exp $
 }
 
 ad_page_contract_filter attribute_dynamic_p { name value } {
@@ -518,7 +518,7 @@ ad_proc -public multirow {
 		    # pretty name for that attribute
 		    set col_value $enum_values($key:$col_value)
 		}
-		template::multirow append $datasource_name $attr_props(pretty_name:$key) $col_value "id_column=$object_id&[ad_export_vars {attribute_id return_url}]"
+		template::multirow append $datasource_name $attr_props(pretty_name:$key) $col_value "id_column=$object_id&[export_vars {attribute_id return_url}]"
 	    }
 	}
     }

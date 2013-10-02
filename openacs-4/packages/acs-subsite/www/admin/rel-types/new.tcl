@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Sun Nov 12 18:27:08 2000
-    @cvs-id $Id: new.tcl,v 1.4 2011/04/19 21:22:47 emmar Exp $
+    @cvs-id $Id: new.tcl,v 1.4.4.4 2013/09/09 16:44:23 gustafn Exp $
 
 } {
     { return_url "" }
@@ -25,6 +25,6 @@ db_multirow supertypes select_supertypes {
 
 set context [list [list "[ad_conn package_url]admin/rel-types/" [_ acs-subsite.Relationship_Types]] [_ acs-subsite.Create_relation_type]]
 
-set export_vars [ad_export_vars -form {return_url}]
+set export_vars [export_vars -form {return_url}]
 
 ad_return_template

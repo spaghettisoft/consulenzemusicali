@@ -35,7 +35,7 @@ ad_library {
 
     @creation-date 2010/04/09
     @author Don Baccus
-    @cvs-id $Id: json-procs.tcl,v 1.5 2011/08/22 23:46:39 donb Exp $
+    @cvs-id $Id: json-procs.tcl,v 1.5.2.1 2013/09/29 14:55:32 gustafn Exp $
 }
 
 namespace eval util {
@@ -464,7 +464,7 @@ ad_proc util::json::sql_values_to_json_values {row} {
 } {
     set new_row {}
     foreach value $row {
-        if { $value == "" } {
+        if { $value eq "" } {
             lappend new_row null
         } else {
             lappend new_row $value

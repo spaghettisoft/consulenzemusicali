@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Wed Nov  8 18:22:04 2000
-    @cvs-id $Id: delete.tcl,v 1.3 2002/09/06 21:49:58 jeffd Exp $
+    @cvs-id $Id: delete.tcl,v 1.3.26.4 2013/09/09 16:44:20 gustafn Exp $
 
 } {
     group_type:notnull
@@ -30,7 +30,7 @@ ad_page_contract {
 
 set context [list \
          [list "[ad_conn package_url]admin/group-types/" "Group types"] \
-         [list one?[export_url_vars group_type] "One group type"] \
+         [list one?[export_vars -url {group_type}] "One group type"] \
          "Delete group type"]
 
 if { ![db_0or1row select_pretty_name {
@@ -61,7 +61,7 @@ if { $subtypes_exist_p } {
           from acs_object_types t
          where t.supertype = :group_type
     } {
-	template::multirow append subtypes $pretty_name [ad_export_vars {group_type return_url}]
+	template::multirow append subtypes $pretty_name [export_vars {group_type return_url}]
     }
     ad_return_template "delete-subtypes-exist"
     return
@@ -90,13 +90,13 @@ if { $rel_types_depend_p } {
                 or rel.object_type_two = :group_type)
 	   and rel.rel_type = t.object_type
     } {
-	template::multirow append rel_types $pretty_name [ad_export_vars {rel_type return_url}]
+	template::multirow append rel_types $pretty_name [export_vars {rel_type return_url}]
     }
     ad_return_template "delete-rel-types-exist"
     return
 }
 
-set export_form_vars [ad_export_vars -form {group_type return_url}]
+set export_form_vars [export_vars -form {group_type return_url}]
 
 set groups_of_this_type [util_commify_number [db_string groups_of_this_type {
     select count(o.object_id) 

@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
     @arch-tag: a2fad1c8-17eb-412c-a62e-9704d346b27b
-    @cvs-id $Id: content-template-procs.tcl,v 1.7 2005/01/06 16:52:25 daveb Exp $
+    @cvs-id $Id: content-template-procs.tcl,v 1.7.16.1 2013/09/30 17:44:27 gustafn Exp $
 }
 
 namespace eval ::content::template {}
@@ -44,7 +44,7 @@ ad_proc -public content::template::new {
         [list creation_ip $creation_ip ] \
         [list package_id $package_id ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {([info exists creation_date] && $creation_date ne "")} {
         lappend arg_list [list creation_date $creation_date ]
     }
     return [package_exec_plsql -var_list  $arg_list content_template new]

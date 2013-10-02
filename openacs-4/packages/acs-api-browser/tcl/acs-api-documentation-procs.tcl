@@ -7,7 +7,7 @@ ad_library {
     @author Jon Salz (jsalz@mit.edu)
     @author Lars Pind (lars@arsdigita.com)
     @creation-date 21 Jun 2000
-    @cvs-id $Id: acs-api-documentation-procs.tcl,v 1.27.8.4 2013/09/06 11:39:37 gustafn Exp $
+    @cvs-id $Id: acs-api-documentation-procs.tcl,v 1.27.8.7 2013/09/28 12:24:24 gustafn Exp $
 
 }
 
@@ -626,11 +626,11 @@ ad_proc -public api_proc_documentation {
                          -parameter FancySourceFormattingP \
                          -default 1]} {
 			append out "<dt><b>Source code:</b></dt><dd>
-<pre>[api_tcl_to_html $proc_name]<pre>
+<pre>[api_tcl_to_html $proc_name]</pre>
 </dd><p>\n"
 		} else {
 		append out "<dt><b>Source code:</b></dt><dd>
-<pre>[ns_quotehtml [api_get_body $proc_name]]<pre>
+<pre>[ns_quotehtml [api_get_body $proc_name]]</pre>
 </dd><p>\n"
 	        }
         }
@@ -642,21 +642,21 @@ ad_proc -public api_proc_documentation {
                 set missing {}
 		if { [file exists ${xql_base_name}.xql] } {
 			append there "<dt><b>Generic XQL file:</b></dt>
-<blockquote>[api_quote_file ${xql_base_name}.xql]</blockquote>
+<blockquote><pre>[api_quote_file ${xql_base_name}.xql]</pre></blockquote>
 <p>\n"
 		} else {
                       lappend missing Generic
 		}
 		if { [file exists ${xql_base_name}-postgresql.xql] } {
 			append there "<dt><b>Postgresql XQL file:</b></dt>
-<blockquote>[api_quote_file ${xql_base_name}-postgresql.xql]</blockquote>
+<blockquote><pre>[api_quote_file ${xql_base_name}-postgresql.xql]</pre></blockquote>
 <p>\n"
 		} else {
                       lappend missing PostgreSQL
 		}
 		if { [file exists ${xql_base_name}-oracle.xql] } {
 			append there "<dt><b>Oracle XQL file:</b></dt>
-<blockquote>[api_quote_file ${xql_base_name}-oracle.xql]</blockquote>
+<blockquote><pre>[api_quote_file ${xql_base_name}-oracle.xql]</pre></blockquote>
 <p>\n"
 		} else {
                     lappend missing Oracle
@@ -832,8 +832,12 @@ ad_proc -public api_get_body {proc_name} {
     }
   } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name match thread kind obj]} {
     return [$thread do $obj serialize]
-  } else {
+  } elseif {[info proc $proc_name] ne ""} {
     return [info body $proc_name]
+  } elseif {[info proc ::nsf::procs::$proc_name] ne ""} {
+    return [info body ::nsf::procs::$proc_name]
+  } else {
+    return "No such Tcl-proc"
   }
 }
 

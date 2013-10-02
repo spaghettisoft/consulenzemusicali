@@ -7,7 +7,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Jan  2 12:23:02 2001
-    @cvs-id $Id: rel-type-remove.tcl,v 1.3.26.1 2013/09/06 16:01:45 gustafn Exp $
+    @cvs-id $Id: rel-type-remove.tcl,v 1.3.26.5 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     group_rel_id:integer,notnull
@@ -32,7 +32,7 @@ if { ![db_0or1row select_info {
 
 permission::require_permission -object_id $group_id -privilege admin
 
-set export_vars [ad_export_vars -form {group_rel_id return_url}]
-set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars {group_id}] "One group"] "Remove relation type"]
+set export_vars [export_vars -form {group_rel_id return_url}]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[export_vars {group_id}] "One group"] "Remove relation type"]
 
 ad_return_template

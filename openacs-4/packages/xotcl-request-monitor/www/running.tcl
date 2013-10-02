@@ -2,7 +2,7 @@ ad_page_contract {
     Displays last requests of a user
 
     @author Gustaf Neumann (adapted for interaction with controlling thread)
-    @cvs-id $Id: running.tcl,v 1.6 2012/12/20 15:38:47 gustafn Exp $
+    @cvs-id $Id: running.tcl,v 1.6.2.1 2013/09/30 11:39:39 gustafn Exp $
 } -query {
   orderby:optional
 } -properties {
@@ -19,7 +19,7 @@ if {!$admin_p} {
 }
 
 set running_requests [throttle running]
-if {[info command bgdelivery] ne ""} {
+if {[info commands bgdelivery] ne ""} {
    set background_requests [bgdelivery running]
 } else {
    set background_requests [list]

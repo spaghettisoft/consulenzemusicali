@@ -1,4 +1,4 @@
- # $Id: acs-developer-support-procs.tcl,v 1.52.2.3 2013/09/07 14:36:49 gustafn Exp $
+ # $Id: acs-developer-support-procs.tcl,v 1.52.2.9 2013/09/30 11:09:27 gustafn Exp $
  # File:        developer-support-procs.tcl
  # Author:      Jon Salz <jsalz@mit.edu>
  # Date:        22 Apr 2000
@@ -474,7 +474,7 @@
          $you_are_really
          Change user: <select name=\"user_id\">
          $options
-         </select>[export_form_vars return_url]<input type=submit value=\"Go\"></form>"
+         </select>[export_vars -form {return_url}]<input type=submit value=\"Go\"></form>"
      } else {
          ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
                  because it is not mounted anywhere."
@@ -567,7 +567,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
     Replace the ad_get_user procs with our own versions
 } {
     if { $enabled_p } {
-	if { [info commands orig_ad_get_user_id] eq ""} {
+	if { [info commands orig_ad_conn] eq ""} {
             #ds_comment "Enabling user-switching"
             # let the user stay who he is now (but ignore any error trying to do so)
 	    catch {
@@ -580,16 +580,16 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
             proc ad_conn { args } {
 	        ds_conn {*}$args
             }
-	    proc ad_get_user_id {} {
-                ds_get_user_id
-	    }
+	    #proc ad_get_user_id {} {
+            #    ds_get_user_id
+	    #}
 	    #proc ad_verify_and_get_user_id {} {
             #    ds_get_user_id
 	    #}
 	}
     } else {
         #ds_comment "Disabling user-switching"
-	if { [info commands orig_ad_get_user_id] ne ""} {
+	if { [info commands orig_ad_conn] ne ""} {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
 
@@ -668,7 +668,7 @@ ad_proc -public ds_profile { command {tag {}} } {
             if { [info exists ::ds_profile__start_clock($tag)] 
                  && $::ds_profile__start_clock($tag) ne "" } {
                 ds_add prof $tag \
-                    [expr [clock clicks -milliseconds] - $::ds_profile__start_clock($tag)]
+                    [expr {[clock clicks -milliseconds] - $::ds_profile__start_clock($tag)}]
                 unset ::ds_profile__start_clock($tag)
             } else {
                 ns_log Warning "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"

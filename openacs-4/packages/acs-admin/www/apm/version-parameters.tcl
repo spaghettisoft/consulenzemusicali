@@ -5,7 +5,7 @@ ad_page_contract {
     @author tnight@arsdigita.com
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 12 September 2000
-    @cvs-id $Id: version-parameters.tcl,v 1.8.4.2 2013/08/29 13:39:09 victorg Exp $
+    @cvs-id $Id: version-parameters.tcl,v 1.8.4.4 2013/09/28 12:10:01 gustafn Exp $
 } {
     {orderby "parameter_name"}
     {version_id:integer}
@@ -14,8 +14,8 @@ ad_page_contract {
 
 db_1row apm_package_by_version_id {
     select pretty_name, version_name, package_key
-      from apm_package_version_info 
-     where version_id = :version_id
+    from apm_package_version_info 
+    where version_id = :version_id
 }
 
 
@@ -69,8 +69,8 @@ append sql_clauses " [template::list::orderby_clause -orderby -name parameters_l
 
 db_multirow -extend {actions} parameters parameter_table {} {
     set actions "\[<font size=-1>
-        <a href=parameter-delete?[export_url_vars parameter_id version_id section_name]>delete</a> | 
-        <a href=parameter-edit?[export_url_vars version_id parameter_id]>edit</a></font>\]"
+        <a href=parameter-delete?[export_vars -url {parameter_id version_id section_name}]>delete</a> | 
+        <a href=parameter-edit?[export_vars -url {version_id parameter_id}]>edit</a></font>\]"
 }
 
 

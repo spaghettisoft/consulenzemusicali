@@ -4,14 +4,14 @@
 /delete-2.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /delete-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /delete-postgresql.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/delete.adp/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /delete.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index-postgresql.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/index.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /toggle-approval-oracle.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /toggle-approval-postgresql.xql/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /toggle-approval.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/delete.adp/1.6.6.6/Tue Oct  1 23:27:47 2013//Topenacs-5-8-compat
+/index.adp/1.4.20.1/Tue Oct  1 23:27:47 2013//Topenacs-5-8-compat
 D

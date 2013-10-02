@@ -3,7 +3,7 @@ ad_library {
 
     @author Lars Pind (lars@collaobraid.biz)
     @creation-date 2003-05-14
-    @cvs-id $Id: authority-procs.tcl,v 1.28 2009/04/06 20:13:15 daveb Exp $
+    @cvs-id $Id: authority-procs.tcl,v 1.28.8.1 2013/09/30 18:26:48 gustafn Exp $
 }
 
 namespace eval auth {}
@@ -104,15 +104,15 @@ ad_proc -public auth::authority::create {
             }
         }
 
-        if { ![exists_and_not_null context_id] } {
+        if { ![info exists context_id] || $context_id eq "" } {
             set context_id [ad_conn package_id]
         }
 
-        if { ![exists_and_not_null creation_user] } {
+        if { ![info exists creation_user] || $creation_user eq "" } {
             set creation_user [ad_conn user_id]
         }
 
-        if { ![exists_and_not_null creation_ip] } {
+        if { ![info exists creation_ip] || $creation_ip eq "" } {
             set creation_ip [ad_conn peeraddr]
         }
 
@@ -151,7 +151,7 @@ ad_proc -public auth::authority::create {
     }
 
     # Flush the cache, so that if we've tried to request this short_name while it didn't exist, we will now find it
-    if { [exists_and_not_null row(short_name)] } {
+    if { [info exists row(short_name)] && $row(short_name) ne "" } {
         get_id_flush -short_name $row(short_name)
     }
 

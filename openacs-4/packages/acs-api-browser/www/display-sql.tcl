@@ -17,7 +17,7 @@ ad_page_contract {
 
     @creation-date 12/19/98
     @author philg@mit.edu
-    @cvs-id $Id: display-sql.tcl,v 1.4 2007/01/10 21:22:01 gustafn Exp $
+    @cvs-id $Id: display-sql.tcl,v 1.4.10.2 2013/09/16 20:38:39 gustafn Exp $
 } {
     url:notnull
     { version_id "" }
@@ -35,7 +35,9 @@ if {[exists_and_not_null version_id]} {
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+    if {[info exists pretty_name]} {
+	lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+    }
 }
 lappend context [file tail $url]
 
@@ -58,10 +60,14 @@ if {[exists_and_not_null package_key]} {
 }
 
 if { $safe_p } {
-    if [catch {
-        set sql [ad_quotehtml [read [open "[acs_package_root_dir $package_key]/sql/$url"]]]
-    }] {
-        ad_return_error "Problem reading file" "There was a problem reading $url"
+    set sql ""
+    set fn [acs_package_root_dir $package_key]/sql/$url
+    if {[file exists $fn]} {
+	if {[catch {
+	    set f [open $fn]; set sql [read $f]; close $f
+	} errorMsg]} {
+	    ad_return_error "Problem reading file" "There was a problem reading $url ($errorMsg)"
+	}
     }
 } else {
     ad_return_error "Invalid file location" "Can only display files in package or doc directory"

@@ -2,7 +2,7 @@ ad_page_contract {
     displays a user's portrait to other users
 
     @creation-date 26 Sept 1999
-    @cvs-id $Id: portrait.tcl,v 1.8 2009/03/31 14:58:07 emmar Exp $
+    @cvs-id $Id: portrait.tcl,v 1.8.8.1 2013/09/09 16:44:25 gustafn Exp $
 } {
     user_id:integer
 } -properties {
@@ -46,7 +46,7 @@ if { $width ne "" && $height ne "" } {
 
 set doc(title) [_ acs-subsite.lt_Portrait_of_first_last]
 set context [list [list [acs_community_member_url -user_id $user_id] "$first_names $last_name"] [_ acs-subsite.Portrait]]
-set export_vars [export_url_vars user_id]
+set export_vars [export_vars -url {user_id}]
 set pretty_date [lc_time_fmt $publish_date "%q"]
 
 ad_return_template

@@ -1,4 +1,4 @@
-# $Id: session-history.tcl,v 1.3 2007/01/10 21:22:00 gustafn Exp $
+# $Id: session-history.tcl,v 1.3.10.1 2013/09/09 16:44:17 gustafn Exp $
 
 append whole_page "[ad_admin_header "Session History"]
 
@@ -38,7 +38,7 @@ while { [ns_db getrow $db $selection] } {
 	set last_year $pretty_year
     }
     append whole_page "<tr>
-<td><a href=\"sessions-one-month?[export_url_vars pretty_month pretty_year]\">$pretty_month $pretty_year</a>
+<td><a href=\"sessions-one-month?[export_vars -url {pretty_month pretty_year}]\">$pretty_month $pretty_year</a>
 <td align=right>[util_commify_number $total_sessions]</td>
 <td align=right>[util_commify_number $total_repeats]</td>
 </tr>

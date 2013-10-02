@@ -7,7 +7,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Wed Dec 13 20:00:25 2000
-    @cvs-id $Id: new-3.tcl,v 1.4.10.1 2013/09/06 16:01:46 gustafn Exp $
+    @cvs-id $Id: new-3.tcl,v 1.4.10.5 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     group_id:integer,notnull
@@ -66,7 +66,7 @@ if { ![db_string segments_exists_p {
 }
 
 
-set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars segment_id] "One segment"] "Create constraints"]
-set export_vars [ad_export_vars -form {segment_id return_url}]
+set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[export_vars segment_id] "One segment"] "Create constraints"]
+set export_vars [export_vars -form {segment_id return_url}]
 
 ad_return_template

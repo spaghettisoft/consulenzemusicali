@@ -1,7 +1,7 @@
 ad_library {
     Provides procedures to spit out the navigational parts of the site.
 
-    @cvs-id $Id: navigation-procs.tcl,v 1.30 2013/04/12 16:12:56 gustafn Exp $
+    @cvs-id $Id: navigation-procs.tcl,v 1.30.2.2 2013/09/29 19:23:18 gustafn Exp $
     @author philg@mit.edu
     @creation-date 11/5/98 (adapted originally from the Cognet server)     
 }
@@ -39,7 +39,7 @@ ad_proc -public ad_context_bar_html {
     }
 
     set out {}
-    foreach element [lrange $context 0 [expr {[llength $context] - 2}]] { 
+    foreach element [lrange $context 0 [llength $context]-2] { 
         append out "<a href=\"[lindex $element 0]\">[lindex $element 1]</a> $separator "
     }
     append out [lindex $context end]
@@ -106,7 +106,7 @@ ad_proc -public ad_context_bar_multirow {
 	return ""
     }
     
-    if { ![exists_and_not_null node_id] } {
+    if { ![info exists node_id] || $node_id eq "" } {
         set node_id [ad_conn node_id]
     }
 
@@ -168,7 +168,7 @@ ad_proc -public ad_context_bar {
 	return ""
     }
 
-    if { ![exists_and_not_null node_id] } {
+    if { ![info exists node_id] || $node_id eq "" } {
         set node_id [ad_conn node_id]
     }
 

@@ -5,7 +5,7 @@ ad_library {
 
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 15 May 2000
-    @cvs-id $Id: request-processor-procs.tcl,v 1.113.2.2 2013/09/03 08:08:38 gustafn Exp $
+    @cvs-id $Id: request-processor-procs.tcl,v 1.113.2.10 2013/09/30 09:39:08 gustafn Exp $
 }
 
 #####
@@ -240,7 +240,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
 } {
     set startclicks [clock clicks -milliseconds]
 
-    util_unlist $filter_info filter_index debug_p arg_count proc arg
+    lassign $filter_info filter_index debug_p arg_count proc arg
 
     rp_debug -debug $debug_p "Invoking $why filter $proc"
 
@@ -298,7 +298,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
 } {
     set startclicks [clock clicks -milliseconds]
 
-    util_unlist $argv proc_index debug_p arg_count proc arg
+    lassign $argv proc_index debug_p arg_count proc arg
 
     rp_debug -debug $debug_p "Invoking registered procedure $proc"
 
@@ -766,7 +766,14 @@ ad_proc rp_report_error {
     set params [list]
     
     #Serve the stacktrace
-    set params [list [list stacktrace $message] [list user_id $user_id] [list error_file $error_file] [list prev_url $prev_url] [list feedback_id $feedback_id] [list error_url $error_url] [list bug_package_id $bug_package_id] [list vars_to_export $vars_to_export]]
+    set params [list [list stacktrace $message] \
+		    [list user_id $user_id] \
+		    [list error_file $error_file] \
+		    [list prev_url $prev_url] \
+		    [list feedback_id $feedback_id] \
+		    [list error_url $error_url] \
+		    [list bug_package_id $bug_package_id] \
+		    [list vars_to_export $vars_to_export]]
     
     set error_message $message
 
@@ -780,9 +787,8 @@ ad_proc rp_report_error {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
     } {
         # An error occurred during rendering of the error page
-        global errorInfo
-        ns_log Error "rp_report_error: Error rendering error page (!)\n$errorInfo"
-        set rendered_page "</table></table></table></h1></b></i><blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>[ad_footer]"
+        ns_log Error "rp_report_error: Error rendering error page (!)\n$::errorInfo"
+        set rendered_page "</table></table></table></h1></b></i><blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>"
     }
 
     ns_return 500 text/html $rendered_page
@@ -836,15 +842,21 @@ ad_proc -private rp_handler {} {
       return
   }
   if {$ad_conn(extra_url) ne "" && ![string match *$ad_conn(extra_url) [ns_conn url]]} {
-    # On internal redirects, the current extra_url might be from a
-    # previous request, which might have lead to a not-found error
-    # pointing to a new url. This can lead to an hard-to find loop
-    # which ends with a "recursion depth exceeded". Therefore, we
-    # refetch the url in case, in case, we have already extra_url 
-    # set to an incompatible value
+    #
+    # On internal redirects, the current ad_conn(extra_url) might be
+    # from a previous request, which might have lead to a not-found
+    # error pointing to a new url. This can lead to an hard-to find
+    # loop which ends with a "recursion depth exceeded". There is a
+    # similar problem with ad_conn(package_key) and
+    # ad_conn(package_url) Therefore, we refetch the url info in case,
+    # in case, and reset these values. These variables seem to be
+    # sufficient to handle request processor loops, but maybe other
+    # variables have to be reset either.
     #
     array set node [site_node::get -url [ad_conn url]]
     ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+    ad_conn -set package_key $node(package_key)
+    ad_conn -set package_url $node(url)
   }
 
   # JCD: keep track of rp_handler call count to prevent dev support from recording 
@@ -937,7 +949,7 @@ ad_proc -private rp_handler {} {
             }
             ad_try {
                 ad_conn -set path_info \
-                    [string range $extra_url [expr {[string length $prefix] - 1}] end]
+                    [string range $extra_url [string length $prefix]-1 end]
                 rp_serve_abstract_file -noredirect -nodirectory \
                     -extension_pattern ".vuh" "$root$prefix"
                     set tcl_url2file([ad_conn url]) [ad_conn file]
@@ -1110,9 +1122,10 @@ ad_proc -private rp_concrete_file {
   # Grab a list of all available files with extensions.
   set files [glob -nocomplain "$path_glob$extension_pattern"]
 
-  # Search for files in the order specified in ExtensionPrecedence.
+  # Search for files in the order specified in ExtensionPrecedence,
+  # include always "vuh"
   set precedence [parameter::get -package_id [ad_acs_kernel_id] -parameter ExtensionPrecedence -default tcl]
-  foreach extension [split [string trim $precedence] ","] {
+  foreach extension [concat [split [string trim $precedence] ","] vuh] {
     if { [lsearch -glob $files "*.$extension"] != -1 } {
       return "$path.$extension"
     }
@@ -1120,10 +1133,21 @@ ad_proc -private rp_concrete_file {
 
   # None of the extensions from ExtensionPrecedence were found - just pick
   # the first in alphabetical order.
-  if { [llength $files] > 0 } {
-    set files [lsort $files]
-    return [lindex $files 0]
-  }
+  #
+  # GN: OpenACS was trying to serve files with arbitrary extensions
+  # (i.e. not included in the kernel parameter ExtensionPrecedence) in
+  # case the requested file was not found.  This is quite dangerous
+  # and breaks e.g. the listing of openacs.org/repository (which is a
+  # directory), since the directory is moved every night into
+  # openacs.org/repository.bak. With the given logic, it tries to
+  # server the .bak directory as a file (which does of course not
+  # work). That blind logic is not inecessary, and is actually a
+  # potential attack vector.
+  #
+  #if { [llength $files] > 0 } {
+  #  set files [lsort $files]
+  #  return [lindex $files 0]
+  #}
 
   # Nada!
   return ""
@@ -1346,7 +1370,7 @@ ad_proc -private rp_handle_tcl_request {} {
   Sets up the stack of datasource frames, in case the page is templated.
 
 } {
-    namespace eval template variable parse_level [info level]
+    namespace eval template {variable parse_level [info level]}
     source [ad_conn file]
 }
 
@@ -1525,7 +1549,7 @@ proc root_of_host1 {host} {
     if { $node_id ne "" } {
         set url [site_node::get_url -node_id $node_id]
 
-       return [string range $url 0 [expr {[string length $url]-2}]]
+       return [string range $url 0 end-1]
     } else {
        # Hack to provide a useful default
        return ""
@@ -1554,18 +1578,18 @@ if {[ns_info name] eq "NaviServer"} {
   # this is written for NaviServer 4.99.1 or newer
   foreach filter {rp_filter rp_resources_filter request_denied_filter} {
     set cmd ${filter}_aolserver
-    if {[info command $cmd] ne ""} {rename $cmd ""}
+    if {[info commands $cmd] ne ""} {rename $cmd ""}
     rename $filter $cmd
     proc $filter {why} "$cmd \$why" 
   }
 
   set cmd rp_invoke_filter_conn
-  if {[info command $cmd] ne ""} {rename $cmd ""}
+  if {[info commands $cmd] ne ""} {rename $cmd ""}
   rename rp_invoke_filter $cmd
   proc   rp_invoke_filter { why filter_info} "$cmd _ \$filter_info \$why"
   
   set cmd rp_invoke_proc_conn
-  if {[info command $cmd] ne ""} {rename $cmd ""}
+  if {[info commands $cmd] ne ""} {rename $cmd ""}
   rename rp_invoke_proc   $cmd
   proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
 }

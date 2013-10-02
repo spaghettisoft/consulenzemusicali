@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Jan  2 12:28:33 2001
-    @cvs-id $Id: rel-type-remove-2.tcl,v 1.2 2007/01/10 21:22:07 gustafn Exp $
+    @cvs-id $Id: rel-type-remove-2.tcl,v 1.2.10.4 2013/09/09 16:44:21 gustafn Exp $
 
 } {
     group_rel_id:naturalnum,notnull
@@ -65,7 +65,7 @@ if {$operation eq "Yes, I really want to delete this relationship type"} {
 
 
 if { $return_url eq "" } {
-    set return_url one?[ad_export_vars {group_id}]
+    set return_url one?[export_vars {group_id}]
 }
 
 ad_returnredirect $return_url

@@ -2,7 +2,7 @@ ad_page_contract {
     shows User A what User B has contributed to the community
     
     @param user_id defaults to currently logged in user if there is one
-    @cvs-id $Id: community-member.tcl,v 1.19.2.1 2013/09/06 15:41:22 gustafn Exp $
+    @cvs-id $Id: community-member.tcl,v 1.19.2.2 2013/09/09 16:44:25 gustafn Exp $
 } {
     {user_id:integer ""}
 } -properties {
@@ -73,7 +73,7 @@ set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
 
 # Do we show the portrait?
 set inline_portrait_state "none"
-set portrait_export_vars [export_url_vars user_id]
+set portrait_export_vars [export_vars -url {user_id}]
 
 if {[db_0or1row portrait_info "
 select i.width, i.height, cr.title, cr.description, cr.publish_date

@@ -4,7 +4,7 @@
 
   @author Gustaf Neumann (gustaf.neumann@wu-wien.ac.at)
   @creation-date Oct 23, 2005
-  @cvs-id $Id: list.tcl,v 1.34 2012/09/13 16:05:32 victorg Exp $
+  @cvs-id $Id: list.tcl,v 1.34.2.1 2013/09/17 17:49:25 gustafn Exp $
 
   @param object_type show objects of this class and its subclasses
 } -parameter {
@@ -87,7 +87,7 @@ TableWidget t1 -volatile \
       AnchorField delete -CSSclass delete-item-button -label "" ;#-html {onClick "return(confirm('#xowiki.delete_confirm#'));"}
     }
 
-foreach {att order} [split $orderby ,] break
+lassign [split $orderby ,] att order
 t1 orderby -order [expr {$order eq "asc" ? "increasing" : "decreasing"}] $att
 
 # -page_size 10

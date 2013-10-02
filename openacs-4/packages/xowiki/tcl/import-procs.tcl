@@ -3,7 +3,7 @@
 
     @creation-date 2008-04-25
     @author Gustaf Neumann
-    @cvs-id $Id: import-procs.tcl,v 1.27 2013/07/20 15:48:35 gustafn Exp $
+    @cvs-id $Id: import-procs.tcl,v 1.27.2.1 2013/09/29 16:40:17 gustafn Exp $
 }
 
 
@@ -344,7 +344,7 @@ namespace eval ::xowiki {
     #
     ns_set put [ns_conn outputheaders] "Content-Type" "text/plain"
     ns_set put [ns_conn outputheaders] "Content-Disposition" "attachment;filename=export.xotcl"
-    ReturnHeaders 
+    ad_return_top_of_page "" 
     
     foreach item_id $item_ids {
       ns_log notice "--exporting $item_id [$item_id name]"

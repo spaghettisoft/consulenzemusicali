@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author  ron@arsdigita.com
     @creation-date 2000-12-08
-    @cvs-id  $Id: calendar-navigation.tcl,v 1.2 2002/09/10 22:22:08 jeffd Exp $
+    @cvs-id  $Id: calendar-navigation.tcl,v 1.2.24.1 2013/09/24 08:35:23 gustafn Exp $
 } {
     {view ""}
     {date ""}
@@ -15,7 +15,8 @@ ad_page_contract {
     calendar_widget:onevalue
 }
 
-set title "dt_widget_calendar_navigation"
+set title "Calendar Navigation"
+set context [list [list . "ACS DateTime Examples"] $title]
 
 set calendar_widget [dt_widget_calendar_navigation "" $view $date]
 

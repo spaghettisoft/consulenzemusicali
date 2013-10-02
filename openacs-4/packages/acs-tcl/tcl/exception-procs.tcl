@@ -2,7 +2,7 @@ ad_library {
 
   @author rhs@mit.edu
   @creation-date 2000-09-09
-  @cvs-id $Id: exception-procs.tcl,v 1.3 2007/01/10 21:22:12 gustafn Exp $
+  @cvs-id $Id: exception-procs.tcl,v 1.3.10.1 2013/09/29 19:23:18 gustafn Exp $
 }
 
 ad_proc -private ad_raise {exception {value ""}} {
@@ -45,9 +45,9 @@ ad_proc -private ad_try {code args} {
       }
 
       if {$matched} {
-	upvar [lindex $args [expr {$i + 1}]] var
+	upvar [lindex $args $i+1] var
 	set var $result
-	set errno [catch {uplevel [lindex $args [expr {$i + 2}]]} result]
+	set errno [catch {uplevel [lindex $args $i+2]} result]
       }
     }
 

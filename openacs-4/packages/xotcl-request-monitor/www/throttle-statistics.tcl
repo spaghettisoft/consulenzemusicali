@@ -2,7 +2,7 @@ ad_page_contract {
   present throttle statistics, active users, etc
 
   @author Gustaf Neumann
-  @cvs-id $Id: throttle-statistics.tcl,v 1.2 2005/12/30 00:07:23 gustafn Exp $
+  @cvs-id $Id: throttle-statistics.tcl,v 1.2.2.1 2013/09/17 19:29:57 gustafn Exp $
 } -properties {
   title:onevalue
   context:onevalue
@@ -28,7 +28,7 @@ template::list::create \
 
 multirow create url_statistics type user user_url time IPadress URL
 foreach l [lsort -index 2 $data] {
-  foreach {type user time IPadress URL} $l break
+  lassign $l type user time IPadress URL
   if {[string match *.* $user]} {
     set user "Anonymous"
     set user_url ""

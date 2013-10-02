@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Gustaf Neumann 
 
-    @cvs-id $Id: last100.tcl,v 1.6 2008/09/12 20:12:08 gustafn Exp $
+    @cvs-id $Id: last100.tcl,v 1.6.2.1 2013/09/17 19:29:57 gustafn Exp $
 } -query {
     {orderby:optional "time,desc"}
 } -properties {
@@ -32,11 +32,11 @@ TableWidget t1 -volatile \
       AnchorField url  -label "URL" -orderby url
     }
 
-foreach {att order} [split $orderby ,] break
+lassign [split $orderby ,] att order
 t1 orderby -order [expr {$order eq "asc" ? "increasing" : "decreasing"}] $att
 
 foreach l $stat {
-  foreach {timestamp c url ms requestor} $l break
+  lassign $l timestamp c url ms requestor
   if {[string is integer $requestor]} {
     acs_user::get -user_id $requestor -array user
     set user_string "$user(first_names) $user(last_name)"

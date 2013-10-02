@@ -6,7 +6,7 @@ ad_page_contract {
     @author Bruno Mattarollo <bruno.mattarollo@ams.greenpeace.org>
     @author Christian Hvid
     @creation-date 30 October 2001
-    @cvs-id $Id: edit-localized-message.tcl,v 1.17.8.1 2013/08/27 12:20:36 gustafn Exp $
+    @cvs-id $Id: edit-localized-message.tcl,v 1.17.8.2 2013/09/12 16:25:48 antoniop Exp $
 
 } {
     locale
@@ -168,6 +168,16 @@ ad_form -extend -name message -form {
     }
 } -on_submit {
 
+    set first_translated_message ""
+    
+    with_catch errmsg {
+	# Call semantic and sanity checks on the key before registering.
+	lang::message::check $locale $package_key $message_key $message
+    } {
+	template::form::set_error message message $errmsg
+	break
+    }
+    
     # Register message via acs-lang
     lang::message::register -comment $comment $locale $package_key $message_key $message
 

@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
     @arch-tag: 31c66882-e912-4db4-84fe-8a2b0890ffb0
-    @cvs-id $Id: content-symlink-procs.tcl,v 1.5 2006/06/04 00:45:23 donb Exp $
+    @cvs-id $Id: content-symlink-procs.tcl,v 1.5.12.1 2013/09/30 17:44:27 gustafn Exp $
 }
 
 namespace eval ::content::symlink {}
@@ -87,7 +87,7 @@ ad_proc -public content::symlink::new {
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date ]
     }
     return [package_exec_plsql -var_list $var_list content_symlink new]

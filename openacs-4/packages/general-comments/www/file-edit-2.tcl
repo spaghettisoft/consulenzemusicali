@@ -10,7 +10,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: file-edit-2.tcl,v 1.2.26.1 2013/09/06 16:01:50 gustafn Exp $
+    @cvs-id $Id: file-edit-2.tcl,v 1.2.26.2 2013/09/09 16:44:28 gustafn Exp $
 } {
     attach_id:integer,notnull
     parent_id:integer,notnull
@@ -30,7 +30,7 @@ db_dml edit_title {
      where revision_id = :revision_id
 }
     
-ad_returnredirect "view-comment?comment_id=$parent_id&[export_url_vars return_url]"
+ad_returnredirect "view-comment?comment_id=$parent_id&[export_vars -url {return_url}]"
 
 
 

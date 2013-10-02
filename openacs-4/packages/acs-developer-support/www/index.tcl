@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author  jsalz@mit.edu
     @creation-date        22 June 2000
-    @cvs-id $Id: index.tcl,v 1.20 2012/12/08 18:20:36 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.20.2.1 2013/09/30 11:09:27 gustafn Exp $
 } {
     {request_limit:integer 25}
 }
@@ -157,7 +157,7 @@ if { [llength $requests] == 0 } {
                 set url {}
 	    }
 
-	    if { [info exists conn(query)] && ![empty_string_p $conn(query)] } {
+	    if { [info exists conn(query)] && $conn(query) ne "" } {
 		if { [string length $conn(query)] > 50 } {
 		    set query "?[string range $conn(query) 0 46]..."
 		} else {

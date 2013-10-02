@@ -6,7 +6,7 @@ ad_library {
 
   @author Gustaf Neumann (neumann@wu-wien.ac.at)
   @creation-date 2005-11-26
-  @cvs-id $Id: 20-Ordered-Composite-procs.tcl,v 1.21 2013/08/12 20:01:06 gustafn Exp $
+  @cvs-id $Id: 20-Ordered-Composite-procs.tcl,v 1.21.2.2 2013/09/30 11:38:40 gustafn Exp $
 }
 
 namespace eval ::xo {
@@ -91,7 +91,7 @@ namespace eval ::xo {
     # push the active composite
     lappend composite [self]
     # check, if we have Tcl's apply available
-    if {$::tcl_version >= 8.5 && [info proc ::apply] eq ""} {
+    if {$::tcl_version >= 8.5 && [info procs ::apply] eq ""} {
       set errorOccurred [catch {::apply [list {} $cmds [self]]} errorMsg]
     } else {
       set errorOccurred [catch {namespace eval [self] $cmds} errorMsg]
@@ -143,10 +143,10 @@ namespace eval ::xo {
 	return $def
       }
     } elseif {$xp == -1} {
-      set yh [string range $y 0 [expr {$yp-1}]]
+      set yh [string range $y 0 $yp-1]
       return [my __value_compare $x $yh -1]
     } elseif {$yp == -1} {
-      set xh [string range $x 0 [expr {$xp-1}]]
+      set xh [string range $x 0 $xp-1]
       return [my __value_compare $xh $y 1]
     } else {
       set xh [string range $x 0 $xp]

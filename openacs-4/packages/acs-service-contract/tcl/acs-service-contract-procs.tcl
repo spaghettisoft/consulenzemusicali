@@ -3,7 +3,7 @@ ad_library {
     
     @author Neophytos Demetriou
     @creation-date 2001-09-01
-    @cvs-id $Id: acs-service-contract-procs.tcl,v 1.25.2.2 2013/08/27 11:20:39 gustafn Exp $
+    @cvs-id $Id: acs-service-contract-procs.tcl,v 1.25.2.3 2013/09/29 11:50:55 gustafn Exp $
 }
 
 namespace eval acs_sc {}
@@ -153,7 +153,7 @@ ad_proc -private acs_sc_proc {
     acs_sc_log SCDebug "ACS_SC_PROC: proc_name = $proc_name"
     
     if { $impl_alias eq "" } {
-        foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
+        lassign [acs_sc_get_alias $contract $operation $impl] impl_alias impl_pl 
     }
 
     if { $impl_alias eq "" } {

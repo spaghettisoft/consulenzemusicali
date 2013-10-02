@@ -2,7 +2,7 @@ ad_page_contract {
     Adds a dependency to a version of a package. 
     @author Bryan Quinn
     @creation-date 17 April 2000
-    @cvs-id $Id: version-dependency-add-2.tcl,v 1.11 2010/04/01 23:21:01 donb Exp $
+    @cvs-id $Id: version-dependency-add-2.tcl,v 1.11.6.1 2013/09/09 16:44:17 gustafn Exp $
 } {
     {dependency_id:naturalnum}
     {version_id:integer}
@@ -50,4 +50,4 @@ db_transaction {
     }
 }
 
-ad_returnredirect "version-dependencies?[export_url_vars version_id]"
+ad_returnredirect "version-dependencies?[export_vars -url {version_id}]"

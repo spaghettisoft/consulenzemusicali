@@ -5,7 +5,7 @@
 #          Stanislav Freidin 	  (sfreidin@arsdigita.com)
 #          Christian Brechbuehler (chrisitan@arsdigita.com)
 
-# $Id: tag-procs.tcl,v 1.18 2013/03/30 17:53:58 gustafn Exp $
+# $Id: tag-procs.tcl,v 1.18.2.1 2013/09/29 18:49:59 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -151,7 +151,7 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     between { 
       set expr1 "$arg1 >= \"[lindex $args $i]\""
-      set expr2 "$arg1 <= \"[lindex $args [expr {$i + 1}]]\""
+      set expr2 "$arg1 <= \"[lindex $args $i+1]\""
       append condition "($expr1 && $expr2)" 
       set next [expr {$i + 2}]
     }

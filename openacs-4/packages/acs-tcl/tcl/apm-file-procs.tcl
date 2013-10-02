@@ -4,7 +4,7 @@ ad_library {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Fri Oct  6 21:46:05 2000
-    @cvs-id $Id: apm-file-procs.tcl,v 1.35.8.3 2013/08/26 07:10:52 gustafn Exp $
+    @cvs-id $Id: apm-file-procs.tcl,v 1.35.8.8 2013/09/30 12:00:40 gustafn Exp $
 } 
 
 
@@ -107,9 +107,7 @@ ad_proc -public apm_db_type_keys {} {
 
 
 ad_proc -public apm_package_info_file_path { 
-    {
-	-path ""
-    }
+    {-path ""}
     package_key 
 } {
 
@@ -284,7 +282,7 @@ ad_proc -private apm_files_load {
     global apm_current_package_key
 
     foreach file_info $files {
-	util_unlist $file_info package_key path
+	lassign $file_info package_key path
 
 	if { $force_reload_p || ![nsv_exists apm_library_mtime packages/$package_key/$path] } {
 	    if { [file exists "[acs_root_dir]/packages/$package_key/$path"] } {
@@ -498,16 +496,23 @@ ad_proc -private apm_transfer_file {
   # Therefore, we check first for the NaviServer built in ns_http, then 
   # if the optional xotcl-core components are available...
   #
-  if {[info command ::ns_http] ne "" && [ns_info patchlevel] > "4.99.5"} {
+  if {[info commands ::ns_http] ne "" && [ns_info patchlevel] > "4.99.5"} {
     # 
     # ... use ns_http when we have a version with the "-file" flag ...
     #
-    # ns_log notice "Transfer $url based to $output_file_name on ns_http"
-    set h [ns_http queue -timeout 60:0 $url]
-    ns_http wait -file F -spoolsize 1 $h
-    if {[file exists $output_file_name]} {file delete $output_file_name}
-    file rename $F $output_file_name
-  } elseif {[info command ::xo::HttpRequest] ne ""} {
+      foreach i {1 2 3} {
+	  ns_log notice "Transfer $url to $output_file_name based on ns_http"
+	  set h [ns_http queue -timeout 60:0 $url]
+	  set replyHeaders [ns_set create]
+	  ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
+	  if {[file exists $output_file_name]} {file delete $output_file_name}
+	  file rename $F $output_file_name
+	  set location [ns_set iget $replyHeaders location]
+	  if {$location eq ""} break
+	  ns_log notice "Transfer $url redirected to $location ..."
+	  set url $location
+      }
+  } elseif {[info commands ::xo::HttpRequest] ne ""} {
     # 
     # ... use xo::HttpRequest...
     #
@@ -569,7 +574,7 @@ ad_proc -private apm_load_apm_file {
         if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
             apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
             The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
-            </pre></blockquote>[ad_footer]"
+            </pre></blockquote>"
             return
         }	
 

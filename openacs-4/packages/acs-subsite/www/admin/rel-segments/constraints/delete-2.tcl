@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Fri Dec 15 11:27:27 2000
-    @cvs-id $Id: delete-2.tcl,v 1.4.10.1 2013/09/06 16:01:46 gustafn Exp $
+    @cvs-id $Id: delete-2.tcl,v 1.4.10.5 2013/09/09 16:44:22 gustafn Exp $
 
 } {
     constraint_id:naturalnum,notnull
@@ -25,7 +25,7 @@ if {$operation eq "Yes, I really want to delete this constraint"} {
 	if { [db_0or1row select_segment_id {
 	    select c.rel_segment as segment_id from rel_constraints c where c.constraint_id = :constraint_id
 	}] } {
-	    set return_url "../one?[ad_export_vars {segment_id}]"
+	    set return_url "../one?[export_vars {segment_id}]"
 	}
     }
 
@@ -51,7 +51,7 @@ if {$operation eq "Yes, I really want to delete this constraint"} {
 
 } elseif { $return_url eq "" } {
     # if we're not deleting, redirect to the constraint page
-    set return_url one?[ad_export_vars constraint_id]
+    set return_url one?[export_vars constraint_id]
 }
 
 

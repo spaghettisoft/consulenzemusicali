@@ -3,7 +3,7 @@
 
     @creation-date 2006-10-10
     @author Gustaf Neumann
-    @cvs-id $Id: package-procs.tcl,v 1.279 2013/08/12 20:41:09 gustafn Exp $
+    @cvs-id $Id: package-procs.tcl,v 1.279.2.2 2013/09/30 11:37:18 gustafn Exp $
 }
 
 namespace eval ::xowiki {
@@ -1670,7 +1670,7 @@ namespace eval ::xowiki {
                      $object $method]
     if {$allowed} {
       #my log "--p calling $object ([$object name] [$object info class]) '$method'"
-      eval $object $method $options
+      $object $method {*}$options
     } else {
       my log "not allowed to call $object $method"
     }
@@ -2234,7 +2234,7 @@ namespace eval ::xowiki {
   Class ParameterCache
   ParameterCache instproc get_parameter {{-check_query_parameter true}  {-type ""} attribute {default ""}} {
     set key [list [my id] [self proc] $attribute]
-    if {[info command "::xo::cc"] ne ""} {
+    if {[info commands "::xo::cc"] ne ""} {
       if {[::xo::cc cache_exists $key]} {
         return [::xo::cc cache_get $key]
       }

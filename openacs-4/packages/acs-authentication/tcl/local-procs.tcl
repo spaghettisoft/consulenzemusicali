@@ -3,7 +3,7 @@ ad_library {
 
     @author Lars Pind (lars@collaobraid.biz)
     @creation-date 2003-05-13
-    @cvs-id $Id: local-procs.tcl,v 1.37 2009/10/08 14:33:46 daveb Exp $
+    @cvs-id $Id: local-procs.tcl,v 1.37.6.1 2013/09/30 18:26:48 gustafn Exp $
 }
 
 namespace eval auth {}
@@ -367,7 +367,7 @@ ad_proc -private auth::local::password::ResetPassword {
     }
 
     # Reset the password
-    if {[exists_and_not_null new_password]} {
+    if { $new_password ne "" } {
 	set password $new_password
     } else {
 	set password [ad_generate_random_string]

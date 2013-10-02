@@ -1,4 +1,3 @@
-/index.adp/1.7/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.tcl/1.18.10.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
 /index.xql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /make-admin.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -6,14 +5,15 @@
 /make-member.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /member-invite-oracle.xql/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /member-invite-postgresql.xql/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/member-invite.adp/1.7/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /member-invite.tcl/1.10/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /member-remove.tcl/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /member-state-change.tcl/1.1.22.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
-/user-batch-add-2.adp/1.3/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /user-batch-add-2.tcl/1.5.6.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
-/user-batch-add.adp/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/user-batch-add.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/user-new.adp/1.6/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /user-new.tcl/1.10/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
+/index.adp/1.7.10.1/Tue Oct  1 23:26:55 2013//Topenacs-5-8-compat
+/member-invite.adp/1.7.4.1/Tue Oct  1 23:26:55 2013//Topenacs-5-8-compat
+/user-batch-add-2.adp/1.3.8.1/Tue Oct  1 23:26:55 2013//Topenacs-5-8-compat
+/user-batch-add.adp/1.4.8.1/Tue Oct  1 23:26:55 2013//Topenacs-5-8-compat
+/user-batch-add.tcl/1.4.8.5/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/user-new.adp/1.6.4.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
 D

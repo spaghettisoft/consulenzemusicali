@@ -7,7 +7,7 @@ ad_library {
     @author Jon Salz (jsalz@arsdigita.com)
     @author Richard Li (richardl@arsdigita.com)
     @author Archit Shah (ashah@arsdigita.com)
-    @cvs-id $Id: security-procs.tcl,v 1.74.2.2 2013/09/07 08:37:59 gustafn Exp $
+    @cvs-id $Id: security-procs.tcl,v 1.74.2.3 2013/09/29 14:55:32 gustafn Exp $
 }
 
 namespace eval security {}
@@ -669,11 +669,11 @@ ad_proc -public ad_get_login_url {
     append url "register/"
 
     set export_vars [list]
-    if { [exists_and_not_null authority_id] } {
+    if { [info exists authority_id] && $authority_id ne "" } {
         lappend export_vars authority_id
         
     }
-    if { [exists_and_not_null username] } {
+    if { ([info exists username] && $username ne "") } {
         lappend export_vars username
         
     }

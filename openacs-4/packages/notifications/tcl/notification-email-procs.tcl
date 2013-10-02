@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 2002-06-20
     @author Ben Adida <ben@openforce.biz>
-    @cvs-id $Id: notification-email-procs.tcl,v 1.37.2.1 2013/08/27 12:20:39 gustafn Exp $
+    @cvs-id $Id: notification-email-procs.tcl,v 1.37.2.2 2013/09/18 08:57:40 gustafn Exp $
 
 }
 
@@ -127,11 +127,11 @@ namespace eval notification::email {
 
        if { $content_html eq "" } {
            set mime_type "text/plain"
-           append content_text "\n#notifications.lt_Getting_too_much_emai#"
+           append content_text "\n#" "notifications.lt_Getting_too_much_emai#"
            set content $content_text
        } else {
            set mime_type "text/html"
-           append content_html "<p>#notifications.lt_Getting_too_much_emai#</p>"
+           append content_html "<p>#" "notifications.lt_Getting_too_much_emai#</p>"
            set content $content_html
        }
 

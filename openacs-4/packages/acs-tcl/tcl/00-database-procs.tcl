@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 15 Apr 2000
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id $Id: 00-database-procs.tcl,v 1.86.2.3 2013/09/05 11:50:59 gustafn Exp $
+    @cvs-id $Id: 00-database-procs.tcl,v 1.86.2.7 2013/09/29 20:24:02 gustafn Exp $
 }
 
 # Database caching.
@@ -179,8 +179,8 @@ ad_proc -private db_driverkey {{
         set handle $dbn ; set dbn {}
         set pool [ns_db poolname $handle]
 
-        if { [nsv_exists {db_pool_to_dbn} $pool] } {
-            set dbn [nsv_get {db_pool_to_dbn} $pool]
+        if { [nsv_exists db_pool_to_dbn $pool] } {
+            set dbn [nsv_get db_pool_to_dbn $pool]
         } else {
             # db_pool_to_dbn_init runs on startup, so other than some
             # broken code deleting the nsv key (very unlikely), the
@@ -192,7 +192,7 @@ ad_proc -private db_driverkey {{
         }
     }
 
-    if { ![nsv_exists {db_driverkey} $dbn] } {
+    if { ![nsv_exists db_driverkey $dbn] } {
         # This ASSUMES that any overriding of this default value via
         # "ns_param driverkey_dbn" has already been done:
 
@@ -209,19 +209,19 @@ ad_proc -private db_driverkey {{
 
         if { [string match "Oracle*" $driver] } {
             set driverkey {oracle}
-        } elseif { [string equal $driver {PostgreSQL}] } {
-            set driverkey {postgresql}
-        } elseif { [string equal $driver {ODBC}] } {
-            set driverkey {nsodbc}
+        } elseif { $driver eq "PostgreSQL" } {
+            set driverkey "postgresql"
+        } elseif { $driver eq "ODBC" } {
+            set driverkey "nsodbc"
         } else {
             set driverkey {}
-            ns_log Error "$proc_name: Unknown driver '$driver_type'."
+            ns_log Error "$proc_name: Unknown driver '$driver'."
         }
 
-        nsv_set {db_driverkey} $dbn $driverkey
+        nsv_set db_driverkey $dbn $driverkey
     }
 
-    return [nsv_get {db_driverkey} $dbn]
+    return [nsv_get db_driverkey $dbn]
 }
 
 
@@ -837,8 +837,8 @@ ad_proc -private db_get_quote_indices { sql } {
     set all_indices [regexp -inline -indices -all -- {(?:^|[^'])(')(?:[^']|'')+(')(?=$|[^'])} $sql]
 
     for {set i 0} { $i < [llength $all_indices] } { incr i 3 } {
-        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 1}]] 0]
-        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 2}]] 0]
+        lappend quote_indices [lindex [lindex $all_indices $i+1] 0]
+        lappend quote_indices [lindex [lindex $all_indices $i+2] 0]
     }
 
     return $quote_indices
@@ -2463,7 +2463,7 @@ ad_proc -public db_get_database {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource [expr {$last_colon_pos + 1}] end]
+    return [string range $datasource $last_colon_pos+1 end]
 }
 
  
@@ -2484,7 +2484,7 @@ ad_proc -public db_get_dbhost {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource 0 [expr {$first_colon_pos - 1}]]
+    return [string range $datasource 0 $first_colon_pos-1]
 }
 
 ad_proc -public db_source_sql_file {{
