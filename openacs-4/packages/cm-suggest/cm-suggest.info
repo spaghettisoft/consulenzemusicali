@@ -17,14 +17,15 @@
         <maturity>0</maturity>
 
         <provides url="cm-suggest" version="0.1d"/>
+        <requires url="file-storage" version="5.6.0d2"/>
 
         <callbacks>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="jplayer_path"  description="URL path to the JPlayer library relative to the root of the server." section_name="Javascript Libraries"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="jplayer_playlist_path"  description="URL path to the JPlayer playlist plugin relative to the root of the server." section_name="Javascript Libraries"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="jplayer_skin_path"  description="URL path to the css skin of the JPlayer library relative to the root of the server." section_name="Javascript Libraries"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="jquery_path"  description="URL path to the JQuery library relative to the root of the server." section_name="Javascript Libraries"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="jplayer_path"  default="js/jquery.jplayer.min.js" description="URL path to the JPlayer library relative to the root of the server." section_name="Javascript Libraries"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="jplayer_playlist_path"  default="js/jplayer.playlist.min.js" description="URL path to the JPlayer playlist plugin relative to the root of the server." section_name="Javascript Libraries"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="jplayer_skin_path"  default="skin/blue.monday/jplayer.blue.monday.css" description="URL path to the css skin of the JPlayer library relative to the root of the server." section_name="Javascript Libraries"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="jquery_path"  default="js/jquery-1.6.4.min.js" description="URL path to the JQuery library relative to the root of the server." section_name="Javascript Libraries"/>
         </parameters>
 
     </version>

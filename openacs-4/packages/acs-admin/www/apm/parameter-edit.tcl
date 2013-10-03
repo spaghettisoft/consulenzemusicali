@@ -2,11 +2,14 @@ ad_page_contract {
     Adds a parameter to a version.
     @author Todd Nightingale [tnight@arsdigita.com]
     @creation-date 17 April 2000
-    @cvs-id $Id: parameter-edit.tcl,v 1.6.10.6 2013/09/28 12:10:00 gustafn Exp $
+    @cvs-id $Id: parameter-edit.tcl,v 1.6 2007/09/25 15:22:33 donb Exp $
 } {
     parameter_id:notnull,naturalnum
     version_id:notnull,naturalnum
 }
+
+
+set user_id [ad_conn user_id]
 
 db_1row param_info { 
     select parameter_name, datatype, description, default_value, min_n_values, max_n_values, parameter_id, 
@@ -21,18 +24,16 @@ db_1row apm_get_name {
      where version_id = :version_id
 }
 
-set title "Edit Parameter"
-set context [list \
-		 [list "." "Package Manager"] \
-		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
-		 [list [export_vars -base version-parameters { version_id }] "Parameters"] \
-		 $title]
+db_release_unused_handles
 
-append body [subst {
-<form action="parameter-edit-2" method="post">
+set page_title "Edit Parameter"
+set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list [export_vars -base version-parameters { version_id }] "Parameters"] $page_title]
+
+append body "
+<form action=\"parameter-edit-2\" method=\"post\">
 <blockquote>
 <table>
-[export_vars -form {package_key parameter_id version_id}]
+[export_form_vars package_key parameter_id version_id]
 
 <tr>
   <td></td>
@@ -43,8 +44,8 @@ plain text string that identifies the parameter.
 </tr>
 
 <tr>
-  <th aligh="right" nowrap>Parameter Name:</th>
-  <td><input name="parameter_name" size="50" value="[ad_quotehtml $parameter_name]"></td>
+  <th align=right nowrap>Parameter Name:</th>
+  <td><input name=parameter_name size=50 value=\"[ad_quotehtml $parameter_name]\"></td>
 </tr>
 
 <tr>
@@ -53,20 +54,20 @@ plain text string that identifies the parameter.
 </tr>
 
 <tr valign=top>
-  <th aligh="right"><br>Description:</th>
-  <td><textarea name="description" cols="60" rows="8">[ad_quotehtml $description]</textarea>
+  <th align=right><br>Description:</th>
+  <td><textarea name=description cols=60 rows=8>[ad_quotehtml $description]</textarea>
 </td>
 </tr>
 
 <tr>
   <td></td>
-  <td>You may enter a section name to identify the parameter.  For example, the ACS Kernel has a "security" section
+  <td>You may enter a section name to identify the parameter.  For example, the ACS Kernel has a \"security\" section
 to indicate which parameters pertain to security.
 </tr>
 
 <tr valign=top>
-  <th aligh="right"><br>Section Name:</th>
-  <td><input name="section_name" value="[ad_quotehtml $section_name]" size=50><br>
+  <th align=right><br>Section Name:</th>
+  <td><input name=section_name value=\"[ad_quotehtml $section_name]\" size=50><br>
 </td>
 </tr>
 
@@ -77,8 +78,8 @@ to indicate which parameters pertain to security.
 </tr>
 
 <tr>
-  <th aligh="right" nowrap>Type:</th>
-  <td><select name="datatype">
+  <th align=right nowrap>Type:</th>
+  <td><select name=datatype>
       [ad_generic_optionlist {number string "textarea"} {number string text} $datatype]
       </select>
   </td>
@@ -92,15 +93,17 @@ to indicate which parameters pertain to security.
 </tr>
 
 <tr>
-  <th aligh="right" nowrap>Default:</th>
-<td><textarea name="default_value" cols="60" rows="[expr {$datatype eq "text" ? 8 : 1}]">[ad_quotehtml $default_value]</textarea>
+  <th align=right nowrap>Default:</th>
+  <td><input name=default_value size=50 value=\"[ad_quotehtml $default_value]\"></td>
 </tr>
 
-<tr><th colspan=2><input type="submit" value="Edit Parameter"></th>
+<tr><th colspan=2><input type=submit value=\"Edit Parameter\"></th>
 </tr>
 </table>
 </blockquote>
 </form>
-}]
+[ad_footer]
+"
 
-ad_return_template apm
+
+

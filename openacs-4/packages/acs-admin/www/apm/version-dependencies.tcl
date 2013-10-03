@@ -2,19 +2,16 @@ ad_page_contract {
     Views dependency information about a version.
     @author Jon Salz [jsalz@arsdigita.com]
     @creation-date 17 April 2000
-    @cvs-id $Id: version-dependencies.tcl,v 1.7.4.2 2013/09/28 12:10:00 gustafn Exp $
+    @cvs-id $Id: version-dependencies.tcl,v 1.7 2010/10/17 21:06:07 donb Exp $
 } {
     {version_id:integer}
 }
 
-db_1row apm_package_info_by_version_id {}
+db_1row  apm_package_info_by_version_id {}
 
-set title "Dependencies"
-set context [list \
-		 [list "/acs-admin/apm/" "Package Manager"] \
-		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
-		 $title]
-set body ""
+doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Dependencies"]
+
+"
 
 foreach dependency_type { provide require extend embed } {
 
@@ -24,14 +21,13 @@ foreach dependency_type { provide require extend embed } {
     } else {
         set dependency_type_prep_2 ${dependency_type}ed
     }
-    append body "<h3>Services [string totitle $dependency_type_prep_2]</h3><ul>\n"
+    doc_body_append "<h3>Services [string totitle $dependency_type_prep_2]</h3><ul>\n"
 
     db_foreach apm_all_dependencies {} {
-	append body "<li>[string totitle $dependency_type_prep] service $service_uri, version $service_version "
-	
+	doc_body_append "<li>[string totitle $dependency_type_prep] service $service_uri, version $service_version"
+
         if { $dependency_type ne "provide" } {
-	    set qvars [export_vars -url {package_key dependency_id version_id dependency_type}]
-            append body "(<a href=\"version-dependency-remove?$qvars\">remove</a>)\n"
+            doc_body_append "(<a href=\"version-dependency-remove?[export_url_vars package_key dependency_id version_id dependency_type]\">remove</a>)\n"
         }
 	
 	# If this package provides a service, show a list of all packages that require it,
@@ -46,7 +42,7 @@ foreach dependency_type { provide require extend embed } {
 	db_foreach apm_specific_version_dependencies {} {
             incr counter
 	    if { $counter == 1 } {
-		append body "<ul>\n"
+		doc_body_append "<ul>\n"
 	    }
             switch $dep_type {
                 provides { set dep_d provided }
@@ -54,27 +50,23 @@ foreach dependency_type { provide require extend embed } {
                 extends { set dep_d extended }
                 embeds { set dep_d embeds }
             } 
-	    append body [subst {
-		<li>[string totitle $dep_d] by <a href="version-view?version_id=$dep_version_id">$dep_pretty_name, 
-		version $dep_version_name</a>
-	    }]
+	    doc_body_append "<li>[string totitle $dep_d] by <a href=\"version-view?version_id=$dep_version_id\">$dep_pretty_name, version $dep_version_name</a>\n"
 	}
 	if { $counter != 0 } {
-	    append body "</ul>\n"
-	}
+	    doc_body_append "</ul>\n"
+	}	
     } else {
-	append body "<li>This package does not $dependency_type any services.\n"
+	doc_body_append "<li>This package does not $dependency_type any services.\n"
     }
     if { $installed_p eq "t" && $dependency_type ne "provide"} {
-	append body [subst {
-	    <li><a href="version-dependency-add?[export_vars -url {version_id dependency_type}]">Add a 
-	    service $dependency_type_prep_2 by this package</a>
-	}]
+	doc_body_append "<li><a href=\"version-dependency-add?[export_url_vars version_id dependency_type]\">Add a service $dependency_type_prep_2 by this package</a>\n"
     }
-    append body "</ul>\n"
+    doc_body_append "</ul>\n"
 }
 
-append body "</ul>\n"
-
-ad_return_template apm
+db_release_unused_handles
+doc_body_append "
+</ul>
+[ad_footer]
+"
 

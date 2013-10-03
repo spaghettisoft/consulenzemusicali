@@ -410,11 +410,7 @@ ad_proc -public cmit::playlist::delete {
 } {
     Deletes a playlist
 } { 
-    foreach song_id [db_list query "
-      select song_id from cmit_playlist_songs
-    where playlist_id = :playlist_id"] {
-	cmit::playlist::delete_song -playlist_id $playlist_id -song_id $song_id
-    }
+    cmit::playlist::delete_song -playlist_id $playlist_id
     
     cmit::playlist::thumbnail_delete -playlist_id $playlist_id
     
@@ -547,31 +543,43 @@ ad_proc -public cmit::playlist::edit_song {
 
 ad_proc -public cmit::playlist::delete_song {
     -playlist_id:required
-    -song_id:required
+    {-song_id ""}
 } {
-    Removes a song from a playlist
+    If song_id is provided, removes the song from the playlist,
+    otherwise every song will be removed.
 } {
-    # First I update the ordering, setting
-    # that all rows down this, should move 
-    # upward 1...
-    db_dml query "
-      update cmit_playlist_songs set
-	   order_no = order_no - 1
-	where playlist_id = :playlist_id
-	  and order_no > (
-	    select order_no from cmit_playlist_songs
-	      where playlist_id = :playlist_id
-	        and song_id     = :song_id limit 1);
+    if {$song_id ne ""} {
+	# First I update the ordering, setting
+	# that all rows down this, should move 
+	# upward 1...
+	db_dml query "
+	  update cmit_playlist_songs set
+	      order_no = order_no - 1
+	    where playlist_id = :playlist_id
+	      and order_no > (
+		select order_no from cmit_playlist_songs
+		  where playlist_id = :playlist_id
+		    and song_id     = :song_id limit 1);
 
-      -- then I delete the song from the playlist...
-      delete from cmit_playlist_songs
-    where playlist_id = :playlist_id
-      and song_id     = :song_id;
-      
-      -- ...together with the mapping.
-      delete from category_object_map
-    where object_id   = :song_id
-      and category_id = :playlist_id"
+	  -- then I delete the song from the playlist...
+	  delete from cmit_playlist_songs
+	where playlist_id = :playlist_id
+	  and song_id     = :song_id;
+	  
+	  -- ...together with the mapping.
+	  delete from category_object_map
+	where object_id   = :song_id
+	  and category_id = :playlist_id"
+    } else {
+	# If no song was provided, just empty
+	# all the playlist
+	db_dml query "
+	  delete from cmit_playlist_songs
+	where playlist_id = :playlist_id;
+	  
+	  delete from category_object_map
+	where category_id = :playlist_id"
+    }
     
     # flush cache
     util_memoize_flush_regexp "cmit::"
