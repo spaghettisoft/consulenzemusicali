@@ -4,10 +4,7 @@
 <meta charset=utf-8 />
 <title>@page_title@</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link href="skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
-<script type="text/javascript" src="js/jplayer.playlist.min.js"></script>
+
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -26,6 +23,7 @@ $(document).ready(function(){
 });
 //]]>
 </script>
+
 </head>
 <body>
   <p>

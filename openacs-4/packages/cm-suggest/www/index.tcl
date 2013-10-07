@@ -51,7 +51,7 @@ foreach lib {
 }
 
 # Add css
-template::head::add_css -href "css/style.css"
+#template::head::add_css -href "css/style.css"
 
 # set page_title "Gruppi"
 # set doc(title) $page_title
