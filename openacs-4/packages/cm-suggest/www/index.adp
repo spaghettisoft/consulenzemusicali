@@ -10,6 +10,25 @@
 <img style="display:none;" src="skin/blue.monday/forwardHoverIcon16x16.png">
 <img style="display:none;" src="skin/blue.monday/reverseHoverIcon16x16.png">
 
+<img style="display:none;" src="skin/blue.monday/playIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/stillIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/forwardIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/reverseIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/playHoverIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/stillHoverIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/forwardHoverIcon32x32.png">
+<img style="display:none;" src="skin/blue.monday/reverseHoverIcon32x32.png">
+
+<script type="text/javascript">
+  if (screen.height >= 900) {
+ 	 document.write("<link href='skin/blue.monday/jplayer.blue.monday.css' rel='stylesheet' type='text/css' </meta>");
+  }
+  else {
+	  document.write("<link href='skin/blue.monday/jplayer.blue.monday.big.css' rel='stylesheet' type='text/css' </meta>");
+  }
+</script>
+
+
 <div id="cm_container">
   <div id="log">
     <if @logged_p@ ne 0>
