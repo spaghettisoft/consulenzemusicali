@@ -20,7 +20,7 @@
 <img style="display:none;" src="skin/blue.monday/reverseHoverIcon32x32.png">
 
 <script type="text/javascript">
-  if (screen.height >= 900) {
+  if (screen.height <= 900) {
  	 document.write("<link href='skin/blue.monday/jplayer.blue.monday.css' rel='stylesheet' type='text/css' </meta>");
   }
   else {

@@ -32,7 +32,9 @@ foreach param $params {
 }
 
 # add jplayer skin css to the page header
-template::head::add_css -href $jplayer_skin_path
+# To allow conditional dimension of the player's button based on resolution,
+# the css is hardcoded in index.adp
+#template::head::add_css -href $jplayer_skin_path
 
 # load this java libraries
 # in respective orders
