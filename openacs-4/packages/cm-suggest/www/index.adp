@@ -21,14 +21,14 @@
 
 <script type="text/javascript">
   if (screen.width >= 800) {
-        document.write(screen.height);
-	document.write(screen.width);
+     /*
 	document.write("<link href='css/style.css' rel='stylesheet' type='text/css' </meta>");
  	document.write("<link href='skin/blue.monday/jplayer.blue.monday.css' rel='stylesheet' type='text/css' </meta>");
+*/
+document.write("<link href='css/style.big.css' rel='stylesheet' type='text/css' </meta>");
+	 document.write("<link href='skin/blue.monday/jplayer.blue.monday.big.css' rel='stylesheet' type='text/css' </meta>");
   }
   else {
-         document.write(screen.height);
-         document.write(screen.width);
  	 document.write("<link href='css/style.big.css' rel='stylesheet' type='text/css' </meta>");
 	 document.write("<link href='skin/blue.monday/jplayer.blue.monday.big.css' rel='stylesheet' type='text/css' </meta>");
   }

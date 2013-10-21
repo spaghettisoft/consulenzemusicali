@@ -37,7 +37,7 @@ body {
     height:15px;
 }
 .cm-playlist-players {
-    height:32px;
+    height:38px;
 }
 .cm-playlist-player {
     float:left;
@@ -46,8 +46,10 @@ body {
 /*     margin-left:-20px */
 }
 .cm-playlist-name {
+    line-height:95%;
     float:left;
     width:115px;
+    height:38px;
 /*     margin-left:15px; */
     font-size: 8pt;
     position:relative;

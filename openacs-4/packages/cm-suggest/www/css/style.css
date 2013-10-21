@@ -46,8 +46,10 @@ body {
 /*     margin-left:-20px */
 }
 .cm-playlist-name {
+ 
     float:left;
     width:115px;
+
 /*     margin-left:15px; */
     font-size: 8pt;
     position:relative;
