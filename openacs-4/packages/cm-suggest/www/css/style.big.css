@@ -50,10 +50,11 @@ body {
     float:left;
     width:115px;
     height:38px;
+    margin-top: 3px;
 /*     margin-left:15px; */
     font-size: 8pt;
-    position:relative;
-    bottom:1px;
+   /* position:relative;*/
+    bottom:3px;
 }
 .log {
     font-size: 8pt;
