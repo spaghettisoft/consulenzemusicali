@@ -1,7 +1,16 @@
+a:hover {
+  background-color:transparent;
+}
+
+html {
+  overflow-y: scroll;
+}
+
 body {
   font-family:Arial, sans-serif;
   color:black;
 }
+
 #title {
     font-size:22px;
     font-weight:bold;
@@ -60,7 +69,12 @@ body {
     font-size: 8pt;
     color:black;
     position:relative;
-    top:507px;
+    top:50px;
+}
+#log {
+    position:relative;
+    top:50px;
+    z-index:-1;
 }
 #cm_selected {
     text-decoration:underline;

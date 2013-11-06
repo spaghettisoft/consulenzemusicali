@@ -75,23 +75,24 @@ a.jp-pause {
 }
 
 a.jp-play {
-	background-image: url("playIcon16x16.png");
+	background-image: url("playForwardStillSprite.svg");
+	background-size: 48px 32px;
 	background-repeat: no-repeat;
-	background-position: left top;
+	background-position: 0px 0px;
 }
 a.jp-play:hover {
-	background-image: url("playHoverIcon16x16.png");
+	background-image: url("playForwardStillSprite.svg");
+	background-size: 48px 32px;
 	background-repeat: no-repeat;
-	background-position: left top;
-
+	background-position: 0px -16px;
 }
 a.jp-pause {
-	background: url("stillIcon16x16.png") 0 0px no-repeat;
-	display: none;
+	background: url("playForwardStillSprite.svg") -32px 0px no-repeat;
+	background-size: 48px 32px;
 }
 a.jp-pause:hover {
-	background: url("stillHoverIcon16x16.png") 0px 0 no-repeat;
-	
+	background: url("playForwardStillSprite.svg") -32px -16px no-repeat;
+	background-size: 48px 32px;
 }
 
 a.jp-stop, a.jp-previous, a.jp-next {
@@ -117,10 +118,12 @@ a.jp-previous:hover {
 }*/
 
 a.jp-next {
-	background: url("forwardIcon16x16.png") 0px 0px no-repeat;
+	background: url("playForwardStillSprite.svg") -16px -0px no-repeat;
+	background-size: 48px 32px;
 }
 a.jp-next:hover {
-	background: url("forwardHoverIcon16x16.png") 0px 0px no-repeat;
+	background: url("playForwardStillSprite.svg") -16px -16px no-repeat;
+	background-size: 48px 32px;
 }
 
 div.jp-playlist {
@@ -234,7 +237,7 @@ div.jp-volume-bar-value {
 .jp-no-solution {
 	padding:5px;
 	font-size:.8em;
-	background-color:#eee;
+/* 	background-color:#eee; */
 	border:2px solid #009be3;
 	color:#000;
 	display:none;

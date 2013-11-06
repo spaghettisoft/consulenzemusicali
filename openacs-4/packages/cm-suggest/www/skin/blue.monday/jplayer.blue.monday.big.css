@@ -67,31 +67,31 @@ div.jp-interface ul.jp-controls a {
 	text-indent:-9999px;
 }
 
-a.jp-play,
-a.jp-pause {
+a.jp-play, a.jp-pause {
 	width:32px;
 	height:32px;
 	margin-top:0px;
 }
 
 a.jp-play {
-	background-image: url("playIcon32x32.png");
+	background-image: url("playForwardStillSprite.svg");
+	background-size: 96px 64px;
 	background-repeat: no-repeat;
-	background-position: left top;
+	background-position: 0px 0px;
 }
 a.jp-play:hover {
-	background-image: url("playHoverIcon32x32.png");
+	background-image: url("playForwardStillSprite.svg");
+	background-size: 96px 64px;
 	background-repeat: no-repeat;
-	background-position: left top;
-
+	background-position: 0px -32px;
 }
 a.jp-pause {
-	background: url("stillIcon32x32.png") 0 0px no-repeat;
-	display: none;
+	background: url("playForwardStillSprite.svg") -64px 0px no-repeat;
+	background-size: 96px 64px;
 }
 a.jp-pause:hover {
-	background: url("stillHoverIcon32x32.png") 0px 0 no-repeat;
-	
+	background: url("playForwardStillSprite.svg") -64px -32px no-repeat;
+	background-size: 96px 64px;
 }
 
 a.jp-stop, a.jp-previous, a.jp-next {
@@ -110,17 +110,19 @@ a.jp-stop:hover {
 }
 
 /*a.jp-previous {
-	background: url("reverseIcon16x16.png") 0px 0 no-repeat;
+	background: url("reverseIcon32x32.png") 0px 0 no-repeat;
 }
 a.jp-previous:hover {
-	background: url("reverseHoverIcon16x16.png") 0px 0px no-repeat;
+	background: url("reverseHoverIcon32x32.png") 0px 0px no-repeat;
 }*/
 
 a.jp-next {
-	background: url("forwardIcon32x32.png") 0px 0px no-repeat;
+	background: url("playForwardStillSprite.svg") -32px -0px no-repeat;
+	background-size: 96px 64px;
 }
 a.jp-next:hover {
-	background: url("forwardHoverIcon32x32.png") 0px 0px no-repeat;
+	background: url("playForwardStillSprite.svg") -32px -32px no-repeat;
+	background-size: 96px 64px;
 }
 
 div.jp-playlist {
