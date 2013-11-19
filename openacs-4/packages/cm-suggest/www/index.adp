@@ -37,7 +37,7 @@ Not needed, we now have a unique vectorial sprite for every button :-)
 
 <div id="cm_container">
   <div id="cm_groups">
-    <div id="title"><img src="images/Logo.svg" width="145" height="42" border="0"></div>
+    <div id="title"><img src="images/Logo.svg" width="145" border="0"></div>
     <multiple name="groups">
       <div class="cm_group">
 	<include 
@@ -63,14 +63,16 @@ Not needed, we now have a unique vectorial sprite for every button :-)
   </div>
 </div>
 
-<script type="text/javascript">
-  $(function() {
+<!-- New Safari seems to handle animations correctly -->
+<!-- <script type="text/javascript">
+//   $(function() {
     // This is to force clicked buttons to get out 
     // of the way before the one is coming arrives.
     // Required for Safari in Ipad, otherwise, for a short
     // istant there will be 2 elements making buttons overflow.
-    $('.jp-pause, .jp-play').click(function () {
-      $(this).hide();
-    });
+//     $('.jp-pause, .jp-play').click(function () {
+//       $(this).hide();
+//       $('.jp-pause').hide();
+//     });
   });
-</script>
+</script> -->
