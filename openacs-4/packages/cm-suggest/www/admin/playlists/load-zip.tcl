@@ -309,6 +309,14 @@ ad_form -html { enctype multipart/form-data } -name addedit \
 	
 	# That's it folks! Let's clean our own mess!
 	file delete -force -- $tmpdir
+
+    # If for wathever reason, a loading of a correct playlist fails,
+    # we must make sure temp folder is deleted, or we'll stuff the server
+    } on_error {
+	template::form::set_error addedit zip_file $errmsg
+	if {[info exists tmpdir]} {
+	  file delete -force -- $tmpdir
+	}
     }
 
 } -after_submit {
