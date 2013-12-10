@@ -55,6 +55,7 @@ template::list::create \
     -actions $actions \
     -key song_id \
     -bulk_actions $bulk_actions \
+    -bulk_action_method post \
     -elements {
 	edit {
 	    link_url_col edit_url

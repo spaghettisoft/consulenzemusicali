@@ -319,6 +319,11 @@ ad_form -html { enctype multipart/form-data } -name addedit \
 	}
     }
 
+    # This will stop form submission if we have errors in the transaction
+    if {![template::form::is_valid addedit]} {
+	break
+    }
+
 } -after_submit {
     
     set mesg "La playlist '$playlist_name' è stata caricata."
