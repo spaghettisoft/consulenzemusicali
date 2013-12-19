@@ -298,11 +298,14 @@ ad_proc -public cmit::playlist::add {
 	    ,thumbnail_id
 	    ,valid_from
 	    ,valid_to
+	    ,order_no
 	    ) values (
 	     :playlist_id
 	    ,:thumbnail_id
 	    ,:valid_from
 	    ,:valid_to
+	    ,(select coalesce(max(order_no), 0) + 1
+		  from cmit_playlists)
 	    )"
     
     # flush cache
@@ -316,6 +319,7 @@ ad_proc -public cmit::playlist::edit {
     -playlist_id:required
     -name
     -description
+    {-order_no ""}
     -thumbnail_filename
     -thumbnail_tmp_filename
     -valid_from
@@ -365,12 +369,40 @@ ad_proc -public cmit::playlist::edit {
 	-name        $name \
 	-locale      $locale \
 	-description $description
+	
+    set old_order_no $playlist(order_no)
+    
+    # If a new order is given...
+    if {$order_no ne "" && $order_no != $old_order_no} {
+	set max_order_no [db_string query "
+	  select coalesce(max(order_no), 0)
+	    from cmit_playlists"]
+	# ...it is set to the next max order if greater than that...
+	if {$order_no > $max_order_no} {
+	    set order_no [expr $max_order_no + 1]
+	# ...else we move all the elements which were after this
+	# upward, and the ones which will be after this downward. 
+	} else {
+	    db_dml query "
+	      update cmit_playlists set
+		  order_no = order_no - 1
+		where order_no >= :old_order_no;
+	      
+	      update cmit_playlists set
+		  order_no = order_no + 1
+		where order_no >= :order_no"
+	}
+    } else {
+	# ...else it's just the old order.
+	set order_no $old_order_no
+    }
     
     db_dml query "
       update cmit_playlists set
 	   thumbnail_id = :thumbnail_id
 	  ,valid_from   = :valid_from
 	  ,valid_to     = :valid_to
+	  ,order_no     = :order_no
 	where playlist_id = :playlist_id"
     
     # flush cache
@@ -415,6 +447,14 @@ ad_proc -public cmit::playlist::delete {
     cmit::playlist::thumbnail_delete -playlist_id $playlist_id
     
     db_dml query "
+      -- update playlists order
+      update cmit_playlists set
+	  order_no = order_no - 1
+	where order_no > (
+	    select order_no from cmit_playlists
+	      where playlist_id = :playlist_id
+	       limit 1);
+      -- then delete playlist
       delete from cmit_playlists
     where playlist_id = :playlist_id"
     

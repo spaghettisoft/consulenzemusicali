@@ -28,6 +28,9 @@ template::list::create \
     -multirow playlists \
     -actions $actions \
     -elements {
+	order_no {
+	    label "N°"
+	}
 	edit {
 	    link_url_col edit_url
 	    display_template {<img src="/resources/acs-subsite/Edit16.gif" width="16" height="16" border="0">}
@@ -71,6 +74,7 @@ db_multirow -extend {
     name 
     upper_name
     description
+    order_no
     thumbnail
     upper_description
     valid_from
@@ -80,7 +84,7 @@ db_multirow -extend {
 } playlists query "
     select p.playlist_id
     from cmit_playlists p
-    where 1 = 1
+    order by order_no asc
   " {
 	set edit_url   [export_vars -base "add-edit" {playlist_id}]
 	set songs_url  [export_vars -base "songs-list" {playlist_id}]
@@ -106,4 +110,4 @@ db_multirow -extend {
 	set upper_description [string toupper $description]
     }
 
-template::multirow sort playlists upper_name upper_description
+#template::multirow sort playlists upper_name upper_description

@@ -37,7 +37,8 @@ db_multirow -extend {
   where (valid_from is null or 
          current_date >= valid_from)
     and (valid_to is null or 
-         current_date <= valid_to)" {
+         current_date <= valid_to)
+    order by order_no asc" {
     # skipp all playlists which are not
     # accessible from this group AND
     # this user.

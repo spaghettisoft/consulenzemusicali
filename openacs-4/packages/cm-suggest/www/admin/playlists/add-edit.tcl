@@ -26,6 +26,11 @@ set this_url [export_vars -base [ad_conn url] -entire_form -no_empty]
 
 
 set form {
+    {order_no:integer,optional
+	{label "N° ordine"}
+	{html {size 3}}
+	{help_text "Non cambia se non digitato su una playlist esistente."}
+    }
     {name:text(textarea),nospell
 	{label "Nome"} {html {rows 1 cols 80}}
     }
@@ -124,6 +129,7 @@ ad_form -html { enctype multipart/form-data } -name addedit \
 	    cmit::playlist::edit -playlist_id $playlist_id \
 		-name                   $name \
 		-description            $description \
+		-order_no               $order_no \
 		-thumbnail_filename     $filename \
 		-thumbnail_tmp_filename ${file.tmpfile} \
 		-valid_from             $valid_from_ansi \

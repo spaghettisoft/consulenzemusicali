@@ -29,6 +29,7 @@ create table cmit_playlists (
     ,thumbnail_id integer references cr_revisions(revision_id)
     ,valid_from   date
     ,valid_to     date
+    ,order_no     integer not null
 );
 
 -- Songs will be FileStorage files with an expiration date
