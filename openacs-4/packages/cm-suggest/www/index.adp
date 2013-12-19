@@ -48,13 +48,8 @@ Not needed, we now have a unique vectorial sprite for every button :-)
     </multiple>
     <div id="visible_players"></div>
     <if @logged_p@ eq 0>
-      <a id="login" style="color:black;" href='@login_url@'>Login</a>
+      <a id="login" style="color:black;" href='@login_url@'>LOGIN</a>
     </if>
-    <div id="log">
-      <if @logged_p@ ne 0>
-	<a style="color:black;" class="log" href='@logout_url@'>LogOut</a>
-      </if>
-    </div>
   </div>
   <div id="cm_group_thumbnail">
     <multiple name="groups">
@@ -62,6 +57,14 @@ Not needed, we now have a unique vectorial sprite for every button :-)
     </multiple>
   </div>
 </div>
+<footer id="log">
+  <if @logged_p@ ne 0>
+  <span style="float:right;"> 
+   AREA LEGALE | SERVIZIO CLIENTI | CONTATTI | ENGLISH | <a style="color:inherit; text-decoration:none;" href='@logout_url@'>LOGOUT</a>
+  </span>
+  </if>
+</footer>
+
 
 <!-- New Safari seems to handle animations correctly -->
 <!-- <script type="text/javascript">

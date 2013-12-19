@@ -51,7 +51,7 @@ body {
 }
 .cm-playlist-player {
     float:left;
-    width:42px;
+    width:36px;
 /*     height:16px; */
 /*     margin-left:-20px */
 }
@@ -63,7 +63,7 @@ body {
 /*     margin-left:15px; */
     font-size: 8pt;
     position:relative;
-    bottom:3px;
+    bottom:1px;
 }
 .log {
     font-size: 8pt;
@@ -73,9 +73,10 @@ body {
     top:50px;
 }
 #log {
-    position:relative;
-    top:50px;
-    z-index:-1;
+    font-size: 8pt;
+    color:black;
+    position: fixed; right: 223px; bottom:70px; width:98%;
+    z-index:100;
 }
 #cm_selected {
     text-decoration:underline;
