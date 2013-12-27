@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-09
     @arch-tag: 4a8a3652-fd5d-49aa-86fc-fade683f06ce
-    @cvs-id $Id: content-type-procs.tcl,v 1.12 2010/12/28 15:21:26 gustafn Exp $
+    @cvs-id $Id: content-type-procs.tcl,v 1.12.4.1 2013/10/13 14:25:22 gustafn Exp $
 }
 
 namespace eval ::content::type {}
@@ -54,7 +54,7 @@ ad_proc -public content::type::delete {
     @param drop_table_p
     @param drop_objets_p Drop the objects of this content type along with all entries in cr_items and cr_revisions. Will not be done by default.
 } {
-    if {$drop_objects_p eq "f"} {
+    if {$drop_objects_p == "f"} {
 	return [package_exec_plsql -var_list [list \
 						  [list content_type $content_type ] \
 						  [list drop_children_p $drop_children_p ] \

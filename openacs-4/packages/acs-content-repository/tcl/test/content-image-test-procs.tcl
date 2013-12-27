@@ -3,7 +3,7 @@ ad_library {
 
     @author Hugh Brock
     @creation-date 2006-01-17
-    @cvs-id $Id: content-image-test-procs.tcl,v 1.4 2007/01/10 21:22:03 gustafn Exp $
+    @cvs-id $Id: content-image-test-procs.tcl,v 1.4.10.1 2013/10/17 08:56:37 gustafn Exp $
 }
 
 
@@ -80,7 +80,7 @@ aa_register_case -cats {api smoke db} image_new {
                 -folder_id $first_folder_id \
                 -content_type "image" \
 
-            set tmp_filename "[acs_root_dir]/packages/acs-content-repository/tcl/test/test-image-1.jpg"
+            set tmp_filename "$::acs::rootdir/packages/acs-content-repository/tcl/test/test-image-1.jpg"
             set image_item_id_orig [db_nextval  "acs_object_id_seq"]
             set image_name [ns_mktemp "XXXXXX"]
             set image_item_id [image::new \

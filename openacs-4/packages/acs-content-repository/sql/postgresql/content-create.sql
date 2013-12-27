@@ -4,7 +4,7 @@
 -- Copyright (C) 1999-2000 ArsDigita Corporation
 -- Author: Karl Goldstein (karlg@arsdigita.com)
 
--- $Id: content-create.sql,v 1.60.2.1 2013/09/16 09:49:28 gustafn Exp $
+-- $Id: content-create.sql,v 1.60.2.2 2013/12/25 16:10:31 gustafn Exp $
 
 -- This is free software distributed under the terms of the GNU Public
 -- License.  Full text of the license is available from the GNU Project:
@@ -497,6 +497,7 @@ create index cr_revisions_content_idx on cr_revisions (substring(content for 100
 -- create index cr_revisions_lower_title_idx on cr_revisions(lower(title));
 -- create index cr_revisions_title_ltr_idx on cr_revisions(substr(lower(title), 1, 1));
 
+create index cr_revisions_content_idx on cr_revisions (substring(content for 100));
 
 comment on table cr_revisions is '
   Each content item may be associated with any number of revisions.

@@ -6,7 +6,7 @@ ad_library {
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-05-28
-    @cvs-id $Id: content-item-test-procs.tcl,v 1.9 2010/06/19 21:20:04 daveb Exp $
+    @cvs-id $Id: content-item-test-procs.tcl,v 1.9.4.1 2013/10/17 08:56:37 gustafn Exp $
     
 }
 
@@ -241,7 +241,7 @@ aa_register_case content_item {
                                  -name $tmp_item_name \
                                  -title $tmp_item_name \
                                  -parent_id $first_folder_id \
-                                 -tmp_filename [acs_root_dir]/packages/acs-content-repository/tcl/test/test.html]
+                                 -tmp_filename $::acs::rootdir/packages/acs-content-repository/tcl/test/test.html]
 
             aa_true "Tmp_filename added cr_item exists" \
                 [expr {[content::item::get_id \

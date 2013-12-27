@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-04
     @arch-tag: ddc736fb-cb5f-41fe-a854-703df26e8e03
-    @cvs-id $Id: content-revision-procs.tcl,v 1.25.6.2 2013/09/30 17:44:27 gustafn Exp $
+    @cvs-id $Id: content-revision-procs.tcl,v 1.25.6.4 2013/10/13 14:25:22 gustafn Exp $
 }
 
 namespace eval ::content::revision {}
@@ -120,7 +120,7 @@ ad_proc -public ::content::revision::new {
 	}
 	foreach attribute_pair $attributes {
             lassign $attribute_pair attribute_name attribute_value
-	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
+	    if {$attribute_name in $valid_attributes}  {
 
                 # first add the column name to the list
 		append attribute_names  ", ${attribute_name}"		

@@ -68,7 +68,6 @@ ad_proc -private cr_scan_mime_types {} {
     }
 }
 
-
 ##
 ## Check for orphans in the content respository directory, and delete
 ## such files if required.
@@ -76,34 +75,43 @@ ad_proc -private cr_scan_mime_types {} {
 ## gustaf.neumann@wu-wien.ac.at
 ##
 
-ad_proc cr_check_orphaned_files {-delete:boolean} { 
+
+ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} { 
 
   Check for orphaned files in the content respository directory, and
   delete such files if required.  Orphaned files might be created, when
   files add added to the content repository, but the transaction is being aborted.
 
   @param -delete delete the orphaned files
+  @param -mtime same semantics as mtime in the file command
   
 } {
-  package require fileutil
-
     set cr_root [nsv_get CR_LOCATIONS CR_FILES]
     set root_length [string length $cr_root]
-  set result ""
+    set result ""
 
-  # For every file in the content respository directory, check if this
-  # file is still referenced from the content-revisions.
+    # Check for missing trailing slash on directory.
+    # Find needs folders to end with slash to search them.
+    if {[string index $cr_root end] != "/"} {
+	append cr_root /
+    }
 
-    foreach f [::fileutil::find $cr_root "file isfile"] {
+    # For every file in the content respository directory, check if this
+    # file is still referenced from the content-revisions.
+
+    set cmd [list exec find $cr_root -type f]
+    if {$mtime ne ""} {lappend cmd -mtime $mtime}
+    foreach f [split [{*}$cmd] \n] {
 	set name [string range $f $root_length end]
 	if {![regexp {^[0-9/]+$} $name]} continue
-	set x [db_string _ {select count(*) from cr_revisions where content = :name}]
+	set x [db_string fetch_path { *SQL* }]
 	if {$x > 0} continue
-
-    lappend result $f
+	
+	lappend result $f
 	if {$delete_p} {
-      file delete $f
+	    file delete $f
 	}
     }
-  return $result
+    
+    return $result
 }
