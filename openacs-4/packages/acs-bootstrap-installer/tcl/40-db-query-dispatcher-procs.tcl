@@ -22,7 +22,7 @@ if {[info commands ad_library] ne "" } {
 
         @author Ben Adida (ben@openforce.net)
         @author Bart Teeuwisse (bart.teeuwisse@thecodemill.biz)
-	@cvs-id $Id: 40-db-query-dispatcher-procs.tcl,v 1.42.2.2 2013/09/05 11:50:59 gustafn Exp $
+	@cvs-id $Id: 40-db-query-dispatcher-procs.tcl,v 1.42.2.6 2013/10/17 08:54:59 gustafn Exp $
     } 
 }
 
@@ -256,7 +256,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
-    if {[lsearch $list_of_source_procs [lindex $proc_name 0]] != -1} {
+    if { [lindex $proc_name 0] in $list_of_source_procs } {
 
 	# Means we are running inside an URL
 
@@ -345,7 +345,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
         if {$calling_namespace ne "" && 
-            ![string match *::* $proc_name]} {
+            ![string match "*::*" $proc_name]} {
             set proc_name ${calling_namespace}::${proc_name}
         }
 	# db_qd_log QDDebug "proc_name is -$proc_name-"
@@ -540,7 +540,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
     }
 
     set relative_path [string range $file_tag \
-        [expr { [string length [acs_root_dir]] + 1 }] end]
+        [expr { [string length $::acs::rootdir] + 1 }] end]
     nsv_set apm_library_mtime $relative_path [file mtime $file_tag]
 }
 
@@ -853,13 +853,13 @@ ad_proc -private db_qd_internal_prepare_queryfile_content {file_content} {
 	append new_file_content [string range $rest_of_file_content 0 [expr {$first_querytext_open + $querytext_open_len - 1}]]
 
 	# append quoted querytext
-	append new_file_content [ns_quotehtml [string range $rest_of_file_content [expr {$first_querytext_open + $querytext_open_len}] [expr {$first_querytext_close - 1}]]]
+	append new_file_content [ns_quotehtml [string range $rest_of_file_content $first_querytext_open+$querytext_open_len $first_querytext_close-1]]
 
 	# append close querytext
 	append new_file_content $querytext_close
 
 	# Set up the rest
-	set rest_of_file_content [string range $rest_of_file_content [expr {$first_querytext_close + $querytext_close_len}] end]
+	set rest_of_file_content [string range $rest_of_file_content $first_querytext_close+$querytext_close_len end]
     }
 
     # db_qd_log QDDebug "new massaged file content: \n $new_file_content \n"

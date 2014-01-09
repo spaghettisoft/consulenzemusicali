@@ -29,19 +29,19 @@ proc empty_string_p { query_string } {
 }
 
 proc acs_root_dir {} {
-    return [nsv_get acs_properties root_directory]
+    return $::acs::rootdir
 }
 
 proc acs_package_root_dir { package } {
-    return "[file join [acs_root_dir] packages $package]"
+    return [file join $::acs::rootdir packages $package]
 }
 
 proc ad_make_relative_path { path } {
-    set root_length [string length [acs_root_dir]]
-    if { ![string compare [acs_root_dir] [string range $path 0 $root_length-1]] } {
+    set root_length [string length $::acs::rootdir]
+    if { $::acs::rootdir eq [string range $path 0 $root_length-1] } {
 	return [string range $path $root_length+1 [string length $path]]
     }
-    error "$path is not under the path root ([acs_root_dir])"
+    error "$path is not under the path root ($::acs::rootdir)"
 }
 
 proc ad_get_tcl_call_stack { { level -2 }} {
@@ -86,7 +86,7 @@ proc ad_parse_documentation_string { doc_string elements_var } {
 }
 
 proc ad_proc_valid_switch_p {str} {
-  return [expr [string equal "-" [string index $str 0]] && ![number_p $str]]
+  return [expr {[string index $str 0] eq "-" && ![number_p $str]}]
 }
 
 proc ad_proc args {
@@ -254,7 +254,7 @@ proc ad_proc args {
         }
     }
 
-    set arg_list [lindex $args [expr { $i + 1 }]]
+    set arg_list [lindex $args $i+1]
     if { $n_args_remaining == 3 } {
         # No doc string provided.
         array set doc_elements [list]
@@ -305,9 +305,9 @@ proc ad_proc args {
     set effective_arg_list $arg_list
 
     set last_arg [lindex $effective_arg_list end]
-    if { [llength $last_arg] == 1 && [string equal [lindex $last_arg 0] "args"] } {
+    if { [llength $last_arg] == 1 && [lindex $last_arg 0] eq "args" } {
         set varargs_p 1
-        set effective_arg_list [lrange $effective_arg_list 0 [expr { [llength $effective_arg_list] - 2 }]]
+        set effective_arg_list [lrange $effective_arg_list 0 [llength $effective_arg_list]-2]
     }
 
     set check_code ""
@@ -347,7 +347,7 @@ proc ad_proc args {
             set arg [string range $arg 1 end]
             lappend switches $arg
 
-            if { [lsearch $arg_flags "boolean"] >= 0 } {
+            if {"boolean" in $arg_flags} {
                 set default_values(${arg}_p) 0
 		append switch_code "            -$arg - -$arg=1 - -$arg=t - -$arg=true {
                 ::uplevel ::set ${arg}_p 1
@@ -365,7 +365,7 @@ proc ad_proc args {
 		append switch_code "            }\n"
             }
 
-            if { [lsearch $arg_flags "required"] >= 0 } {
+            if {"required" in $arg_flags} {
                 append check_code "    ::if { !\[::uplevel ::info exists $arg\] } {
         ::return -code error \"Required switch -$arg not provided\"
     }
@@ -400,10 +400,9 @@ proc ad_proc args {
         set doc_elements($element) [array get $element]
     }
     
-    set root_dir [nsv_get acs_properties root_directory]
     set script [info script]
-    set root_length [string length $root_dir]
-    if { ![string compare $root_dir [string range $script 0 $root_length-1]] } {
+    set root_length [string length $::acs::rootdir]
+    if { $::acs::rootdir eq [string range $script 0 $root_length-1] } {
         set script [string range $script $root_length+1 end]
     }
     
@@ -684,7 +683,7 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
 } {
     if {[lindex $allowed_args end] eq "args"} {
 	set varargs_p 1
-	set allowed_args [lrange $allowed_args 0 [expr { [llength $allowed_args] - 2 }]]
+	set allowed_args [lrange $allowed_args 0 [llength $allowed_args]-2]
     } else {
 	set varargs_p 0
     }
@@ -790,7 +789,7 @@ ad_proc -public callback {
     if {[info commands ::callback::${callback}::contract] eq ""} {
         error "Undefined callback $callback"
     }
-    eval ::callback::${callback}::contract $args
+    ::callback::${callback}::contract {*}$args
 
     set returns {}
 
@@ -827,7 +826,7 @@ ad_proc -public callback {
         }
     }
 
-    if {![string equal $impl *] && ![info exists c] && !$catch_p} {
+    if {$impl ne "*" && ![info exists c] && !$catch_p} {
         error "callback $callback implementation $impl does not exist"
     }
 
@@ -853,7 +852,7 @@ ad_library {
 
     @creation-date 7 Jun 2000
     @author Jon Salz (jsalz@mit.edu)
-    @cvs-id $Id: 00-proc-procs.tcl,v 1.41.2.4 2013/09/05 11:50:59 gustafn Exp $
+    @cvs-id $Id: 00-proc-procs.tcl,v 1.41.2.10 2013/10/16 19:37:01 gustafn Exp $
 }
 
 ad_proc -public empty_string_p {query_string} {
@@ -948,7 +947,7 @@ ad_proc -public ad_assert_arg_value_in_list {
 } {
     upvar $arg_name arg_value
 
-    if { [lsearch -exact $allowed_values_list $arg_value] == -1 } {
+    if {$arg_value ni $allowed_values_list} {
         error "argument $arg_name has value $arg_value but must be in ([join $allowed_values_list ", "])"
     }
 

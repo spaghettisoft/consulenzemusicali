@@ -4,26 +4,13 @@ ad_library {
 
     @creation-date 26 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $Id: 30-apm-load-procs.tcl,v 1.41.2.2 2013/09/14 15:03:34 gustafn Exp $
+    @cvs-id $Id: 30-apm-load-procs.tcl,v 1.41.2.7 2013/11/02 18:18:44 gustafn Exp $
 }
-
-# FIXME: Peter M - This file cannot be watched with the APM as it re-initializes 
-# the reload level to 0 everytime it is sourced. Could we move these initialization 
-# to an -init.tcl file instead?
-
-# Initialize loader NSV arrays. See apm-procs.tcl for a description of
-# these arrays.
-nsv_array set apm_library_mtime [list]
-nsv_array set apm_version_procs_loaded_p [list]
-nsv_array set apm_reload_watch [list]
-nsv_array set apm_package_info [list]
-nsv_set apm_properties reload_level 0
 
 ad_proc apm_first_time_loading_p {} { 
     Returns 1 if this is a -procs.tcl file's first time loading, or 0 otherwise. 
 } {
-    global apm_first_time_loading_p
-    return [info exists apm_first_time_loading_p]
+    return [info exists ::apm_first_time_loading_p]
 }
 
 ad_proc -public ad_after_server_initialization { name args } {
@@ -212,11 +199,11 @@ ad_proc -public apm_get_package_files {
 
     set matching_files [list]
     foreach file $files {
-        set rel_path [string range $file [expr {[string length $package_path] + 1}] end]
+        set rel_path [string range $file [string length $package_path]+1 end]
         set file_type [apm_guess_file_type $package_key $rel_path]
         set file_db_type [apm_guess_db_type $package_key $rel_path]
 
-        set type_match_p [expr {$file_types eq "" || [lsearch $file_types $file_type] != -1}]
+        set type_match_p [expr {$file_types eq "" || $file_type in $file_types}]
 
         if { $all_db_types_p } {
             set db_match_p 1
@@ -333,7 +320,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
          "ctl_file" eq $file_type } {
         set sql_index [lsearch $components "sql"]
         if { $sql_index >= 0 } {
-            set db_dir [lindex $components [expr {$sql_index + 1}]]
+            set db_dir [lindex $components $sql_index+1]
             if {$db_dir eq "common"} {
                 return ""
             }
@@ -372,7 +359,7 @@ ad_proc apm_package_supports_rdbms_p {
     # We need to add that information back into the .info files.
     
     set package_path [acs_package_root_dir $package_key]
-    return [expr ![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]]
+    return [expr {![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]}]
 }
 
 ad_proc -private apm_source { __file } {
@@ -417,7 +404,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     and procs flags.
 
     This proc is an analog of apm_load_libraries.  In addition though
-    this proc sets apm_first_time_loading_p nsv variable.
+    this proc sets apm_first_time_loading_p variable.
 
     @author Don Baccus (dhogaza@pacifier.com)
     @author Peter Marklund
@@ -439,8 +426,7 @@ ad_proc -private apm_bootstrap_load_libraries {
 
     # This is the first time each of these files is being loaded (see
     # the documentation for the apm_first_time_loading_p proc).
-    global apm_first_time_loading_p
-    set apm_first_time_loading_p 1
+    set ::apm_first_time_loading_p 1
 
     set package_root_dir [acs_package_root_dir $package_key]
     foreach file [apm_get_package_files -package_key $package_key -file_types $file_types] {
@@ -454,14 +440,13 @@ ad_proc -private apm_bootstrap_load_libraries {
         }
     }
 
-    unset apm_first_time_loading_p
+    unset ::apm_first_time_loading_p
 }
 
 proc apm_bootstrap_load_queries { package_key } {
 
     # Load up queries.
 
-    set root_directory [nsv_get acs_properties root_directory]
     set db_type [nsv_get ad_database_type .]
 
     # DRB: We can't parse the $package_key.info file at this point in time, primarily because
@@ -470,9 +455,9 @@ proc apm_bootstrap_load_queries { package_key } {
 	# queryfiles in this package that match the current database or no database
     # (which we interpret to mean all supported databases).
 
-    set files [ad_find_all_files $root_directory/packages/$package_key]
+    set files [ad_find_all_files $::acs::rootdir/packages/$package_key]
     if { [llength $files] == 0 } {
-	error "Unable to locate $root_directory/packages/$package_key/*."
+	error "Unable to locate $::acs::rootdir/packages/$package_key/*."
     }
 
     foreach file [lsort $files] {
@@ -510,7 +495,7 @@ ad_proc -private apm_install_xml_file_path {} {
 
     @author Peter Marklund
 } {
-    return "[acs_root_dir]/install.xml"
+    return "$::acs::rootdir/install.xml"
 }
 
 ad_proc -private apm_ignore_file_p { 
@@ -591,4 +576,19 @@ ad_proc -private apm_include_file_p { filename } {
 } {
     #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p $filename]"
     return [expr {![apm_ignore_file_p $filename]}] 
+}
+
+ad_proc apm_bootstrap_upgrade {
+    {-from_version_name:required}
+    {-to_version_name:required}
+} {
+    # just for testing; in the future, we might simply copy for every release
+    set doCopy [expr {$to_version_name eq "5.8.1d3"}]
+
+    if {$doCopy} {
+	set source [acs_root_dir]/packages/acs-bootstrap-installer/installer/tcl
+	foreach file [glob -nocomplain $source/*tcl] {
+	    file copy -force $file [acs_root_dir]/tcl
+	}
+    }
 }
