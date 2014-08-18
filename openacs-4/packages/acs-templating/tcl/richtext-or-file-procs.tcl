@@ -3,7 +3,7 @@ ad_library {
 
     @author Lars Pind (lars@pinds.com)
     @creation-date 2003-01-27
-    @cvs-id $Id: richtext-or-file-procs.tcl,v 1.5 2007/11/21 14:08:44 emmar Exp $
+    @cvs-id $Id: richtext-or-file-procs.tcl,v 1.5.10.1 2013/10/05 12:55:10 gustafn Exp $
 }
 
 namespace eval template {}
@@ -17,7 +17,7 @@ namespace eval template::widget {}
 ad_proc -public template::util::richtext_or_file { command args } {
     Dispatch procedure for the richtext_or_file object
 } {
-  eval template::util::richtext_or_file::$command $args
+  template::util::richtext_or_file::$command {*}$args
 }
 
 ad_proc -public template::util::richtext_or_file::create {

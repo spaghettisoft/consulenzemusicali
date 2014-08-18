@@ -491,9 +491,6 @@ create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
 create index cr_revisions_publish_date_idx on cr_revisions(publish_date);
 
--- SpaghettiSoft: speeds up the search for orphaned files. See http://www.openacs.org/forums/message-view?message_id=4109775
-create index cr_revisions_content_idx on cr_revisions (substring(content for 100));
-
 -- create index cr_revisions_lower_title_idx on cr_revisions(lower(title));
 -- create index cr_revisions_title_ltr_idx on cr_revisions(substr(lower(title), 1, 1));
 

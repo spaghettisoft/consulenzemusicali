@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id: version-i18n-process-2.tcl,v 1.16.8.1 2013/08/27 11:44:43 gustafn Exp $  
+    @cvs-id $Id: version-i18n-process-2.tcl,v 1.16.8.2 2013/10/17 08:44:30 gustafn Exp $  
 } {
     version_id:integer,notnull    
     {files:multiple,notnull}
@@ -67,7 +67,7 @@ if { $replace_text_p } {
 
     ns_log Notice "Replacing text in file $text_file with message tags"
     append processing_html_result "<h3>Text replacements for $text_file</h3>"
-    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$text_file" write $message_key_list]
+    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "$::acs::rootdir/$text_file" write $message_key_list]
     set text_replacement_list [lindex $adp_text_result_list 0]
     set text_untouched_list [lindex $adp_text_result_list 1]
 

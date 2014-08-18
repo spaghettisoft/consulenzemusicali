@@ -287,16 +287,9 @@ ad_form -html { enctype multipart/form-data } -name addedit \
 	    if {[info exists sngs($song_name)]} {
 		set sng_id $sngs($song_name)
 		# ...we replace it into playlists...
-		db_dml query "
-		  update cmit_playlist_songs set 
-		      song_id = :song_id
-		    where song_id = :sng_id"
-		# (this gets done many times by the procs,
-		# but is a good practice to flush cache
-		# whenever we touch the db)
-		util_memoize_flush_regexp "cmit::"
-		# ...then we delete it.
-		cmit::song::delete -song_id $sng_id
+		cmit::song::replace_song \
+		  -old_song_id $sng_id \
+		  -new_song_id $song_id
 	    }
 	    # Take note of the song with its order
 	    lappend playlist_songs [list $song_id $order_no]

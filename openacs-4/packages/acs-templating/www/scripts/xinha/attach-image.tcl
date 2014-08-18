@@ -5,7 +5,7 @@ ad_page_contract {
     @author Gustaf Neumann neumann@wu-wien.ac.at
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 13.07.2004
-    @cvs-id $Id: attach-image.tcl,v 1.11 2009/05/11 15:46:18 daveb Exp $
+    @cvs-id $Id: attach-image.tcl,v 1.11.8.1 2013/10/11 09:49:13 gustafn Exp $
 } {
     {parent_id:integer,optional}
     {package_id ""}
@@ -172,7 +172,7 @@ if {$write_p} {
 	    } else {
 		# user chose an existing file
 		set item_id $choose_file 
-		set file_name [lindex [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1]] 0]
+		set file_name [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1] 0]
 	    }
 		set f_url "/image/${item_id}/${file_name}"			    
 	}

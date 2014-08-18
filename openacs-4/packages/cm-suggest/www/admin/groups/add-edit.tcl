@@ -35,6 +35,7 @@ if {!$new_record_p} {
 append form {
     {group_name:text
 	{label {Nome Gruppo}}
+	{html {size 30}}
     }
     {valid_from:date,optional
 	{label {Valido da}}
@@ -163,5 +164,46 @@ ad_form -html { enctype multipart/form-data } -name addedit \
 }
 
 
-
+if {!$new_record_p} {
+    foreach locale {
+	en_US
+	it_IT
+	es_ES
+	fr_FR
+	de_DE
+	pt_BR
+    } {
+	set desired_locales($locale) 1
+    }
+	
+    template::list::create \
+	-name translations \
+	-multirow translations \
+	-actions [list] \
+	-elements {
+	    edit {
+		link_url_col edit_url
+		display_template {<img src="/resources/acs-subsite/Edit16.gif" width="16" height="16" border="0">}
+		link_html {title "Modifica Traduzione"}
+		sub_class narrow
+	    }
+	    locale {
+		label "Lingua"
+	    }
+	    translation {
+		label "Traduzione"
+	    }
+	}
+	
+    template::multirow create translations edit_url locale translation
+    set translation_key [string trim [group::title -group_id $group_id] #]
+    set default_translation [_ $translation_key]
+    foreach lc [lang::util::get_locale_options] {
+	set locale [lindex $lc 1]
+	if {![info exists desired_locales($locale)]} continue
+	set translation [lang::message::lookup $locale $translation_key $default_translation]
+	set edit_url [export_vars -base "translate" {group_id locale}]
+	template::multirow append translations $edit_url $locale $translation
+    }
+}
 

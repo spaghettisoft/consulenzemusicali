@@ -5,7 +5,7 @@ ad_page_contract {
     @author Gustaf Neumann neumann@wu-wien.ac.at
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 13.07.2004
-    @cvs-id $Id: attach-file.tcl,v 1.17 2009/10/20 21:22:58 daveb Exp $
+    @cvs-id $Id: attach-file.tcl,v 1.17.6.2 2013/10/11 09:49:13 gustafn Exp $
 } {
     {parent_id:integer,optional}
     {package_id ""}
@@ -100,7 +100,7 @@ if {$write_p} {
 		element set_value upload_form f_href $f_href
 	    }
 	    # ensure that Link Title is specified
-	    if { ![exists_and_not_null f_title] && [exists_and_not_null url_ok_btn] } {
+	    if { (![info exists f_title] || $f_title eq "") && ([info exists url_ok_btn] && $url_ok_btn ne "") } {
 		template::form::set_error upload_form f_title "Specify a [_ acs-templating.Link_Title]"
 	    }
 	    set error_p 0
@@ -206,7 +206,7 @@ if {$write_p} {
 		} else {
 		    if {$choose_file ne ""} {
 			set item_id $choose_file
-			set file_name [lindex [lindex $recent_files_options [util_search_list_of_lists $recent_files_options $item_id 1]] 0]
+			set file_name [lindex $recent_files_options [util_search_list_of_lists $recent_files_options $item_id 1] 0]
 			# we have to get rid of the icon from the form.
 			set file_name [regsub -all {<.*?>} $file_name {}]
 		    }
@@ -225,7 +225,7 @@ if {$write_p} {
 		    # see the parent object
 		    set f_href "/image/${item_id}/private/${parent_id}/${file_name}"			
 		} else {
-		    if { [exists_and_not_null f_url] && $url_ok_btn ne "" } {
+		    if { ([info exists f_url] && $f_url ne "") && $url_ok_btn ne "" } {
 			set f_href $f_url
 		    } else {
 			set f_href "/file/${item_id}/${file_name}"

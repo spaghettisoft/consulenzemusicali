@@ -1,6 +1,5 @@
 /alerts-oracle.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /alerts-postgresql.xql/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/alerts.tcl/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /alerts.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /hide-email.tcl/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /hide-email.xql/1.2/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
@@ -26,4 +25,5 @@
 /set-on-vacation-until.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
 /unsubscribe-2.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
 /unsubscribe.adp/1.9.8.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/alerts.tcl/1.5.10.1/Mon Aug 18 21:42:29 2014//Topenacs-5-8-compat
 D

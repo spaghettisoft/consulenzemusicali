@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Wed Nov  8 19:29:22 2000
-    @cvs-id $Id: new.tcl,v 1.6.10.4 2013/09/09 16:44:21 gustafn Exp $
+    @cvs-id $Id: new.tcl,v 1.6.10.6 2013/10/27 14:26:46 gustafn Exp $
 
 } {
     group_type:notnull
@@ -95,8 +95,8 @@ set export_var_list [list group_id group_type \
 ## constraint violations in the database because the constraints are enforced
 ## by triggers in the DB.
 
-if { $group_type_exact_p eq "f" && \
-	[subsite::util::sub_type_exists_p $group_type] } {
+if { $group_type_exact_p == "f" 
+     && [subsite::util::sub_type_exists_p $group_type] } {
 
     # Sub rel-types exist... select one
     set group_type_exact_p "t"
@@ -147,8 +147,7 @@ if { [template::form is_valid add_group] } {
     set package_url [ad_conn package_url]
 
     foreach group_rel_type $group_rel_type_list {
-	set next_group_id [lindex $group_rel_type 0]
-	set next_rel_type [lindex $group_rel_type 1]
+	lassign $group_rel_type next_group_id next_rel_type
 	lappend return_url_list \
 		"${package_url}admin/relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$group_id&allow_out_of_scope_p=t"
     }

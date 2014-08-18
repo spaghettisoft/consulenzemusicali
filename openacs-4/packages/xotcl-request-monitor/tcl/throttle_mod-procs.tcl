@@ -29,7 +29,7 @@
       }
 
   package_parameter log-dir \
-      -default [file dirname [file root [ns_config ns/parameters ServerLog]]]
+      -default [file dirname [file rootname [ns_config ns/parameters ServerLog]]]
 
   package_parameter max-url-stats  -default 500
   package_parameter time-window    -default 13
@@ -163,7 +163,7 @@
   } else {
     Throttle instproc server_threads {} {
       # flatten the list
-      return [eval concat [ns_server threads]]
+      return [concat {*}[ns_server threads]]
     }
   }
   Throttle instproc update_threads_state {} {
@@ -266,7 +266,7 @@
   Throttle instproc add_url_stat {url time_used key pa content_type} {
     catch {my unset running_url($key,$url)}
     #my log "### unset running_url($key,$url) $errmsg"
-    if {[string match text/html* $content_type]} {
+    if {[string match "text/html*" $content_type]} {
       [Users current_object] add_view $key
     }
     response_time_minutes add_url_stat $url $time_used $key
@@ -505,7 +505,7 @@
       set result [my url_stats]
       set l [llength $result]
       for {set i $max} {$i<$l} {incr i} {
-	set url [lindex [lindex $result $i] 0]
+	set url [lindex $result $i 0]
 	my unset stat($url)
 	my unset cnt($url)
       }
@@ -555,7 +555,7 @@
     used to obtain various kinds of information.
 
     @author Gustaf Neumann
-    @cvs-id $Id: throttle_mod-procs.tcl,v 1.41.2.6 2013/09/30 11:39:39 gustafn Exp $
+    @cvs-id $Id: throttle_mod-procs.tcl,v 1.41.2.9 2013/10/13 18:16:12 gustafn Exp $
   }
 
   Users ad_proc active {-full:switch}  {
@@ -605,7 +605,7 @@
   } {
     set ip 0; set auth 0
     foreach i [my array names pa] {
-      if {[string match *.* $i]} {incr ip} {incr auth}
+      if {[string match "*.*" $i]} {incr ip} {incr auth}
     }
     return [list $ip $auth]
   }
@@ -802,7 +802,7 @@
       my incr refcount($key)
     } else {
       my set refcount($key) 1
-      if {[string match *.* $key]} {my incr ip24} {my incr auth24}
+      if {[string match "*.*" $key]} {my incr ip24} {my incr auth24}
     }
     my set pa($key) $pa
     my set timestamp($key) [clock seconds]
@@ -831,7 +831,7 @@
     #
     my set ip24 0; my set auth24 0
     foreach i [my array names timestamp] {
-      if {[string match *.* $i]} {my incr ip24} {my incr auth24}
+      if {[string match "*.*" $i]} {my incr ip24} {my incr auth24}
     }
   }
   Users proc nr_users_per_day {} {
@@ -841,7 +841,7 @@
     my instvar timestamp
     set ip [list]; set auth [list]
     foreach i [array names timestamp] {
-      if {[string match *.* $i]} {lappend ip [list $i $timestamp($i)]} {lappend auth [list $i $timestamp($i)]}
+      if {[string match "*.*" $i]} {lappend ip [list $i $timestamp($i)]} {lappend auth [list $i $timestamp($i)]}
     }
     return [list $ip $auth]
   }  
@@ -896,7 +896,7 @@
 	#my log "--- $i expired $d days $h hours $m minutes ago"
 	my unset timestamp($i)
       } else {
-        if {[string match *.* $i]} {my incr ip24} {my incr auth24}
+        if {[string match "*.*" $i]} {my incr ip24} {my incr auth24}
       }
     }
     dump write
@@ -1045,7 +1045,7 @@
    <a href='/xotcl/show-object?object=%3a%3athrottle+do+%3a%3aCounter'>Counter</a>, 
   <a href='/xotcl/show-object?object=%3a%3athrottle+do+%3a%3aMaxCounter'>MaxCounter</a>, ...
   @author Gustaf Neumann
-  @cvs-id $Id: throttle_mod-procs.tcl,v 1.41.2.6 2013/09/30 11:39:39 gustafn Exp $
+  @cvs-id $Id: throttle_mod-procs.tcl,v 1.41.2.9 2013/10/13 18:16:12 gustafn Exp $
 }
 
 throttle proc ms {-start_time} {

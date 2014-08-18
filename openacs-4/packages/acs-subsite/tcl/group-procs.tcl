@@ -6,7 +6,7 @@ ad_library {
 
     @author mbryzek@arsdigita.com
     @creation-date Thu Dec  7 18:13:56 2000
-    @cvs-id $Id: group-procs.tcl,v 1.38.2.1 2013/08/27 12:20:36 gustafn Exp $
+    @cvs-id $Id: group-procs.tcl,v 1.38.2.2 2013/10/05 13:02:11 gustafn Exp $
 
 }
 
@@ -394,7 +394,7 @@ ad_proc -public group::update {
     set columns { group_name join_policy description }
     set set_clauses [list]
     foreach name [array names row] {
-        if { [lsearch -exact $columns $name] == -1 } {
+        if {$name ni $columns} {
             error "Attribute '$name' isn't valid for groups."
         }
         lappend set_clauses "$name = :$name"

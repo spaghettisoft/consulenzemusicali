@@ -5,7 +5,7 @@ ad_page_contract {
     @author Victor Guerra (guerra@galileo.edu)
     @creation-date 2005-02-03
     @arch-tag: 983f3d87-40c8-4327-8873-c6a01ba7d875
-    @cvs-id $Id: page-error.tcl,v 1.7 2009/07/12 01:08:30 donb Exp $
+    @cvs-id $Id: page-error.tcl,v 1.7.6.1 2013/10/02 22:55:54 gustafn Exp $
 } {
     {bug_number ""}
 }
@@ -373,7 +373,7 @@ if { ![form is_valid bug_edit] } {
     }
     # Add empty option to resolution code
     if { $enabled_action_id ne "" } {
-        if { [lsearch [workflow::action::get_element -action_id $action_id -element edit_fields] "resolution"] == -1 } {
+        if {"resolution" ni [workflow::action::get_element -action_id $action_id -element edit_fields]} {
             element set_properties bug_edit resolution -options [concat {{{} {}}} [element get_property bug_edit resolution options]]
         }
     } else {

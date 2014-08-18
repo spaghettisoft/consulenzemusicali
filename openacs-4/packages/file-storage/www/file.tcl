@@ -3,13 +3,13 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 7 Nov 2000
-    @cvs-id $Id: file.tcl,v 1.32.2.1 2013/09/06 16:24:55 gustafn Exp $
+    @cvs-id $Id: file.tcl,v 1.32.2.4 2014/07/29 11:24:03 gustafn Exp $
 } {
-    file_id:integer,notnull
+    file_id:naturalnum,notnull
     {show_all_versions_p "f"}
 } -validate {
     valid_file -requires {file_id} {
-	if ![fs_file_p $file_id] {
+	if {![fs_file_p $file_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_file_is]"
 	}
     }
@@ -66,7 +66,7 @@ set actions [list "[_ file-storage.Upload_Revision]" file-add?[export_vars [list
                  "[_ file-storage.Move_File]" [export_vars -base move {{object_id $file_id} {return_url $folder_view_url}}] "Move file" \
                  "[_ file-storage.Delete_File]" [export_vars -base delete {{object_id $file_id} {return_url $folder_view_url}}] "Delete file"]
 
-if {[string equal $delete_p "t"]} {
+if {$delete_p == "t"} {
     lappend actions [_ file-storage.Set_Permissions] [export_vars -base permissions {{object_id $file_id}}] [_ file-storage.lt_Modify_permissions_on]
 }
 
@@ -110,12 +110,12 @@ db_multirow -unclobber -extend { author_link last_modified_pretty content_size_p
     if {$content_size < 1024} {
 	set content_size_pretty "[lc_numeric $content_size] [_ file-storage.bytes]"
     } else {
-	set content_size_pretty "[lc_numeric [expr $content_size / 1024 ]] [_ file-storage.kb]"
+	set content_size_pretty "[lc_numeric [expr {$content_size / 1024 }]] [_ file-storage.kb]"
     }
-    if {[string equal $title ""]} {
+    if {$title eq ""} {
 	set title "[_ file-storage.untitled]"
     }
-    if {![string equal $version_id $live_revision]} {
+    if {$version_id ne $live_revision } {
         set version_url [export_vars -base "download/$title" {version_id}]
     } else {
         set version_url [export_vars -base "download/$title" {file_id}]

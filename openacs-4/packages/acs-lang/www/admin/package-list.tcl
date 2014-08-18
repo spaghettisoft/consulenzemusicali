@@ -5,7 +5,7 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
 
     @creation-date 26 October 2001
-    @cvs-id $Id: package-list.tcl,v 1.10 2011/04/07 16:28:27 emmar Exp $
+    @cvs-id $Id: package-list.tcl,v 1.10.4.1 2013/10/02 09:10:22 gustafn Exp $
 } {
     locale
 } -properties {
@@ -28,7 +28,7 @@ set default_locale_label [lang::util::get_label $default_locale]
 set page_title $locale_label
 set context [list $page_title]
 
-set locale_enabled_p [expr [lsearch [lang::system::get_locales] $current_locale] != -1]
+set locale_enabled_p [expr {[lsearch [lang::system::get_locales] $current_locale] != -1}]
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 
 

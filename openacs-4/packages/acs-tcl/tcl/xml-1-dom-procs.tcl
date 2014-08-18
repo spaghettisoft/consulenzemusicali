@@ -19,7 +19,7 @@ ad_library {
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying this software.
 #
-    @cvs-id $Id: xml-1-dom-procs.tcl,v 1.3.10.2 2013/09/29 11:50:55 gustafn Exp $
+    @cvs-id $Id: xml-1-dom-procs.tcl,v 1.3.10.6 2013/10/12 13:55:19 gustafn Exp $
 }
 
 package provide dom 1.6
@@ -562,8 +562,9 @@ proc dom::CreateElement {token name aList args} {
 
 	if {$parent(node:nodeType) eq "documentFragment" } {
 	    if {$parent(id) == $parent(documentFragment:masterDoc)} {
-		if {[info exists parent(document:documentElement)] && \
-		    [string length $parent(document:documentElement)]} {
+		if {[info exists parent(document:documentElement)] 
+		    && [string length $parent(document:documentElement)]
+		} {
 		    unset docArray($id)
 		    return -code error "document element already exists"
 		} else {
@@ -1308,8 +1309,9 @@ proc dom::Element:GetByTagName {token name} {
 	foreach child [set $node(node:childNodes)] {
 	    catch {unset childNode}
 	    array set childNode [set $child]
-	    if {$childNode(node:nodeType) eq "element" && \
-		[GetField childNode(node:nodeName)] eq $name } {
+	    if {$childNode(node:nodeType) eq "element" 
+		&& [GetField childNode(node:nodeName)] eq $name 
+	    } {
 		lappend result $child
 	    }
 	}
@@ -1519,7 +1521,7 @@ proc dom::Serialize:document {token args} {
 
     if {![info exists node(document:documentElement)]} {
 	return -code error "document has no document element"
-    } elseif {![string length $node(document:doctype)]} {
+    } elseif {$node(document:doctype) eq ""} {
 	return -code error "no document type declaration given"
     } else {
 
@@ -1743,9 +1745,9 @@ proc dom::Serialize:attributeList {l} {
 	# Handle special characters
 	regsub -all < $value {\&lt;} value
 
-	if {![string match *\"* $value]} {
+	if {![string match "*\"*" $value]} {
 	    append result \"$value\"
-	} elseif {![string match *'* $value]} {
+	} elseif {![string match "*'*" $value]} {
 	    append result '$value'
 	} else {
 	    regsub -all \" $value {\&quot;} value
@@ -1926,7 +1928,7 @@ proc dom::Trim nodeid {
     switch $node(node:nodeType) {
 
 	textNode {
-	    if {![string length [string trim $node(node:nodeValue)]]} {
+	    if {[string trim $node(node:nodeValue)] eq ""} {
 		node removeChild $node(node:parentNode) $nodeid
 	    }
 	}

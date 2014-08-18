@@ -3,7 +3,7 @@ ad_page_contract {
 
   @author Lee Denison (lee@xarg.co.uk)
 
-  $Id: default-master.tcl,v 1.1.2.1 2013/09/08 08:11:58 gustafn Exp $
+  $Id: default-master.tcl,v 1.1.2.2 2013/10/16 10:43:27 gustafn Exp $
 }
 
 #
@@ -17,7 +17,7 @@ if {[ad_conn url] eq "/"} {
     set system_url [ad_url]
 }
 
-if {[template::util::is_nil title]} {
+if {![info exists title]} {
     # TODO: decide how best to set the lang attribute for the title
     set title [ad_conn instance_name]
 }

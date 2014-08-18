@@ -5,14 +5,14 @@ ad_page_contract {
 
     @author Tracy Adams (teadams@mit.edu)
     @creation-date  2004-07-07
-    @cvs-id $Id: upload-size-limit.tcl,v 1.6 2007/05/15 20:14:37 donb Exp $
+    @cvs-id $Id: upload-size-limit.tcl,v 1.6.6.1 2013/10/03 08:33:58 gustafn Exp $
 
 } {
     {return_url ""}
 } 
 
 set max_size [ns_config "ns/server/[ns_info server]/module/nssock" maxinput]
-if { [string equal $max_size ""] } {
+if {$max_size eq ""} {
     set max_size 0
 }
 
@@ -32,7 +32,7 @@ ad_form -name upload_limit_size -export folder_id -form {
 
 } -on_submit {
     parameter::set_value  -parameter "MaximumFileSize" -value $new_size
-    if {![empty_string_p $return_url]} {
+    if {$return_url ne ""} {
 	ad_returnredirect $return_url
     }
 }

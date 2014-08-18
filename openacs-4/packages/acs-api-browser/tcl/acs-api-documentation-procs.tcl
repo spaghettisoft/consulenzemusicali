@@ -7,7 +7,7 @@ ad_library {
     @author Jon Salz (jsalz@mit.edu)
     @author Lars Pind (lars@arsdigita.com)
     @creation-date 21 Jun 2000
-    @cvs-id $Id: acs-api-documentation-procs.tcl,v 1.27.8.7 2013/09/28 12:24:24 gustafn Exp $
+    @cvs-id $Id: acs-api-documentation-procs.tcl,v 1.27.8.10 2013/10/16 20:08:07 gustafn Exp $
 
 }
 
@@ -41,11 +41,11 @@ ad_proc -public api_read_script_documentation {
     # line begins with the string "ad_page_contract".
     set has_contract_p 0
 
-    if { ![file exists "[acs_root_dir]/$path"] } {
+    if { ![file exists "$::acs::rootdir/$path"] } {
 	return -code error "File $path does not exist"
     }
 
-    set file [open "[acs_root_dir]/$path" "r"]
+    set file [open "$::acs::rootdir/$path" "r"]
     while { [gets $file line] >= 0 } {
 	# Eliminate any comment characters.
 	regsub -all {#.*$} $line "" line
@@ -62,7 +62,7 @@ ad_proc -public api_read_script_documentation {
     } 
 
     doc_set_page_documentation_mode 1
-    set errno [catch { source "[acs_root_dir]/$path" } error]
+    set errno [catch { source "$::acs::rootdir/$path" } error]
     doc_set_page_documentation_mode 0
     if { $errno == 1 } {
 	global errorInfo
@@ -250,9 +250,9 @@ ad_proc -public api_script_documentation {
 }
 
 ad_proc -private api_format_author { author_string } {
-    if { [regexp {^[^ \n\r\t]+$} $author_string] && \
-	    [string first "@" $author_string] >= 0 && \
-	    [string first ":" $author_string] < 0 } {
+    if { [regexp {^[^ \n\r\t]+$} $author_string] 
+	 && [string first "@" $author_string] >= 0 
+	 && [string first ":" $author_string] < 0 } {
 	return "<a href=\"mailto:$author_string\">$author_string</a>"
     } elseif { [regexp {^([^\(\)]+)\s+\((.+)\)$} [string trim $author_string] {} name email] } {
 	return "$name &lt;<a href=\"mailto:$email\">$email</a>&gt;"
@@ -270,7 +270,7 @@ ad_proc -private api_format_see { see } {
         || [util_url_valid_p $see]} { 
         return "<a href=\"${see}]\">$see</a>"
     }
-    if {[file exists "[get_server_root]${see}"]} {
+    if {[file exists "$::acs::rootdir${see}"]} {
         return "<a href=\"content-page-view?source_p=1&path=[ns_urlencode $see]\">$see</a>"
     }
     return ${see}
@@ -441,8 +441,7 @@ ad_proc -public api_proc_documentation {
 	@return the formatted documentation string.
 	@error if the procedure is not defined.	   
 } {
-	if { $format ne "text/html" && \
-			$format ne "text/plain" } {
+	if { $format ne "text/html" && $format ne "text/plain" } {
 		return -code error "Only text/html and text/plain documentation are currently supported"
 	}
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
@@ -523,7 +522,9 @@ ad_proc -public api_proc_documentation {
 	append out "[util_wrap_list $command_line]\n<blockquote>\n"
 	
 	if { $script_p } {
-		append out "Defined in <a href=\"/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]\">$doc_elements(script)</a><p>"
+	    append out [subst {Defined in 
+		<a href="/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]">$doc_elements(script)</a>
+		<p>}]
 	}
 	
 	if { $doc_elements(deprecated_p) } {
@@ -556,8 +557,9 @@ ad_proc -public api_proc_documentation {
 				append out " (boolean)"
 			} 
 			
-			if { [info exists default_values($switch)] && \
-					$default_values($switch) ne "" } {
+			if { [info exists default_values($switch)]
+			     && $default_values($switch) ne "" 
+			} {
 				append out " (defaults to <code>\"$default_values($switch)\"</code>)"
 			} 
 			
@@ -625,44 +627,49 @@ ad_proc -public api_proc_documentation {
                          -package_key acs-api-browser \
                          -parameter FancySourceFormattingP \
                          -default 1]} {
-			append out "<dt><b>Source code:</b></dt><dd>
+		    append out [subst {<dt><b>Source code:</b></dt><dd>
 <pre>[api_tcl_to_html $proc_name]</pre>
-</dd><p>\n"
+</dd><p>
+}]
 		} else {
-		append out "<dt><b>Source code:</b></dt><dd>
+		append out [subst {<dt><b>Source code:</b></dt><dd>
 <pre>[ns_quotehtml [api_get_body $proc_name]]</pre>
-</dd><p>\n"
+</dd><p>
+}]
 	        }
         }
 
-	set xql_base_name [get_server_root]/
+	set xql_base_name $::acs::rootdir/
 	append xql_base_name [file rootname $doc_elements(script)]
 	if { $xql_p } {
                 set there {}
                 set missing {}
 		if { [file exists ${xql_base_name}.xql] } {
-			append there "<dt><b>Generic XQL file:</b></dt>
+			append there [subst {<dt><b>Generic XQL file:</b></dt>
 <blockquote><pre>[api_quote_file ${xql_base_name}.xql]</pre></blockquote>
-<p>\n"
+<p>
+}]
 		} else {
                       lappend missing Generic
 		}
 		if { [file exists ${xql_base_name}-postgresql.xql] } {
-			append there "<dt><b>Postgresql XQL file:</b></dt>
+			append there [subst {<dt><b>Postgresql XQL file:</b></dt>
 <blockquote><pre>[api_quote_file ${xql_base_name}-postgresql.xql]</pre></blockquote>
-<p>\n"
+<p>
+}]
 		} else {
                       lappend missing PostgreSQL
 		}
 		if { [file exists ${xql_base_name}-oracle.xql] } {
-			append there "<dt><b>Oracle XQL file:</b></dt>
+			append there [subst {<dt><b>Oracle XQL file:</b></dt>
 <blockquote><pre>[api_quote_file ${xql_base_name}-oracle.xql]</pre></blockquote>
-<p>\n"
+<p>
+}]
 		} else {
                     lappend missing Oracle
 		}
                 if {[llength $missing] > 0} { 
-		    append out "<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>"
+		    append out [subst {<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>}]
                 }
                 append out $there  
 	}
@@ -692,11 +699,16 @@ ad_proc api_proc_pretty_name {
 	append out "$label"
     }
     array set doc_elements [nsv_get api_proc_doc $proc]
+    if {$doc_elements(deprecated_p)} {
+	set deprecated ", decprecated"
+    } else {
+	set deprecated ""
+    }
     if { $doc_elements(public_p) } {
-	append out " (public)"
+	append out " (public$deprecated)"
     }
     if { $doc_elements(private_p) } {
-	append out " (private)"
+	append out " (private$deprecated)"
     }
     return $out
 }
@@ -763,9 +775,9 @@ ad_proc -public api_apropos_functions { string } {
 } {
     set matches [list]
     foreach function [nsv_array names api_proc_doc] {
-        if {[string match -nocase *$string* $function]} {
+        if {[string match -nocase "*$string*" $function]} {
             array set doc_elements [nsv_get api_proc_doc $function]
-            lappend matches [list "$function" "$doc_elements(positionals)"]
+            lappend matches [list $function $doc_elements(positionals)]
         }
     }
     return $matches
@@ -832,9 +844,9 @@ ad_proc -public api_get_body {proc_name} {
     }
   } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name match thread kind obj]} {
     return [$thread do $obj serialize]
-  } elseif {[info proc $proc_name] ne ""} {
+  } elseif {[info procs $proc_name] ne ""} {
     return [info body $proc_name]
-  } elseif {[info proc ::nsf::procs::$proc_name] ne ""} {
+  } elseif {[info procs ::nsf::procs::$proc_name] ne ""} {
     return [info body ::nsf::procs::$proc_name]
   } else {
     return "No such Tcl-proc"
@@ -863,7 +875,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
 
 } {
 
-    if {[info command ::xotcl::api] ne ""} {
+    if {[info commands ::xotcl::api] ne ""} {
       set scope [::xotcl::api scope_from_proc_index $proc_name]
     } else {
       set scope ""
@@ -996,7 +1008,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         {gets puts socket tell format scan} \
         ]
 
-    if {[info command ::xotcl::api] ne ""} {
+    if {[info commands ::xotcl::api] ne ""} {
       set XOTCL_KEYWORDS [list self my next]
       # only command names are highlighted, otherwise we could add xotcl method
       # names by [lsort -unique [concat [list self my next] ..
@@ -1035,7 +1047,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         }
 
         "\$" {
-            if {$in_comment || ([string index $data $i+1] eq " ")} {
+            if {$in_comment || [string index $data $i+1] eq " "} {
                 append html "\$"
             } else {
                 set varl [length_var [string range $data $i end]]
@@ -1093,9 +1105,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
             if {[regexp {^\}(\s*)(else|elseif)(\s*\{)} [string range $data $i end] match pre els post]} {
                 append html "${pre}$HTML(procs)${els}$HTML(/procs)${post}"
                 set proc_ok 1
-                incr i [expr [string length $pre] + \
-                             [string length $els] + \
-                             [string length $post]]
+                incr i [expr {[string length $pre] + [string length $els] + [string length $post]}]
             }
         }
 
@@ -1199,13 +1209,13 @@ ad_proc api_proc_link { proc } {
 ad_proc -private api_xql_links_list { path } {
     
     Returns list of xql files related to tcl script file
-    @param path path and filename from [acs_root_dir]
+    @param path path and filename from $::acs::rootdir
     
     
 } {
     
     set linkList [list]
-    set filename "[acs_root_dir]/$path"
+    set filename "$::acs::rootdir/$path"
     set path_dirname [file dirname $path]
     set file_dirname [file dirname $filename]
     set file_rootname [file rootname [file tail $filename]]

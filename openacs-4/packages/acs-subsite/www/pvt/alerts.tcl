@@ -1,5 +1,5 @@
 ad_page_contract {
-    @cvs-id $Id: alerts.tcl,v 1.5 2007/01/10 21:22:09 gustafn Exp $
+    @cvs-id $Id: alerts.tcl,v 1.5.10.1 2013/10/10 21:00:47 gustafn Exp $
 } {
 } -properties {
     title:onevalue
@@ -49,7 +49,7 @@ if { [db_table_exists "bboard_email_alerts"] } {
     order by bea.frequency" {
 	incr rownum
 
-	if { $valid_p eq "f" } {
+	if { $valid_p == "f" } {
 	    # alert has been disabled for some reason
 	    set bboard_rows:$rownum(status) "disable"
 	    set bboard_rows:$rownum(action_url) "/bboard/alert-reenable?rowid=[ns_urlencode $rowid]"	    
@@ -91,7 +91,7 @@ if { [db_table_exists "classified_email_alerts"] } {
     order by expires desc" {
 	incr rownum
 	
-	if { $valid_p eq "f" } {
+	if { $valid_p == "f" } {
 	    # alert has been disabled for some reason
 	    set classified_rows:$rownum(status) "Off"
 	    set classified_rows:$rownum(action) "<a href=\"/gc/alert-reenable?alert_id=$alert_id\">Re-enable</a>"

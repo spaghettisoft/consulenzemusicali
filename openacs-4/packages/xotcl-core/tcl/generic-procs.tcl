@@ -3,7 +3,7 @@ ad_library {
 
   @author Gustaf Neumann
   @creation-date 2005-08-13
-  @cvs-id $Id: generic-procs.tcl,v 1.94 2009/10/27 11:34:44 gustafn Exp $
+  @cvs-id $Id: generic-procs.tcl,v 1.94.6.3 2014/02/14 18:20:45 gustafn Exp $
 }
 
 namespace eval ::Generic {
@@ -30,11 +30,11 @@ namespace eval ::Generic {
 
     <ul>
     <li><b>fields:</b> form elements as described in 
-       <a href='/api-doc/proc-view?proc=ad_form'>ad_form</a>.
+    <a href='/api-doc/proc-view?proc=ad_form'>ad_form</a>.
     <li><b>data:</b> data object (e.g. instance if CrItem) 
     <li><b>folder_id:</b> associated folder id
     <li><b>name:</b> of this form, used for naming the template, 
-       defaults to the object name
+    defaults to the object name
     <li><b>add_page_title:</b> page title when adding content items
     <li><b>edit_page_title:</b> page title when editing content items
     <li><b>with_categories:</b> display form with categories (default false)
@@ -95,7 +95,7 @@ namespace eval ::Generic {
       $data set $__var [my var $__var]
     }
     $data initialize_loaded_object
-    db_transaction {
+    xo::dc transaction {
       $data save
       set old_name [::xo::cc form_parameter __object_name ""]
       set new_name [$data set name]
@@ -119,7 +119,7 @@ namespace eval ::Generic {
           -privilege $privilege
     }
     set edit_form_page_title [if {$privilege eq "create"} \
-		 {my add_page_title} {my edit_page_title}]
+                                  {my add_page_title} {my edit_page_title}]
 
     set context [list $edit_form_page_title]
   }
@@ -163,11 +163,11 @@ namespace eval ::Generic {
     if {$link eq "view"} {
       set link [export_vars -base $link {item_id}]
     }
-    #ns_log notice "-- redirect to $link // [string match *\?* $link]"
+    #ns_log notice "-- redirect to $link // [string match "*\?*" $link]"
     ad_returnredirect $link
     ad_script_abort
   }
- 
+  
   Form ad_instproc generate {
     {-template "formTemplate"}
     {-export}
@@ -211,16 +211,8 @@ namespace eval ::Generic {
 
       append new_data {
         category::map_object -remove_old -object_id $item_id $category_ids
-        #ns_log notice "-- new data category::map_object -remove_old -object_id $item_id $category_ids"
-        #db_dml [my qn insert_asc_named_object] \
-        #    "insert into acs_named_objects (object_id,object_name,package_id) \
-        #     values (:item_id, :name, :package_id)"
       }
       append edit_data {
-        #db_dml [my qn update_asc_named_object] \
-        #    "update acs_named_objects set object_name = :name, \
-        #        package_id = :package_id where object_id = :item_id"
-        #ns_log notice "-- edit data category::map_object -remove_old -object_id $item_id $category_ids"
         category::map_object -remove_old -object_id $item_id $category_ids
       }
       append on_submit {
@@ -239,6 +231,12 @@ namespace eval ::Generic {
   }
 }
 namespace import -force ::Generic::*
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 2
+#    indent-tabs-mode: nil
+# End:
 
 
 

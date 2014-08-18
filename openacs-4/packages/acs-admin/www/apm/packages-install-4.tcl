@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct  9 00:22:31 2000
-    @cvs-id $Id: packages-install-4.tcl,v 1.16.10.2 2013/09/28 18:17:36 gustafn Exp $
+    @cvs-id $Id: packages-install-4.tcl,v 1.16.10.3 2013/10/02 08:56:25 gustafn Exp $
 } {
     {sql_file:multiple ""}
     {mount_p:multiple ""} 
@@ -78,7 +78,7 @@ foreach pkg_info $pkg_install_list {
     # Install the packages.
     ns_log Debug "APM: Installing package at $package_path."
 
-    set enable_p [expr {[lsearch -exact $pkg_enable_list $package_key] != -1}]
+    set enable_p [expr {$package_key in $pkg_enable_list}]
 
     set version_id [apm_package_install \
                 -enable=$enable_p \

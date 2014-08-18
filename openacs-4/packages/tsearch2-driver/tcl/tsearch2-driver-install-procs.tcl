@@ -7,7 +7,7 @@ ad_library {
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-06-05
     @arch-tag: 2006927e-7f1d-41c9-a111-ac552a4da185
-    @cvs-id $Id: tsearch2-driver-install-procs.tcl,v 1.5 2009/09/29 23:11:22 rhamilton Exp $
+    @cvs-id $Id: tsearch2-driver-install-procs.tcl,v 1.5.6.1 2013/10/02 12:42:56 gustafn Exp $
 }
 
 namespace eval tsearch2_driver::install {}
@@ -54,7 +54,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
                     }
                 }
 		# Check if we've found it, run the sql file		
-		if { [exists_and_not_null sql_file_loc] } {
+		if { ([info exists sql_file_loc] && $sql_file_loc ne "") } {
 			# we found tsearch2.sql let's run it
 			db_source_sql_file $sql_file_loc
 		} else {

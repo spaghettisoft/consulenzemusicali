@@ -3,7 +3,7 @@ ad_library {
     
     @creation-date 2003-09-05
     @author Lars Pind (lars@collaboraid.biz)
-    @cvs-id $Id: sync-procs.tcl,v 1.34.6.2 2013/09/30 18:26:48 gustafn Exp $
+    @cvs-id $Id: sync-procs.tcl,v 1.34.6.3 2013/10/12 14:23:56 gustafn Exp $
 }
 
 namespace eval auth {}
@@ -723,7 +723,7 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotURL) ne "" && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+    if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
              $param(IncrementalURL) eq "" } {
 
         # On the first day of the month, we get a snapshot
@@ -800,7 +800,7 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotPath) ne "" && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+    if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
              $param(IncrementalPath) eq "" } {
 
         # On the first day of the month, we get a snapshot

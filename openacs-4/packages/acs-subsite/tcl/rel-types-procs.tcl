@@ -6,7 +6,7 @@ ad_library {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Dec 12 15:40:39 2000
-    @cvs-id $Id: rel-types-procs.tcl,v 1.10.4.1 2013/08/27 12:20:36 gustafn Exp $
+    @cvs-id $Id: rel-types-procs.tcl,v 1.10.4.3 2013/10/26 10:55:45 gustafn Exp $
 }
 
 ad_page_contract_filter rel_type_dynamic_p {name value} {
@@ -176,14 +176,14 @@ namespace eval rel_types {
 	set pretty_name "#acs-translations.${message_key}#"
 	set pretty_plural "#acs-translations.${message_key}_plural#"
 
-	foreach pair $plsql {
-	    eval [lindex $pair 0] [lindex $pair 1] [lindex $pair 2]
+	foreach cmd $plsql {
+	    eval $cmd
 	}
 
 	# The following create table statement commits the transaction. If it
 	# fails, we roll back what we've done
 
-	if {$create_table_p eq "t"} {
+	if {$create_table_p == "t"} {
 	    if {[catch {db_exec_plsql create_table "
 		create table $table_name (
         	   rel_id constraint $fk_constraint_name
@@ -194,8 +194,8 @@ namespace eval rel_types {
 		# Roll back our work so for
 
 		for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
-		    set drop_pair [lindex $plsql_drop $i]
-		    if {[catch {eval [lindex $drop_pair 0] [lindex $drop_pair 1] [lindex $drop_pair 2]} err_msg_2]} {
+		    set drop_cmd [lindex $plsql_drop $i]
+		    if {[catch {eval $dropcmd} err_msg_2]} {
 			append errmsg "\nAdditional error while trying to roll back: $err_msg_2"
 			return -code error $errmsg
 		    }

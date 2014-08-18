@@ -3,7 +3,7 @@
 
   @author Gustaf Neumann (gustaf.neumann@wu-wien.ac.at)
   @creation-date Aug 11, 2006
-  @cvs-id $Id: delete-type.tcl,v 1.12 2012/09/13 16:05:32 victorg Exp $
+  @cvs-id $Id: delete-type.tcl,v 1.12.2.1 2014/02/11 11:58:19 gustafn Exp $
 
   @param object_type 
   @param query
@@ -13,7 +13,7 @@
 }
 
 set sql [$object_type instance_select_query -with_subtypes 0 -folder_id [::$package_id folder_id]]
-db_foreach retrieve_instances $sql {
+xo::dc foreach retrieve_instances $sql {
   permission::require_write_permission -object_id $item_id
   $package_id delete -item_id $item_id -name $name
 }

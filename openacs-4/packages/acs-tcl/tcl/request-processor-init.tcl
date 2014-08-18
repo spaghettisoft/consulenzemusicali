@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 30 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $Id: request-processor-init.tcl,v 1.15.2.1 2013/09/29 12:03:22 gustafn Exp $
+    @cvs-id $Id: request-processor-init.tcl,v 1.15.2.2 2013/10/10 20:44:07 gustafn Exp $
 }
 
 # These procedures are dynamically defined at startup to alleviate
@@ -39,7 +39,7 @@ if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0
 	    ds_add rp [list debug $string $clicks $clicks]
 	}
 	if { [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
-	     || $debug eq "t" 
+	     || $debug == "t" 
 	     || $debug eq "1"
 	 } {
 	    if { [info exists ::ad_conn(start_clicks)] } {
@@ -125,7 +125,7 @@ ad_after_server_initialization filters_register {
 	    set arg_count [llength [info args $proc]]
 	}
 
-	if { $debug eq "t" } {
+	if { $debug == "t" } {
 	    set debug_p 1
 	} else {
 	    set debug_p 0
@@ -151,7 +151,7 @@ ad_after_server_initialization procs_register {
     foreach proc_info $procs {
 	lassign $proc_info method path proc arg debug noinherit description script
 
-	if { $noinherit eq "t" } {
+	if { $noinherit == "t" } {
 	    set noinherit_switch "-noinherit"
 	} else {
 	    set noinherit_switch ""
@@ -167,7 +167,7 @@ ad_after_server_initialization procs_register {
 	    set arg_count [llength [info args $proc]]
 	}
 
-	if { $debug eq "t" } {
+	if { $debug == "t" } {
 	    set debug_p 1
 	} else {
 	    set debug_p 0

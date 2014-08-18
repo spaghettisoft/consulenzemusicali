@@ -2,7 +2,7 @@ ad_page_contract {
 
     Displays information about a type.
 
-    @cvs-id $Id: type-view.tcl,v 1.3 2004/01/26 15:39:41 jeffd Exp $
+    @cvs-id $Id: type-view.tcl,v 1.3.20.1 2013/10/02 07:55:04 gustafn Exp $
 
 } {
     version_id:optional
@@ -13,8 +13,9 @@ ad_page_contract {
     documentation:onevalue
 }
 
-if { ![info exists version_id] && \
-        [regexp {^([^ /]+)/} $type "" package_key] } {
+if { ![info exists version_id] 
+     && [regexp {^([^ /]+)/} $type "" package_key] 
+ } {
     db_0or1row version_id_from_package_key {
         select version_id 
           from apm_enabled_package_versions 

@@ -84,7 +84,7 @@ ad_proc -public util::fs::get_file {
 	    
 	    set file_url [export_vars -base "${fs_url}download/[ad_urlencode $title]" {{file_id $item_id}}]
 	} else {
-	    set name      $row(name)
+	    set name      [lang::util::localize $row(name)]
 	    set folder_id $row(folder_id)
 	    
 	    # get the root folder of the file-storage instance
@@ -96,7 +96,7 @@ ad_proc -public util::fs::get_file {
 		set folder_path ""
 	    }
 	    
-	    set file_url "${fs_url}view${folder_path}/${name}"
+	    set file_url "${fs_url}view/${folder_path}[ad_urlencode ${name}]"
 	}
     }
     

@@ -3,7 +3,7 @@ ad_library {
 
   @author Gustaf Neumann
   @creation-date 2007-07-19
-  @cvs-id $Id: cluster-procs.tcl,v 1.6 2008/11/26 09:30:07 gustafn Exp $
+  @cvs-id $Id: cluster-procs.tcl,v 1.6.8.2 2014/02/14 18:20:45 gustafn Exp $
 }
 
 namespace eval ::xo {
@@ -12,7 +12,7 @@ namespace eval ::xo {
     # first, excute the command on the local server
     eval $args
     # then, distribute the command in the cluster
-    eval ::xo::Cluster broadcast $args
+    ::xo::Cluster broadcast {*}$args
   }
 
   proc cache_flush_all {cache pattern} {
@@ -113,25 +113,32 @@ namespace eval ::xo {
   #
   Cluster proc broadcast args {
     foreach server [my info instances] {
-      eval $server message $args
+      $server message {*}$args
     }
   }
   Cluster instproc message args {
     my log "--cluster outgoing request to [my host]:[my port] // $args" 
-#     set r [::xo::HttpRequest new -volatile \
-#                -host [my host] -port [my port] \
-#                -path [Cluster set url]?cmd=[ns_urlencode $args]]
-#     return [$r set data]
+    #     set r [::xo::HttpRequest new -volatile \
+    #                -host [my host] -port [my port] \
+    #                -path [Cluster set url]?cmd=[ns_urlencode $args]]
+    #     return [$r set data]
 
     set r [::xo::AsyncHttpRequest new -volatile \
-	       -host [my host] -port [my port] \
-	       -path [Cluster set url]?cmd=[ns_urlencode $args]]
-  
-#     ::bgdelivery do ::xo::AsyncHttpRequest new \
-# 	-host [my host] -port [my port] \
-#         -path [Cluster set url]?cmd=[ns_urlencode $args] \
-# 	-mixin ::xo::AsyncHttpRequest::SimpleListener \
-# 	-proc finalize {obj status value} { my destroy }
+               -host [my host] -port [my port] \
+               -path [Cluster set url]?cmd=[ns_urlencode $args]]
+    
+    #     ::bgdelivery do ::xo::AsyncHttpRequest new \
+    #         -host [my host] -port [my port] \
+    #         -path [Cluster set url]?cmd=[ns_urlencode $args] \
+    #         -mixin ::xo::AsyncHttpRequest::SimpleListener \
+    #         -proc finalize {obj status value} { my destroy }
 
   }
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 2
+#    indent-tabs-mode: nil
+# End:

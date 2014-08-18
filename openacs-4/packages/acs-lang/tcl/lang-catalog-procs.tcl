@@ -24,7 +24,7 @@ ad_library {
     @author Jeff Davis
     @author Peter Marklund (peter@collaboraid.biz)
     @author Lars Pind (lars@collaboraid.biz)
-    @cvs-id $Id: lang-catalog-procs.tcl,v 1.49.8.5 2013/09/24 18:44:10 gustafn Exp $
+    @cvs-id $Id: lang-catalog-procs.tcl,v 1.49.8.6 2013/10/13 10:37:10 gustafn Exp $
 }
 
 namespace eval lang::catalog {}
@@ -496,8 +496,8 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
 
     # Get the message catalog root node
     set root_node [xml_doc_get_first_node $tree]
-    if { ![string equal [xml_node_get_name $root_node] ${MESSAGE_CATALOG_TAG}] } {
-        error "lang::catalog_parse: Could not find root node ${MESSAGE_CATALOG_TAG}"
+    if { [xml_node_get_name $root_node] ne $MESSAGE_CATALOG_TAG } {
+        error "lang::catalog_parse: Could not find root node $MESSAGE_CATALOG_TAG"
     }
 
     # Set the message catalog root level attributes

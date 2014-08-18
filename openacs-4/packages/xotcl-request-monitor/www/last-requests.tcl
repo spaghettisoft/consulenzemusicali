@@ -2,7 +2,7 @@ ad_page_contract {
     Displays last requests of a user
 
     @author Gustaf Neumann (adapted for interaction with controlling thread)
-    @cvs-id $Id: last-requests.tcl,v 1.6.2.1 2013/09/17 19:29:57 gustafn Exp $
+    @cvs-id $Id: last-requests.tcl,v 1.6.2.2 2013/10/11 10:17:22 gustafn Exp $
 } -query {
   request_key
   {all:optional 1}
@@ -55,7 +55,7 @@ TableWidget t1 \
 
 set all [expr {!$all}]
 set requests [throttle users last_requests $request_key]
-#set last_timestamp [lindex [lindex $requests end] 0]
+#set last_timestamp [lindex $requests end 0]
 set last_timestamp [clock seconds]
 
 set hidden 0

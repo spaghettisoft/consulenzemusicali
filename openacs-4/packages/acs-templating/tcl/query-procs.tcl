@@ -5,7 +5,7 @@ ad_library {
     @creation-date 29 September 2000
     @author Karl Goldstein (karlg@arsdigita.com)
             Stanislav Freidin (sfreidin@arsdigita.com)
-    @cvs-id $Id: query-procs.tcl,v 1.33 2012/12/03 09:44:55 victorg Exp $
+    @cvs-id $Id: query-procs.tcl,v 1.33.2.1 2013/10/05 12:55:10 gustafn Exp $
 
 }
 
@@ -17,7 +17,7 @@ namespace eval template::query {}
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Karl Goldstein (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
-# $Id: query-procs.tcl,v 1.33 2012/12/03 09:44:55 victorg Exp $
+# $Id: query-procs.tcl,v 1.33.2.1 2013/10/05 12:55:10 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -978,7 +978,7 @@ ad_proc -public template::multirow {
             lappend sort_list [list $i $sortby]
         }
 
-        set sort_list [eval lsort $sort_args -index 1 [list $sort_list]]
+        set sort_list [lsort {*}$sort_args -index 1 $sort_list]
 
         
         # Now we have a list with two elms, (rownum, sort-by-value), sorted by sort-by-value

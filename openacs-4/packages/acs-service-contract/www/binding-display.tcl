@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Jeff Davis <davis@xarg.net>
     @creation-date 2005-02-05
-    @cvs-id $Id: binding-display.tcl,v 1.4 2012/12/08 18:20:36 gustafn Exp $
+    @cvs-id $Id: binding-display.tcl,v 1.4.2.1 2013/10/02 22:41:59 gustafn Exp $
 } {
     id
     impl_name:trim,notnull
@@ -53,7 +53,7 @@ db_multirow -extend {check} binding binding {
         if {[info commands ::$impl_alias] ne ""} {
             append impl_alias "</b> {[info args ::$impl_alias]}"
         } elseif {[llength $impl_alias]>1 
-		  && [info command ::xotcl::Object] ne "" 
+		  && [info commands ::xotcl::Object] ne "" 
 		  && [::xotcl::Object isobject [lindex $impl_alias 0]]
 		  && [[lindex $impl_alias 0] info methods [lindex $impl_alias 1]] ne ""} {
 	    # - it looks like a method, 

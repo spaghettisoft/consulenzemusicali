@@ -10,7 +10,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: delete-attachment-2.tcl,v 1.5.8.2 2013/09/09 16:44:27 gustafn Exp $
+    @cvs-id $Id: delete-attachment-2.tcl,v 1.5.8.3 2013/10/03 08:41:29 gustafn Exp $
 } {
     attach_id:integer,notnull
     parent_id:integer,notnull
@@ -26,7 +26,7 @@ permission::require_permission -object_id $attach_id -privilege delete
 # is released
 
 #Commented out during i18n convertion, Steffen
-#if { $submit == "Proceed" } {
+#if { $submit eq "Proceed" } {
 
 
     # get the type of the attachment
@@ -35,7 +35,7 @@ permission::require_permission -object_id $attach_id -privilege delete
           from cr_items
          where item_id = :attach_id
     }    
-    if { $content_type == "content_revision" } {
+    if { $content_type eq "content_revision" } {
         # get the mime_type
         db_1row get_mime_type {
             select mime_type
@@ -43,7 +43,7 @@ permission::require_permission -object_id $attach_id -privilege delete
              where item_id = :attach_id
                and revision_id = content_item.get_latest_revision (:attach_id)
         }
-        if { $mime_type == "image/jpeg" || $mime_type == "image/gif" } {
+        if { $mime_type eq "image/jpeg" || $mime_type eq "image/gif" } {
             # delete row from images table, we should only have one row
             # this is only temporary until CR provides a delete image function
             db_dml delete_image_row {
@@ -62,7 +62,7 @@ permission::require_permission -object_id $attach_id -privilege delete
                 end;
             }
         }
-    } elseif { $content_type == "content_extlink" } {
+    } elseif { $content_type eq "content_extlink" } {
         db_exec_plsql delete_extlink {
             begin
                 content_extlink.del(:attach_id);

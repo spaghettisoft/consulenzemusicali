@@ -5,7 +5,7 @@
 #          Stanislav Freidin 	  (sfreidin@arsdigita.com)
 #          Christian Brechbuehler (chrisitan@arsdigita.com)
 
-# $Id: tag-init.tcl,v 1.35 2012/12/08 17:50:20 gustafn Exp $
+# $Id: tag-init.tcl,v 1.35.2.2 2013/10/21 06:27:03 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -128,8 +128,8 @@ template_tag include { params } {
   template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
   # JCD: If we have the ds_page_bits cache maybe save the error for later
   if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_page_fragment_cache_enabled_p] ne "" } {
-      template::adp_append_code "        if {\[::ds_enabled_p\]"
-      template::adp_append_code "            && \[::ds_collection_enabled_p\] } {"
+      template::adp_append_code "        if {\[info exists ::ds_enabled_p\]"
+      template::adp_append_code "            && \[info exists ::ds_collection_enabled_p\] } {"
       template::adp_append_code "            set __include_errors {}"
       template::adp_append_code "            ns_cache get ds_page_bits \[ad_conn request\]:error __include_errors"
       template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$errorInfo\]\]"
@@ -150,9 +150,9 @@ template_tag include { params } {
 
 template_tag multiple { chunk params } {
 
-  set name     [template::get_attribute multiple $params name       ]
-  set startrow [template::get_attribute multiple $params startrow  0]
-  set maxrows  [template::get_attribute multiple $params maxrows  -1]; #unlimit
+  set name      [template::get_attribute multiple $params name       ]
+  set startrow  [template::get_attribute multiple $params startrow  0]
+  set maxrows   [template::get_attribute multiple $params maxrows  -1]; #unlimit
   set delimiter [template::get_attribute multiple $params delimiter ""]
 
   set tag_id [template::current_tag]

@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Fri Oct 13 08:40:54 2000
-    @cvs-id $Id: package-delete.tcl,v 1.9.8.6 2013/09/28 12:09:59 gustafn Exp $
+    @cvs-id $Id: package-delete.tcl,v 1.9.8.7 2013/10/11 11:43:46 gustafn Exp $
 } {
     version_id:naturalnum
 }
@@ -47,7 +47,7 @@ set initial_install_p [db_string initial_install_p {
     where package_key = :package_key
 }]
 
-if {$initial_install_p eq "t"} {
+if {$initial_install_p == "t"} {
     set kernel_deletion_warning "
 <p>
   You are about to delete package <code>$package_key</code> which is part of the <b>OpenACS core</b>

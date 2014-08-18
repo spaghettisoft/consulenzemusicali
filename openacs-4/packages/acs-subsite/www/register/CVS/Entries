@@ -6,7 +6,6 @@
 /explain-persistent-cookies.tcl/1.1.1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /index.tcl/1.13/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /logout.tcl/1.4/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
-/recover-password.tcl/1.12.6.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
 /restore-bounce.tcl/1.1/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /restore-user.tcl/1.5/Tue Sep 17 21:24:20 2013//Topenacs-5-8-compat
 /user-join.tcl/1.12.10.1/Tue Sep 17 21:26:17 2013//Topenacs-5-8-compat
@@ -22,4 +21,5 @@
 /restore-user.adp/1.9.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
 /user-join.adp/1.5.22.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
 /user-new.adp/1.17.10.1/Tue Oct  1 23:26:56 2013//Topenacs-5-8-compat
+/recover-password.tcl/1.12.6.2/Mon Aug 18 21:42:29 2014//Topenacs-5-8-compat
 D

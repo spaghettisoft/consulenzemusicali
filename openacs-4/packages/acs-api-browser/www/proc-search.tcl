@@ -11,7 +11,7 @@ ad_page_contract {
 
     @author Todd Nightingale (tnight@arsdigita.com)
     @creation-date Jul 14, 2000
-    @cvs-id $Id: proc-search.tcl,v 1.12 2007/01/10 21:22:01 gustafn Exp $
+    @cvs-id $Id: proc-search.tcl,v 1.12.10.1 2013/10/16 20:08:07 gustafn Exp $
 } {
     {name_weight:optional 0}
     {doc_weight:optional 0}
@@ -144,7 +144,7 @@ foreach proc [nsv_array names api_proc_doc] {
 set matches [lsort -command ad_sort_by_score_proc $matches]
 
 if {$quick_view && $matches ne "" || [llength $matches] == 1 } {
-    ad_returnredirect [api_proc_url [lindex [lindex $matches 0] 0]]
+    ad_returnredirect [api_proc_url [lindex $matches 0 0]]
     ad_script_abort
 }
 

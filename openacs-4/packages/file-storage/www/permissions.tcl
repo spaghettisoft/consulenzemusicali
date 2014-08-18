@@ -3,9 +3,9 @@ ad_page_contract {
 
     @author Jeff Davis <davis@xarg.net>
     @creation-date 2005-03-05
-    @cvs-id $Id: permissions.tcl,v 1.2 2005/05/26 08:28:46 maltes Exp $
+    @cvs-id $Id: permissions.tcl,v 1.2.8.1 2014/08/05 17:46:34 gustafn Exp $
 } {
-    {object_id:integer}
+    {object_id:naturalnum,notnull}
 }
 set user_id [ad_conn user_id]
 

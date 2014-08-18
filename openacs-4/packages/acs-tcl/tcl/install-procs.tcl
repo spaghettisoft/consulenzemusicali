@@ -5,7 +5,7 @@ ad_library {
 
     @creation-date 2004-06-16
     @author Lee Denison (lee@thaum.net)
-    @cvs-id $Id: install-procs.tcl,v 1.29 2010/03/31 23:33:24 donb Exp $
+    @cvs-id $Id: install-procs.tcl,v 1.29.6.1 2013/10/16 19:49:10 gustafn Exp $
 }
 
 namespace eval install {}
@@ -66,11 +66,11 @@ ad_proc -private ::install::xml::action::source { node } {
 
     switch -exact $type {
         tcl {
-            set code [template::util::read_file [acs_root_dir]$src]
+            set code [template::util::read_file $::acs::rootdir$src]
             set out [eval $code]
         }
         sql {
-            db_source_sql_file [acs_root_dir]$src
+            db_source_sql_file $::acs::rootdir$src
             set out "$src completed"
         }
         install.xml {

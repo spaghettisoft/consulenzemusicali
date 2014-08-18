@@ -3,7 +3,7 @@ ad_page_contract {
     Select, dependency check, install and enable packages.
 
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @cvs-id $Id: packages-install.tcl,v 1.22.4.2 2013/09/28 18:17:36 gustafn Exp $
+    @cvs-id $Id: packages-install.tcl,v 1.22.4.5 2013/10/17 08:44:30 gustafn Exp $
 
 } {
     {checked_by_default_p:boolean 0}
@@ -23,7 +23,7 @@ ad_return_top_of_page [ad_parse_template -params [list context title] \
 #
 # TODO: make sure that it's a later version than that in the packages dir?
 #
-set packages_root_dir "[acs_root_dir]/packages"
+set packages_root_dir "$::acs::rootdir/packages"
 set packages_spec_files [apm_scan_packages $packages_root_dir]
 set workspace_spec_files [apm_scan_packages [apm_workspace_install_dir]]
 set workspace_filenames [list]
@@ -33,7 +33,7 @@ foreach spec_path $workspace_spec_files {
 set all_spec_files $workspace_spec_files
 foreach spec_path $packages_spec_files {
     set spec_filename [file tail $spec_path]
-    if { [lsearch -exact $workspace_filenames $spec_filename] == -1 } {
+    if {$spec_filename ni $workspace_filenames} {
         lappend all_spec_files $spec_path
     }
 }
@@ -89,12 +89,12 @@ if { $spec_files eq "" } {
 
 <script type="text/javascript">
 function uncheckAll() {
-    for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
+    for (var i = 0; i < [llength $spec_files]; ++i)
         document.forms\[0\].elements\[i\].checked = false;
     this.href='';
 }
 function checkAll() {
-    for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
+    for (var i = 0; i < [llength $spec_files]; ++i)
         document.forms\[0\].elements\[i\].checked = true;
     this.href='';
 }

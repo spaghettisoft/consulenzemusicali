@@ -6,7 +6,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: view-comment.tcl,v 1.9.2.3 2013/09/06 17:37:20 gustafn Exp $
+    @cvs-id $Id: view-comment.tcl,v 1.9.2.4 2013/10/03 08:41:29 gustafn Exp $
 } { 
     comment_id:notnull
     { revision_id {} }
@@ -43,7 +43,7 @@ set admin_p [permission::permission_p -object_id $package_id -privilege admin]
 # if the user has write permissions then allow
 # viewing of selected revision
 if { $write_perm_p == 1 } {
-    if { [empty_string_p $revision_id] } {
+    if { $revision_id eq "" } {
 	# get the latest revision
 	set revision_id [db_string get_latest_revision {
             select content_item.get_latest_revision(:comment_id) from dual

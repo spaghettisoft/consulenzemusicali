@@ -8,7 +8,7 @@ ad_library {
 
     @author mbryzek@arsdigita.com
     @creation-date Wed Feb 21 17:10:24 2001
-    @cvs-id $Id: subsite-callback-procs.tcl,v 1.6 2010/04/03 23:13:47 donb Exp $
+    @cvs-id $Id: subsite-callback-procs.tcl,v 1.6.6.1 2013/10/27 14:26:46 gustafn Exp $
 
 }
 
@@ -62,8 +62,7 @@ ad_proc -public subsite_callback {
     set package_id [ad_conn package_id]
 
     foreach row $callback_list {
-	set callback [lindex $row 0]
-	set type [lindex $row 1]
+	lassign $row callback type
 
 	switch -- $type {
 	    tcl { 

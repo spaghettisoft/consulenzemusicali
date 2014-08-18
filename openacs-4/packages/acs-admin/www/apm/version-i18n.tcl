@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id: version-i18n.tcl,v 1.11 2007/05/14 20:30:17 donb Exp $  
+    @cvs-id $Id: version-i18n.tcl,v 1.11.10.1 2013/10/26 09:35:43 gustafn Exp $  
 } {
     version_id:integer,notnull    
     {pre_select_files_p "1"}
@@ -63,7 +63,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
         # If we are showing adp:s and we are only showing adp:s with texts to translate, check if
         # this file has any texts
         if { $file_type eq "adp" && $only_text_p } {
-            if { $number_of_text_snippets == "0" } {
+            if { $number_of_text_snippets == 0 } {
                 set add_file_p 0
             }
         }

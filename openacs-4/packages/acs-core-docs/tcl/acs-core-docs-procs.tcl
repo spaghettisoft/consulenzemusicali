@@ -3,7 +3,7 @@ ad_library {
 
     @author Jeff Davis (davis@xarg.net)
     @creation-date 2002-09-10
-    @cvs-id $Id: acs-core-docs-procs.tcl,v 1.4.22.1 2013/08/27 11:50:28 gustafn Exp $
+    @cvs-id $Id: acs-core-docs-procs.tcl,v 1.4.22.2 2013/10/17 08:58:33 gustafn Exp $
 }
 
 ad_proc -private core_docs_uninstalled_packages_internal {} {
@@ -14,7 +14,7 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
 } {
     set uninstalled [list]
     # Determine which spec files are not installed
-    foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
+    foreach spec_file [apm_scan_packages "$::acs::rootdir/packages"] {
         if { ! [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } { 
             if { ! [apm_package_registered_p $version(package.key)] } {
                 if {$version(package-name) eq ""} { 

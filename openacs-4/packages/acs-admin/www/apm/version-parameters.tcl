@@ -5,7 +5,7 @@ ad_page_contract {
     @author tnight@arsdigita.com
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 12 September 2000
-    @cvs-id $Id: version-parameters.tcl,v 1.8.4.4 2013/09/28 12:10:01 gustafn Exp $
+    @cvs-id $Id: version-parameters.tcl,v 1.8.4.5 2013/10/11 11:43:47 gustafn Exp $
 } {
     {orderby "parameter_name"}
     {version_id:integer}
@@ -84,7 +84,7 @@ if { $dimensional_list ne "" } {
 }
 
 # LARS hack
-set sections [lindex [lindex $dimensional_list 0] 3]
+set sections [lindex $dimensional_list 0 3]
 foreach section $sections {
     if {$section_name eq [lindex $section 0]} {
         set section_name [lindex $section 1]

@@ -4,7 +4,7 @@ ad_library {
 
     @author rhs@mit.edu
     @creation-date 2000-08-17
-    @cvs-id $Id: acs-permissions-procs.tcl,v 1.32.2.2 2013/09/17 11:02:11 gustafn Exp $
+    @cvs-id $Id: acs-permissions-procs.tcl,v 1.32.2.3 2014/05/22 21:16:10 gustafn Exp $
 
 }
 
@@ -32,7 +32,7 @@ ad_proc -public permission::grant {
     grant privilege Y to party X on object Z
 } {
     db_exec_plsql grant_permission {}
-    util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+    util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
     permission::permission_thread_cache_flush
 }
 

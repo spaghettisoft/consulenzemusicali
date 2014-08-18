@@ -1,5 +1,5 @@
 # -*- tcl-*-
-# $Id: contributors.page,v 1.6 2012/09/13 16:05:37 victorg Exp $
+# $Id: contributors.page,v 1.6.2.1 2014/02/11 11:58:21 gustafn Exp $
 ::xowiki::Object new -title "Contributors" -text {
 
   my proc content {} {
@@ -12,7 +12,7 @@
           Field count -label "Page Revisions" -html { align right }
         }
 
-    db_foreach get_contributors {select count(object_id) as count, creation_user 
+    xo::dc foreach get_contributors {select count(object_id) as count, creation_user 
       from acs_objects o, cr_revisions cr,cr_items ci 
       where object_id = revision_id 
         and parent_id = :folder_id

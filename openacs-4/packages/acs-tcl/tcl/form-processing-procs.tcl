@@ -558,8 +558,9 @@ ad_proc -public ad_form {
 
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
-            if { [info exists af_parts(${form_name}__$valid_arg)] &&
-                 [lsearch { form name validate export } $valid_arg] == -1 } {
+            if { [info exists af_parts(${form_name}__$valid_arg)] 
+		 && [lsearch { form name validate export } $valid_arg] == -1 
+	     } {
                 return -code error "Form \"$form_name\" already has a \"$valid_arg\" section"
             }
 
@@ -1016,8 +1017,9 @@ ad_proc -public ad_form {
 
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
-                if { [info exists af_flag_list(${form_name}__$element_name)] && \
-                     [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
+                if { [info exists af_flag_list(${form_name}__$element_name)] 
+		     && [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 
+		 } {
                     template::element set_values $form_name $element_name $values($element_name)
                 } else {
                     template::element set_value $form_name $element_name $values($element_name)
@@ -1034,8 +1036,9 @@ ad_proc -public ad_form {
         # in a reasonable way.
 
         foreach element_name $properties(element_names) {
-            if { [info exists af_flag_list(${form_name}__$element_name)] && \
-                 [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
+            if { [info exists af_flag_list(${form_name}__$element_name)] 
+		 && [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 
+	     } {
                 set values [uplevel #$level [list template::element get_values $form_name $element_name]]
                 uplevel #$level [list set $element_name $values]
             } else {
@@ -1065,8 +1068,9 @@ ad_proc -public ad_form {
 
         foreach validate_element $af_validate_elements($form_name) {
             foreach {element_name validate_expr error_message} $validate_element {
-                if { ![template::element error_p $form_name $element_name] && \
-                    ![uplevel #$level [list expr $validate_expr]] } {
+                if { ![template::element error_p $form_name $element_name] 
+		     && ![uplevel #$level [list expr $validate_expr]] 
+		 } {
                     template::element set_error $form_name $element_name [uplevel [list subst $error_message]]
                 }
             }
@@ -1074,7 +1078,22 @@ ad_proc -public ad_form {
     }
 
     if { [template::form is_submission $form_name] } {
-        if { [uplevel #$level {set __refreshing_p}] } {
+        upvar #$level __refreshing_p __refreshing_p __confirmed_p __confirmed_p
+	#
+	# The values for __refreshing_p and __confirmed_p are returend
+	# from the client.  Since Submitting invalid data to hidden
+	# elements is a common attack vector, we react harsh if we see
+	# an invalid input here.
+	#
+	if {![string is boolean -strict $__refreshing_p] 
+	    || ![string is boolean -strict $__confirmed_p] } {
+	    ad_return_complaint 1 "Your request is invalid."
+	    ns_log Warning "Validation error in hidden form element.\
+		This may be part of a vulnerability scan or attack reconnaissance: \
+		fish values __refreshing_p '$__refreshing_p' or __confirmed_p '$__confirmed_p'"
+	    ad_script_abort
+	}
+        if { $__refreshing_p } {
             uplevel array unset ${form_name}:error
 
             if { [info exists on_refresh] } {
@@ -1087,7 +1106,7 @@ ad_proc -public ad_form {
 
                 # Run confirm and preview templates before we do final processing of the form
 
-                if { [info exists confirm_template] && ![uplevel #$level {set __confirmed_p}] } {
+                if { [info exists confirm_template] && ! $__confirmed_p } {
 
                     # Pass the form variables to the confirm template, applying the to_html filter if present
 

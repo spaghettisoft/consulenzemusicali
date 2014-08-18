@@ -2,7 +2,7 @@ ad_page_contract {
   Show an xotcl class or object
   
   @author Gustaf Neumann
-  @cvs-id $Id: show-class-graph.tcl,v 1.8.6.2 2013/09/27 09:58:46 victorg Exp $
+  @cvs-id $Id: show-class-graph.tcl,v 1.8.6.4 2014/02/14 18:23:18 gustafn Exp $
 } -query {
   {classes}
   {documented_only 1}
@@ -87,7 +87,7 @@ ad_page_contract {
     set reduced_sc [list]
     foreach sc [$e info superclass] {
       if {$omit_base_classes && $sc eq "::xotcl::Object"
-	  || $sc eq "::xotcl::Class"} continue
+          || $sc eq "::xotcl::Class"} continue
       lappend reduced_sc $sc
     }
     if {$reduced_sc eq {}} continue
@@ -102,7 +102,7 @@ ad_page_contract {
     if {$omit_base_classes && $e eq "::xotcl::Object" || $e eq "::xotcl::Class"} continue
     if {$with_children} {
       foreach c [$e info children] {
-        if {[lsearch $things $c] == -1} continue
+        if {$c ni $things} continue
         append children "[my dotquote $c]->[my dotquote $e];\n"
       }
     }
@@ -169,3 +169,11 @@ file delete $tmpfile
 
 #set f [open $tmpnam.dot w]; puts $f $dot_code; close $f
 #file delete $tmpnam.dot
+
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 2
+#    indent-tabs-mode: nil
+# End:

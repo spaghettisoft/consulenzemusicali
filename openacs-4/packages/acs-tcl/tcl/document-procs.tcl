@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 22 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id $Id: document-procs.tcl,v 1.5 2009/02/13 20:28:08 jeffd Exp $
+    @cvs-id $Id: document-procs.tcl,v 1.5.8.2 2014/07/30 11:55:00 gustafn Exp $
 
 }
 
@@ -133,7 +133,7 @@ ad_proc doc_body_flush {} { Flushes the body (if possible). } {
 }
 
 ad_proc doc_find_template { filename } { Finds a master.adp file which can be used as a master template, looking in the directory containing $filename and working our way down the directory tree. } {
-    set path_root [acs_root_dir]
+    set path_root $::acs::rootdir
 
     set start [clock clicks -milliseconds]
 
@@ -206,7 +206,7 @@ proc doc_tag_ad_document { contents params } {
 	doc_set_property [ns_set key $params $i] [ns_set value $params $i]
     }
     doc_set_property _adp 1
-    return [ns_adp_parse -string $contents]
+    return [template::adp_parse_string $contents]
 }
 
 proc doc_tag_ad_property { contents params } {

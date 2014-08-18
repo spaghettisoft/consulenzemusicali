@@ -17,7 +17,7 @@ ad_page_contract {
 
     @creation-date 12/19/98
     @author philg@mit.edu
-    @cvs-id $Id: display-sql.tcl,v 1.4.10.2 2013/09/16 20:38:39 gustafn Exp $
+    @cvs-id $Id: display-sql.tcl,v 1.4.10.4 2013/12/02 07:04:08 gustafn Exp $
 } {
     url:notnull
     { version_id "" }
@@ -29,7 +29,7 @@ ad_page_contract {
 }
 
 set context [list]
-if {[exists_and_not_null version_id]} {
+if {$version_id ne ""} {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
@@ -50,25 +50,25 @@ set title "[file tail $url]"
 # for example
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
-    ad_return_error "Can't back up beyond the pageroot" "You can't use 
+    ad_return_warning "Can't back up beyond the pageroot" "You can't use 
     display-sql.tcl to look at files underneath the pageroot."
     return
 }
 
-if {[exists_and_not_null package_key]} {
+if { $package_key ne "" } {
     set safe_p [regexp {/?(.*)} $url package_url]
 }
 
 if { $safe_p } {
     set sql ""
     set fn [acs_package_root_dir $package_key]/sql/$url
-    if {[file exists $fn]} {
+    if {[file readable $fn]} {
 	if {[catch {
 	    set f [open $fn]; set sql [read $f]; close $f
 	} errorMsg]} {
-	    ad_return_error "Problem reading file" "There was a problem reading $url ($errorMsg)"
+	    ad_return_warning "Problem reading file" "There was a problem reading $url ($errorMsg)"
 	}
     }
 } else {
-    ad_return_error "Invalid file location" "Can only display files in package or doc directory"
+    ad_return_warning "Invalid file location" "Can only display files in package or doc directory"
 }

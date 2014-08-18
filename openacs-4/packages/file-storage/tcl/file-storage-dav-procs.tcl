@@ -4,7 +4,7 @@ ad_library {
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2003-11-09
-    @cvs-id $Id: file-storage-dav-procs.tcl,v 1.10 2005/05/26 08:28:45 maltes Exp $
+    @cvs-id $Id: file-storage-dav-procs.tcl,v 1.10.8.1 2013/10/03 08:33:57 gustafn Exp $
     
 }
 
@@ -30,7 +30,7 @@ ad_proc fs::impl::fs_object::put {} {
     set root_folder_id [oacs_dav::conn folder_id]
     set uri [oacs_dav::conn uri]
 
-    if {![string equal "unlocked" [tdav::check_lock $uri]]} {
+    if {"unlocked" ne [tdav::check_lock $uri] } {
 	return [list 423]
     }
     
@@ -42,12 +42,12 @@ ad_proc fs::impl::fs_object::put {} {
     array set sn [site_node::get -url $uri]
     set package_id $sn(package_id)
     ns_log debug "\n ----- \n file_storage::dav::put package_id $package_id \n parent_id $parent_id \n uri $uri \n ----- \n "
-    if {[empty_string_p $parent_id]} {
+    if {$parent_id eq ""} {
 	set response [list 409]
 	return $response
     }
     
-    if {[empty_string_p $item_id]} {
+    if {$item_id eq ""} {
         fs::add_file \
         -package_id $package_id \
         -name $name \
@@ -101,10 +101,10 @@ ad_proc fs::impl::fs_object::mkcol {} {
     set item_id [oacs_dav::conn item_id]
     set fname [oacs_dav::conn item_name]
     set parent_id [oacs_dav::item_parent_folder_id $uri]
-    if {[empty_string_p $parent_id]} {
+    if {$parent_id eq ""} {
 	return [list 409]
     }
-    if { ![empty_string_p $item_id]} {
+    if { $item_id ne ""} {
 	return [list 405]
     }
 

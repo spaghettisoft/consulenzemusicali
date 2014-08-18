@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author rhs@mit.edu
     @creation-date 2000-08-20
-    @cvs-id $Id: one.tcl,v 1.13.10.1 2013/09/06 16:01:47 gustafn Exp $
+    @cvs-id $Id: one.tcl,v 1.13.10.2 2013/10/10 21:00:46 gustafn Exp $
 } {
     object_id:integer,notnull
     {children_p "f"}
@@ -42,7 +42,7 @@ lappend controls "<a href=\"grant?[export_vars {application_url object_id}]\">[_
 
 db_1row context { *SQL* }
 
-if { $security_inherit_p eq "t" && $context_id ne "" } {
+if { $security_inherit_p == "t" && $context_id ne "" } {
     lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Don't Inherit Permissions from [ad_quotehtml $context_name]</a>"
 } else {
     lappend controls "<a href=\"toggle-inherit?[export_vars {application_url object_id}]\">Inherit Permissions from [ad_quotehtml $context_name]</a>"
@@ -55,7 +55,7 @@ set export_form_vars [export_vars -form {object_id application_url}]
 set show_children_url "one?[export_vars {object_id application_url {children_p t}}]"
 set hide_children_url "one?[export_vars {object_id application_url {children_p f}}]"
 
-if {$children_p eq "t"} {
+if {$children_p == "t"} {
     db_multirow children children { *SQL* } {
     }
 } else {

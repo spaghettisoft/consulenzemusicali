@@ -3,9 +3,9 @@ ad_page_contract {
 
     @author Jeff Davis davis@xarg.net
     @creation-date 2004-04-27
-    @cvs-id $Id: simple.tcl,v 1.3.6.1 2013/09/06 16:01:49 gustafn Exp $
+    @cvs-id $Id: simple.tcl,v 1.3.6.2 2014/08/05 17:46:34 gustafn Exp $
 } {
-    object_id:notnull
+    object_id:naturalnum,notnull
 }
 
 # check for write permission on the item

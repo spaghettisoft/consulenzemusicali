@@ -160,6 +160,30 @@ ad_proc -public cmit::song::delete {
     util_memoize_flush_regexp "cmit::"
 }
 
+ad_proc -public cmit::song::replace_song {
+    {-old_song_id ""}
+    {-new_song_id ""}
+} {
+    Replace a song with another in every playlist and other relations in the system, mantaining all other song information unaltered
+    In the end, the old song is removed.
+} {
+    foreach playlist_id [cmit::song::get_playlists -song_id $old_song_id] {
+	category::map_object -object_id $new_song_id $playlist_id
+    }
+    db_dml query "
+      update cmit_playlist_songs set 
+	  song_id = :new_song_id
+	where song_id = :old_song_id;
+	
+      delete from category_object_map
+	where object_id = :old_song_id"
+    
+    cmit::song::delete -song_id $old_song_id
+    
+    # flush cache
+    util_memoize_flush_regexp "cmit::"
+}
+
 ad_proc -public cmit::song::get_playlists_not_cached {
     -song_id:required
 } {

@@ -5,14 +5,14 @@ ad_library {
 
     @author Ben Adida (ben@openforce.net)
     @creation-date May 29th, 2002
-    @cvs-id $Id: community-core-2-procs.tcl,v 1.2 2002/09/10 22:22:14 jeffd Exp $
+    @cvs-id $Id: community-core-2-procs.tcl,v 1.2.26.1 2013/10/07 19:53:12 gustafn Exp $
 
 }
 
 # The User Namespace
 namespace eval oacs::user {
 
-    ad_proc -public get {
+    ad_proc -deprecated -public get {
         {-user_id:required}
         {-array:required}
     } {

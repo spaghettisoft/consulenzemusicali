@@ -8,7 +8,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: comment-edit.tcl,v 1.5.20.1 2013/09/06 16:01:49 gustafn Exp $
+    @cvs-id $Id: comment-edit.tcl,v 1.5.20.2 2013/10/03 08:41:29 gustafn Exp $
 } { 
     comment_id:integer,notnull
     { revision_id {} }
@@ -30,7 +30,7 @@ permission::require_permission -object_id $comment_id -privilege write
 
 # if revision_id is not passed in, assume that the user
 # wishes to edit the latest revision
-if { [empty_string_p $revision_id] } {
+if { $revision_id eq "" } {
     set revision_id [db_string get_latest_revision \
             "select content_item.get_latest_revision(:comment_id) from dual"]
 }

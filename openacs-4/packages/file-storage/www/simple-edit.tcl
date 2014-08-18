@@ -3,9 +3,9 @@ ad_page_contract {
 
     @author Ben Adida
     @creation-date 01 April 2002
-    @cvs-id $Id: simple-edit.tcl,v 1.10.4.1 2013/09/06 16:01:49 gustafn Exp $
+    @cvs-id $Id: simple-edit.tcl,v 1.10.4.2 2014/08/05 17:46:34 gustafn Exp $
 } {
-    object_id:notnull
+    object_id:naturalnum,notnull
 }
 
 # check for write permission on the item

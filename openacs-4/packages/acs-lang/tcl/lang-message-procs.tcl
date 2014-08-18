@@ -12,7 +12,7 @@ ad_library {
     @author Bruno Mattarollo (bruno.mattarollo@ams.greenpeace.org)
     @author Peter Marklund (peter@collaboraid.biz)
     @author Lars Pind (lars@collaboraid.biz)
-    @cvs-id $Id: lang-message-procs.tcl,v 1.51.8.4 2013/09/17 22:21:36 gustafn Exp $
+    @cvs-id $Id: lang-message-procs.tcl,v 1.51.8.5 2013/10/02 09:10:21 gustafn Exp $
 }
 
 namespace eval lang::message {}
@@ -650,7 +650,7 @@ ad_proc -private lang::message::format {
             if { [llength $value_array_list] > 0 } {
                 # A substitution list is provided, the key should be in there
                 
-                if { [lsearch -exact $value_array_keys $variable_string] == -1 } {
+                if {$variable_string ni $value_array_keys} {
                     ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_string found in the message: $localized_message"
                     
                     # There is no value available to do the substitution with

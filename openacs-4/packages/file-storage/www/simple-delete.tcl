@@ -3,10 +3,10 @@ ad_page_contract {
 
     @author Ben Adida (ben@openforce.net)
     @creation-date 10 Nov 2000
-    @cvs-id $Id: simple-delete.tcl,v 1.8.4.1 2013/09/06 16:01:48 gustafn Exp $
+    @cvs-id $Id: simple-delete.tcl,v 1.8.4.3 2014/08/05 17:46:34 gustafn Exp $
 } {
-    object_id:integer,notnull
-    folder_id:notnull
+    object_id:naturalnum,notnull
+    folder_id:naturalnum,notnull
 }
 
 # check for delete permission on the file

@@ -3,7 +3,7 @@ ad_library {
 
     @author Peter Marklund
     @creation-date 31 March 2004
-    @cvs-id $Id: tclwebtest-procs.tcl,v 1.7.10.1 2013/08/27 11:50:27 gustafn Exp $
+    @cvs-id $Id: tclwebtest-procs.tcl,v 1.7.10.2 2013/10/13 10:18:26 gustafn Exp $
 }
 
 namespace eval twt {}
@@ -83,7 +83,7 @@ ad_proc twt::server_url {} {
 
     regexp {(:[0-9]*)?$} [util_current_location] match port
 
-    if { [exists_and_not_null port] } {
+    if { ([info exists port] && $port ne "") } {
         return "http://${ip_address}${port}"
     } else {
         return "http://$ip_address"

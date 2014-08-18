@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 29 September 2000
     @author Bryan Quinn (bquinn@arsdigita.com)
-    @cvs-id $Id: apm-admin-procs.tcl,v 1.18.8.3 2013/09/28 17:48:14 gustafn Exp $
+    @cvs-id $Id: apm-admin-procs.tcl,v 1.18.8.7 2013/10/17 08:44:30 gustafn Exp $
 
 }
 
@@ -122,7 +122,7 @@ ad_proc -private apm_package_selection_widget {
         incr counter
         set package_key [pkg_info_key $pkg_info]
         set package_path [pkg_info_path $pkg_info]
-        set package_rel_path [string range $package_path [string length [acs_root_dir]] end]
+        set package_rel_path [string range $package_path [string length $::acs::rootdir] end]
         set spec_file [pkg_info_spec $pkg_info]
         array set package [apm_read_package_info_file $spec_file]
         set version_name $package(name)
@@ -131,7 +131,7 @@ ad_proc -private apm_package_selection_widget {
 
         append widget "  <tr valign=baseline bgcolor=[lindex $band_colors \
                 [expr { $counter % [llength $band_colors] }]]>"
-        if { [pkg_info_dependency_p $pkg_info] eq "t" } {
+        if { [pkg_info_dependency_p $pkg_info] == "t" } {
             # Dependency passed.
 
             if { $install_enable_p } {
@@ -165,7 +165,7 @@ ad_proc -private apm_package_selection_widget {
             <td>$package_rel_path</td>
             <td><font color=green>Dependencies satisfied.</font></td>
             </tr> "
-        } elseif { [pkg_info_dependency_p $pkg_info] eq "f" } {
+        } elseif { [pkg_info_dependency_p $pkg_info] == "f" } {
             #Dependency failed.
             if { $install_enable_p } {
                 append widget "  <td align=center><input type=checkbox name=install value=\"$package_key\"
@@ -294,14 +294,14 @@ ad_proc -private apm_build_repository {
     # Configuration Settings
     #----------------------------------------------------------------------
 
-    set cd_helper 		"[acs_root_dir]/bin/cd-helper"
+    set cd_helper 		"$::acs::rootdir/bin/cd-helper"
 
     set cvs_command 		"cvs"
     set cvs_root 		":pserver:anonymous@cvs.openacs.org:/cvsroot"
 
-    set work_dir 		"[acs_root_dir]/repository-builder/"
+    set work_dir 		"$::acs::rootdir/repository-builder/"
 
-    set repository_dir 		"[acs_root_dir]/www/repository/"
+    set repository_dir 		"$::acs::rootdir/www/repository/"
     set repository_url 		"http://openacs.org/repository/"
 
     set channel_index_template  "/packages/acs-admin/www/apm/repository-channel-index"
@@ -502,12 +502,13 @@ ad_proc -private apm_build_repository {
 			    close $fp
 			    
 			    lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
-			    ns_log Notice "Executing: [ad_quotehtml $cmd]"
+			    ns_log Notice "Executing: $cmd"
 			    if {[catch "exec $cd_helper $packages_root_path $cmd" errmsg]} {
 				ns_log notice "Error during tar in repository creation for\
 					file ${channel_dir}$pkg_info(package.key)-$pkg_info(name).apm:\
 					\n$errmsg\n$::errorCode,$::errorInfo"
 			    }
+			    file delete $tmp_filename
 			}
 			
 			set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"

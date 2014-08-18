@@ -3,7 +3,7 @@ ad_library {
 
     @author Lars Pind (lars@collaobraid.biz)
     @creation-date 2003-05-14
-    @cvs-id $Id: authority-procs.tcl,v 1.28.8.1 2013/09/30 18:26:48 gustafn Exp $
+    @cvs-id $Id: authority-procs.tcl,v 1.28.8.3 2013/10/17 08:51:56 gustafn Exp $
 }
 
 namespace eval auth {}
@@ -84,7 +84,7 @@ ad_proc -public auth::authority::create {
         # Check that the columns provided in the array are all valid 
         # Set array entries as local variables
         foreach name $names {
-            if { [lsearch -exact $all_columns $name] == -1 } {
+            if {$name ni $all_columns} {
                 error "Attribute '$name' isn't valid for auth_authorities."
             }
             set $name $row($name)
@@ -248,7 +248,7 @@ ad_proc -public auth::authority::edit {
     # Check that the columns provided in the array are all valid 
     # Set array entries as local variables
     foreach name $names {
-        if { [lsearch -exact $columns $name] == -1 } {
+        if {$name ni $columns} {
             error "Attribute '$name' isn't valid for auth_authorities."
         }
         if {$name eq "authority_id"} {
@@ -361,7 +361,7 @@ ad_proc -public auth::authority::batch_sync {
                 if { $ack_file_name ne "" } {
                     # Interpolate
                     set pairs [list \
-                                   acs_root_dir [acs_root_dir] \
+                                   acs_root_dir $::acs::rootdir \
                                    ansi_date [clock format [clock seconds] -format %Y-%m-%d] \
                                    authority $authority(short_name)]
                     foreach { var value } $pairs {

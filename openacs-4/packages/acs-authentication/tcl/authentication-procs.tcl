@@ -3,7 +3,7 @@ ad_library {
 
     @author Lars Pind (lars@collaobraid.biz)
     @creation-date 2003-05-13
-    @cvs-id $Id: authentication-procs.tcl,v 1.87.4.3 2013/09/30 18:26:48 gustafn Exp $
+    @cvs-id $Id: authentication-procs.tcl,v 1.87.4.6 2013/10/12 14:23:56 gustafn Exp $
 }
 
 namespace eval auth {}
@@ -767,10 +767,10 @@ ad_proc -public auth::get_registration_form_elements {
 
     array set element_info [auth::get_registration_elements]
 
-    if { [lsearch $element_info(required) password] != -1 } {
+    if {"password" in $element_info(required)} {
         lappend element_info(required) password_confirm
     }
-    if { [lsearch $element_info(optional) password] != -1 } {
+    if {"password" in $element_info(optional)} {
         lappend element_info(optional) password_confirm
     }
     
@@ -1427,7 +1427,7 @@ ad_proc -private auth::check_local_account_status {
             set PasswordExpirationDays [parameter::get -parameter PasswordExpirationDays -package_id [ad_acs_kernel_id] -default 0]
             
 
-            if { $email_verified_p eq "f" } {
+            if { $email_verified_p == "f" } {
                 if { !$no_dialogue_p } {
                     set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
                     
@@ -1439,7 +1439,7 @@ ad_proc -private auth::check_local_account_status {
                         set result(account_message) [_ acs-subsite.Error_sending_verification_mail]
                     }
                 }
-            } elseif { [string equal [acs_user::ScreenName] "require"] && $screen_name eq "" } {
+            } elseif { [acs_user::ScreenName] eq "require" && $screen_name eq "" } {
                 set message "Please enter a screen name now."
                 set result(account_url) [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { message return_url {edit_p 1} }]
             } elseif { $PasswordExpirationDays > 0 && \

@@ -14,9 +14,8 @@ foreach connvar $connvars {
 
 cmit::group::get \
   -group_id $group_id \
-    -array group
-set group_name    $group(group_name)
-set group_name [string toupper $group_name]
+    -array group -locale [lang::conn::browser_locale]
+set group_name [string toupper $group(group_name)]
 set thumbnail_id  $group(thumbnail_id)
 if {$thumbnail_id ne ""} {
     set thumbnail $group(thumbnail_url)

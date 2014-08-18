@@ -4,10 +4,10 @@ ad_page_contract {
 
     @author <a href="mailto:yon@openforce.net">yon@openforce.net</a>
     @creation-date 2002-05-21
-    @version $Id: index.vuh,v 1.5.8.1 2013/09/08 08:11:58 gustafn Exp $
+    @version $Id: index.vuh,v 1.5.8.2 2014/07/29 11:37:29 gustafn Exp $
 
 } -query {
-    {object_id:integer,optional}
+    {object_id:naturalnum,optional}
 }
 
 if {([info exists object_id] && $object_id ne "")} {

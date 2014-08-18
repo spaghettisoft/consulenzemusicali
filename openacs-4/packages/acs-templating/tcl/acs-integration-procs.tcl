@@ -5,7 +5,7 @@
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Christian Brechbuehler <christian@arsdigita.com
 
-# $Id: acs-integration-procs.tcl,v 1.20 2013/04/12 16:12:57 gustafn Exp $
+# $Id: acs-integration-procs.tcl,v 1.20.2.5 2013/10/21 06:21:24 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -53,11 +53,9 @@ ad_proc -public ad_parse_template {
     set template_params [list]
     foreach param $params {
         switch [llength $param] {
-            1 { lappend template_params "&"
-                lappend template_params [lindex $param 0]
+            1 { lappend template_params "&" [lindex $param 0]
               }
-            2 { lappend template_params [lindex $param 0]
-                lappend template_params [lindex $param 1]
+            2 { lappend template_params [lindex $param 0] [lindex $param 1]
               }
             default { return -code error [_ acs-templating.Template_parser_error_in_parameter_list] }
         }
@@ -88,18 +86,18 @@ ad_proc -public ad_return_exception_template {
 ad_proc -public get_server_root {} {
     Get the server root directory (supposing we run under ACS)
 } {
-    file dir $::acs::tcllib
+    return $::acs::rootdir
 }
 
 
 ad_proc adp_parse_ad_conn_file {} {
     handle a request for an adp and/or tcl file in the template system.
 } {
-    namespace eval template variable parse_level ""
-    #ns_log debug "adp_parse_ad_conn_file => file '[file root [ad_conn file]]'"
+    set ::template::parse_level ""
+    #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
     template::reset_request_vars
 
-    set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
+    set parsed_template [template::adp_parse [file rootname [ad_conn file]] {}]
 
     if {$parsed_template ne ""} {
         
@@ -124,9 +122,9 @@ ad_proc adp_parse_ad_conn_file {} {
                 if { [string first "</select" [string tolower $select]] != -1 } {
                     set start [lindex $indices 1]
                 } else {
-                    set before [string range $parsed_template 0 [expr {[lindex $indices 0]-1}]]
+                    set before [string range $parsed_template 0 [lindex $indices 0]-1]
                     set message [string range $parsed_template [lindex $message_idx 0] [lindex $message_idx 1]]
-                    set after [string range $parsed_template [expr {[lindex $indices 1] + 1}] end]
+                    set after [string range $parsed_template [lindex $indices 1]+1 end]
                     set parsed_template "${before}${message}${select}${after}"
                 }
             }
@@ -134,8 +132,8 @@ ad_proc adp_parse_ad_conn_file {} {
             # TODO: We could also move message keys out of <head>...</head>
 
             while { [regexp -indices {\x002\(\x001([^\x001]*)\x001\)\x002} $parsed_template indices key] } {
-                set before [string range $parsed_template 0 [expr {[lindex $indices 0] - 1}]]
-                set after [string range $parsed_template [expr {[lindex $indices 1] + 1}] end]
+                set before [string range $parsed_template 0 [lindex $indices 0]-1]
+                set after [string range $parsed_template [lindex $indices 1]+1 end]
 
                 set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
 

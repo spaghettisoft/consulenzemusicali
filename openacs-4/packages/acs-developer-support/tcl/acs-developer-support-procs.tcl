@@ -1,4 +1,4 @@
- # $Id: acs-developer-support-procs.tcl,v 1.52.2.9 2013/09/30 11:09:27 gustafn Exp $
+ # $Id: acs-developer-support-procs.tcl,v 1.52.2.14 2014/02/10 20:56:01 gustafn Exp $
  # File:        developer-support-procs.tcl
  # Author:      Jon Salz <jsalz@mit.edu>
  # Date:        22 Apr 2000
@@ -146,8 +146,8 @@
  } {
     Appends adp start box if the show toggle is true
  } {
-     template::adp_append_code "if { \[::ds_show_p\] } {"
-     template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \[::acs_root_dir\]\] end\].adp"
+     template::adp_append_code "if { \[info exists ::ds_show_p\] } {"
+     template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \$::acs::rootdir\] end\].adp"
      template::adp_append_code "    set __stub_path \[join \[split $stub /\] \" / \"\]"
      template::adp_append_code "    append __adp_output \"<div class=\\\"\[::ds_adp_box_class\]\\\"><span class=\\\"\[::ds_adp_file_class\]\\\"><a href=\\\"/api-doc/content-page-view?source_p=1&path=\$__apidoc_path\\\" style=\\\"text-decoration: none;\\\">\$__stub_path</a></span><div class=\\\"\[::ds_adp_output_class\]\\\">\""
      template::adp_append_code "}"
@@ -159,7 +159,7 @@
  } {
     Appends adp end box if the show toggle is true
  } {
-     template::adp_append_code "if { \[::ds_show_p\] } {"
+     template::adp_append_code "if { \[info exists ::ds_show_p\] } {"
      template::adp_append_code "    append __adp_output \"</div></div><!-- END\n$stub (lvl \[info level\])-->\""
      template::adp_append_code "}"
  }
@@ -203,13 +203,13 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request $::ad_conn(request).db] {
-                 incr total [expr { $end - $start }]
-                 if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+                 set total [expr { $total + ($end - $start) }]
+                 if { [lindex $command 0] in { dml exec 1row 0or1row select } } {
                      incr counter
                  }
              }
              if { $counter > 0 } {
-                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format {%.f} [expr { $total }]] ms<br>"
+                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format {%.f} $total] ms<br>"
              }
          }
 
@@ -277,8 +277,8 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request $::ad_conn(request).db] {
-                 incr total [expr { $end - $start }]
-                 if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+                 set total [expr { $total + ($end - $start) }]
+                 if { [lindex $command 0] in { dml exec 1row 0or1row select } } {
                      incr counter
                  }
              }
@@ -343,7 +343,7 @@
              }
          }
 
-         ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks -milliseconds] $errno $error
+         ds_add db $db $command $statement_name $bound_sql $start_time [expr {[clock clicks -microseconds]/1000.0}] $errno $error
      }
  }
 
@@ -404,7 +404,7 @@
 
  ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
-         ds_add conn end [ns_time] endclicks [clock clicks -milliseconds]
+         ds_add conn end [ns_time] endclicks [clock clicks -microseconds]
 
          for { set i 0 } { $i < [ns_set size [ad_conn outputheaders]] } { incr i } {
              ds_add oheaders [ns_set key [ad_conn outputheaders] $i] [ns_set value [ad_conn outputheaders] $i]
@@ -677,5 +677,27 @@ ad_proc -public ds_profile { command {tag {}} } {
         default {
             error "Invalid command. Valid commands are 'start', 'stop', and 'log'."
         }
+    }
+}
+
+ad_proc -public ds_init { } {
+
+    Perform setup for the developer support for a single request.  We
+    save the state in global variables to avoid highly redundant
+    computations (up to 50 times per page on openacs.org)
+
+} {
+    #ns_log notice "ds_init called [::ds_enabled_p]"
+
+    if {[::ds_enabled_p] } {
+	#
+	# Save current setup for developer support in global
+	# variables, which are deleted automatically after every
+	# request.
+	#
+	set ::ds_enabled_p 1
+	if {[::ds_collection_enabled_p] } {set ::ds_collection_enabled_p 1}
+	if {[::ds_profiling_enabled_p] } {set ::ds_profiling_enabled_p 1}
+	if {[::ds_show_p]} {set ::ds_show_p 1}
     }
 }

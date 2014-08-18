@@ -26,9 +26,8 @@ ad_proc api_page_documentation_mode_p { } {
     @see doc_set_page_documentation_mode
 
 } {
-    global ad_conn
-    if { [info exists ad_conn(api_page_documentation_mode_p)] } {
-	return $ad_conn(api_page_documentation_mode_p)
+    if { [info exists ::ad_conn(api_page_documentation_mode_p)] } {
+	return $::ad_conn(api_page_documentation_mode_p)
     }
     return 0
 }
@@ -42,8 +41,7 @@ ad_proc doc_set_page_documentation_mode { page_documentation_mode_p } {
         or false to clear it.
     @see api_page_documentation_mode_p
 } {
-    global ad_conn
-    set ad_conn(api_page_documentation_mode_p) $page_documentation_mode_p
+    set ::ad_conn(api_page_documentation_mode_p) $page_documentation_mode_p
 }
 
 #################### 
@@ -66,9 +64,8 @@ ad_proc -private ad_complaints_init {} {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_complaints ad_page_contract_errorkeys
-    set ad_page_contract_complaints [list]
-    set ad_page_contract_errorkeys [list]
+    set ::ad_page_contract_complaints [list]
+    set ::ad_page_contract_errorkeys [list]
 }
 
 ad_proc -public ad_complain { 
@@ -88,18 +85,16 @@ ad_proc -public ad_complain {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_complaints ad_page_contract_errorkeys ad_page_contract_error_string
-
     # if no key was specified, grab one from the internally kept stack
-    if { $key eq "" && [info exists ad_page_contract_errorkeys] } {
-	set key [lindex $ad_page_contract_errorkeys 0]
+    if { $key eq "" && [info exists ::ad_page_contract_errorkeys] } {
+	set key [lindex $::ad_page_contract_errorkeys 0]
     }
-    if { [info exists ad_page_contract_error_string($key)] } {
-	lappend ad_page_contract_complaints $ad_page_contract_error_string($key)
+    if { [info exists ::ad_page_contract_error_string($key)] } {
+	lappend ::ad_page_contract_complaints $::ad_page_contract_error_string($key)
     } elseif { $message eq "" } {
-	lappend ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
+	lappend ::ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
     } else {
-	lappend ad_page_contract_complaints $message
+	lappend ::ad_page_contract_complaints $message
     }
 }
 
@@ -111,10 +106,9 @@ ad_proc -private ad_complaints_with_key { errorkey code } {
     @author Lars Pind
     @creation-date 25 July 2000
 } {
-    global ad_page_contract_errorkeys
-    set ad_page_contract_errorkeys [concat $errorkey $ad_page_contract_errorkeys]
+    set ::ad_page_contract_errorkeys [concat $errorkey $::ad_page_contract_errorkeys]
     uplevel 1 $code
-    set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
+    set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
 }
 
 ad_proc -private ad_complaints_count {} {
@@ -123,8 +117,7 @@ ad_proc -private ad_complaints_count {} {
     @author Lars Pind
     @creation-date 25 July 2000
 } {
-    global ad_page_contract_complaints
-    return [llength $ad_page_contract_complaints]
+    return [llength $::ad_page_contract_complaints]
 }
 
 ad_proc -private ad_complaints_get_list {} {
@@ -133,8 +126,7 @@ ad_proc -private ad_complaints_get_list {} {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_complaints
-    return $ad_page_contract_complaints
+    return $::ad_page_contract_complaints
 }
 
 ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
@@ -144,8 +136,7 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    global ad_page_contract_error_string
-    array set ad_page_contract_error_string [list]
+    array set ::ad_page_contract_error_string [list]
 
     foreach { errorkeys text } $errorstrings {
 	foreach errorkey $errorkeys {
@@ -156,13 +147,13 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
 	    set name [lindex $errorkeyv 0]
 	    set flags [lindex $errorkeyv 1]
 	    if { $flags eq "" } {
-		set ad_page_contract_error_string($name) $text
+		set ::ad_page_contract_error_string($name) $text
 	    } else {
 		foreach flag [split $flags ","] {
 		    if { $flag ne "" } {
-			set ad_page_contract_error_string($name:$flag) $text
+			set ::ad_page_contract_error_string($name:$flag) $text
 		    } else {
-			set ad_page_contract_error_string($name) $text
+			set ::ad_page_contract_error_string($name) $text
 		    }
 		}
 	    }
@@ -190,8 +181,7 @@ ad_proc -private ad_page_contract_set_validation_passed { key } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_validations_passed
-    set ad_page_contract_validations_passed($key) 1
+    set ::ad_page_contract_validations_passed($key) 1
 }
 
 ad_proc -private ad_page_contract_get_validation_passed_p { key } { 
@@ -202,8 +192,7 @@ ad_proc -private ad_page_contract_get_validation_passed_p { key } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_validations_passed
-    return [info exists ad_page_contract_validations_passed($key)]
+    return [info exists ::ad_page_contract_validations_passed($key)]
 }
 
 ####################
@@ -792,7 +781,7 @@ ad_proc -public ad_page_contract {
 		    return -code error "[_ acs-tcl.lt_The_-requires_element_1]"
 		}
 		set req_filter [lindex $parts_v 1]
-		if { $req_filter eq "array" || $req_filter eq "multiple" } {
+		if { $req_filter in {array multiple} } {
 		    return -code error "You can't require \"$req_name:$req_filter\" for block \"$name\"."
 		}
 	    }
@@ -892,7 +881,9 @@ ad_proc -public ad_page_contract {
             }
         }
         
-        if { [info exists apc_internal_filter($formal_name:multiple)] && $actual_value eq "" } {
+        if { [info exists apc_internal_filter($formal_name:multiple)] 
+	     && $actual_value eq "" 
+	 } {
             # LARS:
             # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
             # which is not what we want
@@ -920,21 +911,20 @@ ad_proc -public ad_page_contract {
                 ad_page_contract_set_validation_passed $formal_name:notnull
             }
         } else {
-            global ad_page_contract_errorkeys ad_page_contract_validations_passed
-            set ad_page_contract_validations_passed($formal_name:notnull) 1
+            set ::ad_page_contract_validations_passed($formal_name:notnull) 1
             
             foreach filter $apc_filters($formal_name) {
-                set ad_page_contract_errorkeys [concat $formal_name:$filter $ad_page_contract_errorkeys]
+                set ::ad_page_contract_errorkeys [concat $formal_name:$filter $::ad_page_contract_errorkeys]
                 if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
                     set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value]
                 } else {
                     set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value \
                                          $apc_filter_parameters($formal_name:$filter)]
                 }
-                set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
+                set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
                 
                 if { $filter_ok_p } {
-                    set ad_page_contract_validations_passed($formal_name:$filter) 1
+                    set ::ad_page_contract_validations_passed($formal_name:$filter) 1
                 } else {
                     break
                 }
@@ -977,7 +967,11 @@ ad_proc -public ad_page_contract {
 	upvar 1 $formal_name var
 
 	if { [info exists apc_internal_filter($formal_name:cached)] } {
-	    if { ![ad_page_contract_get_validation_passed_p $formal_name] && ![info exists apc_internal_filter($formal_name:notnull)] && (![info exists apc_default_value($formal_name)] || $apc_default_value($formal_name) eq "") } {
+	    if { ![ad_page_contract_get_validation_passed_p $formal_name] 
+		 && ![info exists apc_internal_filter($formal_name:notnull)] 
+		 && (![info exists apc_default_value($formal_name)] 
+		     || $apc_default_value($formal_name) eq "") 
+	     } {
 		if { [info exists apc_internal_filter($formal_name:array)] } {
 		    # This is an array variable, so we need to loop through each name.* variable for this package we have ...
 		    set array_list ""
@@ -1003,15 +997,17 @@ ad_proc -public ad_page_contract {
 	    if { [info exists apc_internal_filter($formal_name:verify)] } {
 		if { ![info exists apc_internal_filter($formal_name:array)] } {
  		    # This is not an array, verify the variable
-		    if { ![info exists apc_signatures($formal_name)] || \
-			    ![ad_verify_signature $var $apc_signatures($formal_name)] } {
+		    if { ![info exists apc_signatures($formal_name)] 
+			 || ![ad_verify_signature $var $apc_signatures($formal_name)] 
+		    } {
 			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
 		    }
 		} else {
 		    # This is an array: verify the [array get] form of the array
-		    if { ![info exists apc_signatures($formal_name)] || \
-			    ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] } {
+		    if { ![info exists apc_signatures($formal_name)] 
+			 || ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] 
+		    } {
 			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
 		    }
@@ -1067,7 +1063,6 @@ ad_proc -public ad_page_contract {
     ####################
 
     set done_p 0
-    global ad_page_contract_validations_passed ad_page_contract_errorkeys
     while { !$done_p } {
 
 	set done_p 1
@@ -1076,11 +1071,25 @@ ad_proc -public ad_page_contract {
 	    set code [lindex $apc_validation_blocks($validation_name) 1]
 
 	    set dependencies_met_p 1
+	    #
+	    # Check, of the variables of the dependencies were provided.
+	    #
 	    foreach dependency $dependencies {
-		if { ![info exists ad_page_contract_validations_passed($dependency)] } {
+		set varName [lindex [split $dependency ":"] 0]
+		if { ![ad_page_contract_get_validation_passed_p $varName] } {
+		    # var $varName was not provided
 		    set dependencies_met_p 0
 		    break
 		}
+	    }
+
+	    #
+	    # Check, whether the earlier section haven't returned
+	    # errors, in which case the detailed validation is not
+	    # necessary.
+	    #
+	    if { $dependencies_met_p && [ad_complaints_count] > 0} {
+		set dependencies_met_p 0
 	    }
 
 	    if { $dependencies_met_p } {
@@ -1091,17 +1100,18 @@ ad_proc -public ad_page_contract {
 		set no_complaints_before [ad_complaints_count]
 
 		# Execute the validation block with an environment with a default error key set
-		set ad_page_contract_errorkeys [concat $validation_name $ad_page_contract_errorkeys]
+		set ::ad_page_contract_errorkeys [concat $validation_name $::ad_page_contract_errorkeys]
 		set validation_ok_p [ad_page_contract_eval uplevel 1 $code]
-		set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
+		set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
 
-		if { $validation_ok_p eq "" || \
-			($validation_ok_p ne "1" && $validation_ok_p ne "0" )} {
+		if { $validation_ok_p eq "" 
+		     || ($validation_ok_p ne "1" && $validation_ok_p ne "0" )
+		 } {
 		    set validation_ok_p [expr {[ad_complaints_count] == $no_complaints_before}]
 		}
 		
 		if { $validation_ok_p } {
-		    set ad_page_contract_validations_passed($validation_name) 1
+		    set ::ad_page_contract_validations_passed($validation_name) 1
 		    # more stuff to process still
 		    set done_p 0
 		}
@@ -1117,8 +1127,7 @@ ad_proc -public ad_page_contract {
     ####################
 
     # Initialize the list of page variables for other scripts to use
-    global ad_page_contract_variables
-    set ad_page_contract_variables $apc_formals
+    set ::ad_page_contract_variables $apc_formals
 
     if { [ad_complaints_count] > 0 } {
 	if { [info exists return_errors] } {
@@ -1135,7 +1144,10 @@ ad_proc -public ad_page_contract {
     }
 
     # Set the __submit_button_variable. This is used in double click protection.
-    if {[info exists __submit_button_name] && $__submit_button_name ne "" && [info exists __submit_button_value]} {
+    if {[info exists __submit_button_name] 
+	&& $__submit_button_name ne "" 
+	&& [info exists __submit_button_value]
+    } {
 	uplevel 1 [list set $__submit_button_name $__submit_button_value]
     }
 
@@ -1147,9 +1159,8 @@ ad_proc -public ad_page_contract_get_variables { } {
     ad_page_contract. If no variables have been specified, returns an
     empty list.  
 } {
-    global ad_page_contract_variables
-    if { [info exists ad_page_contract_variables] && $ad_page_contract_variables ne "" } {
-	return $ad_page_contract_variables
+    if { [info exists ::ad_page_contract_variables] && $::ad_page_contract_variables ne "" } {
+	return $::ad_page_contract_variables
     } 
     return [list]
 }
@@ -1494,15 +1505,17 @@ ad_page_contract_filter integer { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-  # first simple a quick check avoiding the slow regexp
-  if {[string is integer $value]} {
+
+  # First simple a quick check avoiding the slow regexp
+  if {[string is integer -strict $value]} {
     return 1
   }
+
   if { [regexp {^(-)?(0*)([1-9][0-9]*|0)$} $value match sign zeros value] } {
     # Trim the value for any leading zeros
     set value $sign$value
     # the string might be still to large, so check again...
-    if {[string is integer $value]} {
+    if {[string is integer -strict $value]} {
       return 1
     }
   }
@@ -1517,13 +1530,21 @@ ad_page_contract_filter naturalnum { name value } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
+
+    # First a simple quick check to avoid the slow regexp
+    if {[string is integer -strict $value] && $value >= 0} {
+	return 1
+    }
+
+    # Check with leading zeros, but no "-" allowed, so it must be positive
     if { [regexp {^(0*)([1-9][0-9]*|0)$} $value match zeros value] } {
-      if {[string is integer $value]} {
+      if {[string is integer -strict $value]} {
 	return 1
       }
     }
-  ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
-  return 0
+
+    ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
+    return 0
 }
 
 ad_page_contract_filter range { name value range } {
@@ -1657,18 +1678,18 @@ ad_page_contract_filter -type post date { name date } {
     }
 
     if {
-	"" eq $date(month) \
-	    || "" eq $date(day) \
-	    || "" eq $date(year) \
-	    || $date(month) < 1 || $date(month) > 12 \
-	    || $date(day) < 1 || $date(day) > 31 \
-	    || $date(year) < 1 \
-	    || ($date(month) == 2 && $date(day) > 29) \
-	    || (($date(year) % 4) != 0 && $date(month) == 2 && $date(day) > 28) \
-	    || ($date(month) == 4 && $date(day) > 30) \
-	    || ($date(month) == 6 && $date(day) > 30) \
-	    || ($date(month) == 9 && $date(day) > 30) \
-	    || ($date(month) == 11 && $date(day) > 30)
+	"" eq $date(month) 
+	|| "" eq $date(day) 
+	|| "" eq $date(year) 
+	|| $date(month) < 1 || $date(month) > 12 
+	|| $date(day) < 1 || $date(day) > 31
+	|| $date(year) < 1 
+	|| ($date(month) == 2 && $date(day) > 29) 
+	|| (($date(year) % 4) != 0 && $date(month) == 2 && $date(day) > 28) 
+	|| ($date(month) == 4 && $date(day) > 30) 
+	|| ($date(month) == 6 && $date(day) > 30) 
+	|| ($date(month) == 9 && $date(day) > 30) 
+	|| ($date(month) == 11 && $date(day) > 30)
     } {
 	ad_complain "[_ acs-tcl.lt_Invalid_date_datemont]"
 	return 0
@@ -1709,13 +1730,13 @@ ad_page_contract_filter -type post time { name time } {
     }
 
     if {
-	"" eq $time(hours) \
-	    || "" eq $time(minutes) \
-	    || "" eq $time(seconds) \
-	    || (![string equal -nocase "pm" $time(ampm)] && ![string equal -nocase "am" $time(ampm)])
-	    || $time(hours) < 1 || $time(hours) > 12 \
-	    || $time(minutes) < 0 || $time(minutes) > 59 \
-	    || $time(seconds) < 0 || $time(seconds) > 59
+	"" eq $time(hours) 
+	|| "" eq $time(minutes) 
+	|| "" eq $time(seconds) 
+	|| (![string equal -nocase "pm" $time(ampm)] && ![string equal -nocase "am" $time(ampm)])
+	|| $time(hours) < 1 || $time(hours) > 12 
+	|| $time(minutes) < 0 || $time(minutes) > 59 
+	|| $time(seconds) < 0 || $time(seconds) > 59
     } {
 	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime_1]"
 	return 0
@@ -1947,22 +1968,20 @@ ad_page_contract_filter boolean { name value } {
     @creation-date 23 August 2000
 } {
 
-    set lcase_value [string tolower $value]
-    if {[string match $value "0"] || \
-	    [string match $value "1"] || \
-	    [string match $lcase_value "f"] || \
-	    [string match $lcase_value "t"] || \
-	    [string match $lcase_value "true"] || \
-	    [string match $lcase_value "false"] || \
-	    [string match $lcase_value "y"] || \
-	    [string match $lcase_value "n"] || \
-	    [string match $lcase_value "yes"] || \
-	    [string match $lcase_value "no"] } {
+    if {[string is boolean -strict $value]} {
 	return 1
-    } else {
-	ad_complain "[_ acs-tcl.lt_name_does_not_appear__2]"
-	return 0
     }
+    # set lcase_value [string tolower $value]
+    # if {$value eq "0" || $value eq "1" 
+    # 	|| $lcase_value eq "f" || $lcase_value eq "t" 
+    # 	|| $lcase_value eq "y" || $lcase_value eq "n" ||
+    # 	|| $lcase_value eq "true" || $lcase_value eq "false"
+    # 	|| $lcase_value eq "yes"  || $lcase_value eq "no" 
+    # } {
+    # 	return 1
+    # } 
+    ad_complain "[_ acs-tcl.lt_name_does_not_appear__2]"
+    return 0
 }
 
 

@@ -56,10 +56,10 @@ ad_page_contract {
           Lee Denison (lee@xarg.co.uk)
   @creation-date 14 Sept 2000
 
-  $Id: blank-master.tcl,v 1.4 2008/01/11 00:36:18 hamiltonc Exp $
+  $Id: blank-master.tcl,v 1.4.2.1 2013/10/16 10:43:27 gustafn Exp $
 }
 
-if {[template::util::is_nil doc(type)]} { 
+if {![info exists doc(type)]} { 
     set doc(type) {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">}
 }
 
@@ -67,7 +67,7 @@ if {![info exists doc(title)]} {
     set doc(title) "[ad_conn instance_name]"
     ns_log warning "[ad_conn url] has no doc(title) set."
 }
-if {[template::util::is_nil doc(charset)]} {
+if {![info exists doc(charset)]} {
     set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
 }
 

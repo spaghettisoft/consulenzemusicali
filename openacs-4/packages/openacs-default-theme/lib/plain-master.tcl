@@ -13,7 +13,7 @@ ad_page_contract {
   @author Lee Denison (lee@xarg.co.uk)
   @author Don Baccus (dhogaza@pacifier.com)
 
-  $Id: plain-master.tcl,v 1.4 2009/02/23 20:53:37 jeffd Exp $
+  $Id: plain-master.tcl,v 1.4.8.2 2013/10/16 10:01:24 gustafn Exp $
 }
 
 if { ![info exists main_content_p] } {
@@ -32,7 +32,7 @@ if {[ad_conn url] eq "/"} {
     set system_url [ad_url]
 }
 
-if {[template::util::is_nil title]} {
+if {![info exists title]} {
     # TODO: decide how best to set the lang attribute for the title
     set title [ad_conn instance_name]
 }
@@ -47,7 +47,7 @@ if { [template::multirow exists navigation] } {
     }
     for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
         template::multirow get navigation $i
-        if { [lsearch -exact $navigation_groups $navigation(group)] < 0} {
+        if {$navigation(group) ni $navigation_groups} {
             lappend navigation_groups $navigation(group)
         }
     }

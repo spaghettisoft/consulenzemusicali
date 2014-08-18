@@ -3,7 +3,7 @@
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 
-# $Id: filter-procs.tcl,v 1.15 2007/01/10 21:22:12 gustafn Exp $
+# $Id: filter-procs.tcl,v 1.15.10.3 2013/10/16 19:56:14 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -27,7 +27,7 @@ ad_proc -public template::forward { url args } {
 
     set cache_p [lindex $args 0]
 
-    if {$cache_p eq "t"} {
+    if {$cache_p == "t"} {
         set persistent_p [lindex $args 1]
 	set excluded_vars [lindex $args 2]
 
@@ -76,7 +76,7 @@ ad_proc -public cmp_page_filter { why } {
         set url [ns_conn url]
         regsub {.cmp} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set file_stub "[acs_root_dir]/packages/$package_key/www$rest"
+        set file_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
         set beginTime [clock clicks -milliseconds]
 
@@ -102,7 +102,7 @@ ad_proc -public dat_page_filter { why } {
         set url [ns_conn url]
         regsub {.dat} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set code_stub "[acs_root_dir]/packages/$package_key/www$rest"
+        set code_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
         set beginTime [clock clicks -milliseconds]
 
@@ -136,11 +136,10 @@ namespace eval template {
         set url [ns_conn url]
         regsub {.frm} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set __adp_stub "[acs_root_dir]/packages/$package_key/www$rest"
+        set __adp_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
         # Set the parse level
-        variable parse_level
-        lappend parse_level [info level]
+        lappend ::templating::parse_level [info level]
 
         # execute the code to prepare the form(s) for a template
         adp_prepare

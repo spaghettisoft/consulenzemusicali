@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Hiro Iwashima <iwashima@mit.edu>
     @creation-date 23 Aug 2000
-    @cvs-id $Id: send-email.tcl,v 1.4 2009/07/12 01:08:22 donb Exp $
+    @cvs-id $Id: send-email.tcl,v 1.4.6.1 2013/10/11 11:43:46 gustafn Exp $
 } {
     email
     email_from
@@ -29,7 +29,7 @@ if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $em
     ad_script_abort
 }
 
-if { $show_sent_message_p ne "t" } {
+if { $show_sent_message_p != "t" } {
     # Do not show any message. Just go to return url
     ad_returnredirect $return_url
     ad_script_abort

@@ -3,7 +3,7 @@
 #
 # @author Peter Marklund (peter@collaboraid.biz)
 # @author Lars Pind (lars@collaboraid.biz)
-# @cvs-id $Id: message-usage-include.tcl,v 1.5 2007/01/10 21:22:04 gustafn Exp $
+# @cvs-id $Id: message-usage-include.tcl,v 1.5.10.2 2013/10/17 08:37:12 gustafn Exp $
 
 set full_key "$package_key.$message_key"
 
@@ -18,9 +18,9 @@ if { [string match "acs-lang.localization-*" $full_key] } {
 multirow create message_usage file code
 
 with_catch errmsg {
-    exec find [acs_root_dir] -type f -regex ".*\\.\\(info\\|adp\\|sql\\|tcl\\)" -follow | xargs egrep "$grepfor" 2>/dev/null
+    exec find $::acs::rootdir -type f -regex ".*\\.\\(info\\|adp\\|sql\\|tcl\\)" -follow | xargs egrep "$grepfor" 2>/dev/null
 } {
-    #error "find [acs_root_dir] -type f -regex \".*\\.\\(info\\|adp\\|sql\\|tcl\\)\" -follow | xargs egrep \"${full_key_pattern}\""
+    #error "find $::acs::rootdir -type f -regex \".*\\.\\(info\\|adp\\|sql\\|tcl\\)\" -follow | xargs egrep \"${full_key_pattern}\""
     global errorInfo
 
     foreach line [split $errmsg "\n"] {
@@ -28,8 +28,8 @@ with_catch errmsg {
             set colon [string first ":" $line]
             
             multirow append message_usage \
-                [string range $line 0 [expr {$colon-1}]] \
-                [string trim [string range $line [expr {$colon+1}] end]]
+                [string range $line 0 $colon-1] \
+                [string trim [string range $line $colon+1 end]]
         }
     }
 }

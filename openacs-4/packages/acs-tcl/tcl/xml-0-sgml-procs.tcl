@@ -33,7 +33,7 @@ ad_library {
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
-    @cvs-id $Id: xml-0-sgml-procs.tcl,v 1.3.10.3 2013/09/29 19:28:13 gustafn Exp $
+    @cvs-id $Id: xml-0-sgml-procs.tcl,v 1.3.10.6 2013/10/12 13:55:18 gustafn Exp $
 }
 
 package provide sgml 1.7
@@ -541,8 +541,9 @@ proc sgml::parseEvent {sgml args} {
 	    regsub -all &xml:intdtd\; $text \[$options(-internaldtd)\] text
 
 	    # Look for entity references
-	    if {([array size entities] || [string length $options(-entityreferencecommand)]) && \
-		[regexp {&[^;]+;} $text]} {
+	    if {([array size entities] || [string length $options(-entityreferencecommand)]) 
+                && [regexp {&[^;]+;} $text]
+            } {
 
 		# protect Tcl specials
 		regsub -all {([][$\\])} $text {\\\1} text
@@ -738,7 +739,7 @@ proc sgml::Entity {opts entityrefcmd pcdatacmd entities ref} {
     upvar 2 $opts options
     upvar #0 $options(-statevariable) state
 
-    if {![string length $entities]} {
+    if {$entities eq ""} {
 	set entities [namespace current]::EntityPredef
     }
 
@@ -993,7 +994,7 @@ proc sgml::CModelMakeSyntaxTree {state spec} {
     eval $spec
 
     # Peel off the outer seq, its redundant
-    return [lindex [lindex $var(stack) 1] 0]
+    return [lindex $var(stack) 1 0]
 }
 
 # sgml::CModelSTname --
@@ -1275,23 +1276,23 @@ proc sgml::CModelMakeTransitionTable {state st} {
 proc sgml::followpos {state st firstpos lastpos} {
     upvar #0 $state var
 
-    switch -- [lindex [lindex $st 1] 0] {
+    switch -- [lindex $st 1 0] {
 	:seq {
 	    for {set i 1} {$i < [llength [lindex $st 1]]} {incr i} {
-	    	followpos $state [lindex [lindex $st 1] $i]			\
-			[lindex [lindex $firstpos 0] $i-1]	\
-			[lindex [lindex $lastpos 0] $i-1]
-	    	foreach pos [lindex [lindex [lindex $lastpos 0] $i-1] 1] {
-		    lappend var($pos) {*}[lindex [lindex [lindex $firstpos 0] $i] 1]
+	    	followpos $state [lindex $st 1 $i]	\
+			[lindex $firstpos 0 $i-1]	\
+			[lindex $lastpos 0 $i-1]
+	    	foreach pos [lindex $lastpos 0 $i-1 1] {
+		    lappend var($pos) {*}[lindex $firstpos 0 $i 1]
 		    set var($pos) [makeSet $var($pos)]
 	    	}
 	    }
 	}
 	:choice {
 	    for {set i 1} {$i < [llength [lindex $st 1]]} {incr i} {
-		followpos $state [lindex [lindex $st 1] $i]			\
-			[lindex [lindex $firstpos 0] $i-1]	\
-			[lindex [lindex $lastpos 0] $i-1]
+		followpos $state [lindex $st 1 $i]	\
+			[lindex $firstpos 0 $i-1]	\
+			[lindex $lastpos 0 $i-1]
 	    }
 	}
 	default {
@@ -1335,11 +1336,11 @@ proc sgml::TraverseDepth1st {state t leaf nonTerm} {
     set firstpos {}
     set lastpos {}
 
-    switch -- [lindex [lindex $t 1] 0] {
+    switch -- [lindex $t 1 0] {
 	:seq -
 	:choice {
 	    set rep [lindex $t 0]
-	    set cs [lindex [lindex $t 1] 0]
+	    set cs [lindex $t 1 0]
 
 	    foreach child [lrange [lindex $t 1] 1 end] {
 		foreach {childNullable childFirstpos childLastpos} \
@@ -1353,8 +1354,8 @@ proc sgml::TraverseDepth1st {state t leaf nonTerm} {
 	}
 	default {
 	    incr var(number)
-	    set rep [lindex [lindex $t 0] 0]
-	    set name [lindex [lindex $t 1] 0]
+	    set rep [lindex $t 0 0]
+	    set name [lindex $t 1 0]
 	    eval $leaf
 	}
     }
@@ -1377,10 +1378,10 @@ proc sgml::TraverseDepth1st {state t leaf nonTerm} {
 proc sgml::firstpos {cs firstpos nullable} {
     switch -- $cs {
 	:seq {
-	    set result [lindex [lindex $firstpos 0] 1]
+	    set result [lindex $firstpos 0 1]
 	    for {set i 0} {$i < [llength $nullable]} {incr i} {
-	    	if {[lindex [lindex $nullable $i] 1]} {
-	    	    lappend result {*}[lindex [lindex $firstpos $i+1] 1]
+	    	if {[lindex $nullable $i 1]} {
+	    	    lappend result {*}[lindex $firstpos $i+1 1]
 		} else {
 		    break
 		}
@@ -1412,10 +1413,10 @@ proc sgml::firstpos {cs firstpos nullable} {
 proc sgml::lastpos {cs lastpos nullable} {
     switch -- $cs {
 	:seq {
-	    set result [lindex [lindex $lastpos end] 1]
+	    set result [lindex $lastpos end 1]
 	    for {set i [expr {[llength $nullable] - 1}]} {$i >= 0} {incr i -1} {
-		if {[lindex [lindex $nullable $i] 1]} {
-		    lappend result {*}[lindex [lindex $lastpos $i] 1]
+		if {[lindex $nullable $i 1]} {
+		    lappend result {*}[lindex $lastpos $i 1]
 		} else {
 		    break
 		}

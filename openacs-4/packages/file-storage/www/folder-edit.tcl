@@ -3,12 +3,12 @@ ad_page_contract {
 
     @author Andrew Grumet (aegrumet@alum.mit.edu)
     @creation-date 24 Jun 2002
-    @cvs-id $Id: folder-edit.tcl,v 1.4.6.1 2013/09/06 16:01:48 gustafn Exp $
+    @cvs-id $Id: folder-edit.tcl,v 1.4.6.3 2014/07/29 11:24:03 gustafn Exp $
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
 } -validate {
     valid_folder -requires {parent_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_folder_]"
 	}
     }

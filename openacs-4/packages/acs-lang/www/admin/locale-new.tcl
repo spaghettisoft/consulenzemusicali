@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author Bruno Mattarollo <bruno.mattarollo@ams.greenpeace.org>
     @creation-date 15 march 2002
-    @cvs-id $Id: locale-new.tcl,v 1.5 2010/01/08 17:39:58 emmar Exp $
+    @cvs-id $Id: locale-new.tcl,v 1.5.6.1 2013/10/26 09:35:44 gustafn Exp $
 }
 
 
@@ -114,7 +114,7 @@ if { [form is_valid locale_creation] } {
 
         # We first make sure that there is no default for this language
         set is_default_p [db_string select_default {}]
-        if { $is_default_p == "0" } {
+        if { $is_default_p == 0 } {
             # There is a no default for this language
             set default_p "t"
         }

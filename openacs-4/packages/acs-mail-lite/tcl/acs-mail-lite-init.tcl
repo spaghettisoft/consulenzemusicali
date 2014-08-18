@@ -4,7 +4,7 @@ ad_library {
 
     @author Eric Lorenzo (eric@openforce.net)
     @creation-date 22 March, 2002
-    @cvs-id $Id: acs-mail-lite-init.tcl,v 1.13 2010/03/16 12:10:27 emmar Exp $
+    @cvs-id $Id: acs-mail-lite-init.tcl,v 1.13.6.1 2013/12/02 08:14:30 gustafn Exp $
 
 }
 
@@ -28,9 +28,6 @@ nsv_set acs_mail_lite check_bounce_p 0
 
 
 # Redefine ns_sendmail as a wrapper for acs_mail_lite::send
-
-
-ns_log Notice "acs-mail-lite: renaming acs_mail_lite::sendmail to ns_sendmail"
-
-rename ns_sendmail _old_ns_sendmail
-rename acs_mail_lite::sendmail ns_sendmail
+#ns_log Notice "acs-mail-lite: renaming acs_mail_lite::sendmail to ns_sendmail"
+#rename ns_sendmail _old_ns_sendmail
+#rename acs_mail_lite::sendmail ns_sendmail

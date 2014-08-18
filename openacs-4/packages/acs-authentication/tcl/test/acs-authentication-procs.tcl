@@ -3,7 +3,7 @@ ad_library {
 
     @author Peter Marklund
     @creation-date 21 August 2003
-    @cvs-id $Id: acs-authentication-procs.tcl,v 1.42.8.1 2013/09/30 18:26:48 gustafn Exp $
+    @cvs-id $Id: acs-authentication-procs.tcl,v 1.42.8.3 2013/10/02 08:56:26 gustafn Exp $
 }
 
 aa_register_case \
@@ -659,7 +659,7 @@ aa_register_case  \
                 }
                 array unset retrieved_value $parameter
             }
-            aa_true "Only the right parameters were retrieved" [expr [llength [array names retrieved_value]] == 0]
+            aa_true "Only the right parameters were retrieved" [expr {[llength [array names retrieved_value]] == 0}]
         }
 }
 
@@ -681,7 +681,7 @@ aa_register_case  \
             aa_false "Param UseEmailForLoginP 0 -> false" [auth::UseEmailForLoginP]
 
             array set elms [auth::get_registration_elements]
-            aa_false "Registration elements do contain username" [expr [lsearch [concat $elms(required) $elms(optional)] "username"] == -1]
+            aa_false "Registration elements do contain username" [expr {"username" ni [concat $elms(required) $elms(optional)]}]
 
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
             aa_true "Param UseEmailForLoginP {} -> true" [auth::UseEmailForLoginP]
@@ -696,7 +696,7 @@ aa_register_case  \
 
             # GetElements
             array set elms [auth::get_registration_elements]
-            aa_true "Registration elements do NOT contain username" [expr {[lsearch [concat $elms(required) $elms(optional)] "username"] == -1}]
+            aa_true "Registration elements do NOT contain username" [expr {"username" ni [concat $elms(required) $elms(optional)]}]
             
             # Create a user with no username
             set email [string tolower "[ad_generate_random_string]@foobar.com"]

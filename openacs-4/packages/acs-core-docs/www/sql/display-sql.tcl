@@ -17,7 +17,7 @@ ad_page_contract {
 
     @author philg@mit.edu
     @creation-date 12/19/98
-    @cvs-id $Id: display-sql.tcl,v 1.5.10.1 2013/09/09 16:44:18 gustafn Exp $
+    @cvs-id $Id: display-sql.tcl,v 1.5.10.3 2013/12/02 07:11:08 gustafn Exp $
 } {
     url:notnull
     {package_key ""}
@@ -31,11 +31,11 @@ ad_page_contract {
 # for example
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
-    ad_return_error "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
+    ad_return_warning "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
     ad_script_abort
 }
 
-if {[exists_and_not_null package_key]} {
+if {$package_key ne ""} {
     set safe_p [regexp {/?(.*)} $url package_url]
 }
 
@@ -70,7 +70,7 @@ if {$db eq ""} {
     if { $safe_p && [llength $files] > 0 } {
         ns_returnfile 200 text/plain $files
     } else {
-        ad_return_error "Invalid file location" "Can only display files in package or doc directory."
+        ad_return_warning "Invalid file location" "Can only display files in package or doc directory."
     }
     ad_script_abort
 }

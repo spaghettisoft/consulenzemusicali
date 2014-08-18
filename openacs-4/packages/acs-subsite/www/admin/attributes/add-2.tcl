@@ -6,7 +6,7 @@ ad_page_contract {
 
     @author mbryzek@arsdigita.com
     @creation-date Tue Nov  7 12:14:42 2000
-    @cvs-id $Id: add-2.tcl,v 1.3.10.4 2013/09/09 16:44:19 gustafn Exp $
+    @cvs-id $Id: add-2.tcl,v 1.3.10.5 2013/10/10 21:00:46 gustafn Exp $
 
 } {
     object_type:notnull,trim
@@ -39,7 +39,7 @@ if { [attribute::exists_p $object_type $pretty_name] } {
 
 # Right now, we do not support multiple values for attributes
 set max_n_values 1
-if {$required_p eq "t"} {
+if {$required_p == "t"} {
     set min_n_values 1
 } else {
     set min_n_values 0

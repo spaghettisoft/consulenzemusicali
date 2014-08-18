@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 19 January 2001
     @author Eric Lorenzo (elorenzo@arsdigita.com)
-    @cvs-id $Id: set-operation-procs.tcl,v 1.3 2009/02/12 15:38:41 jeffd Exp $
+    @cvs-id $Id: set-operation-procs.tcl,v 1.3.8.1 2013/10/02 07:44:14 gustafn Exp $
 }
 
 
@@ -16,7 +16,7 @@ ad_library {
 ad_proc set_member? { s v } {
     <p>Tests whether or not $v is a member of set $s.</p>
 } {
-    if { [lsearch -exact $s $v] == -1 } {
+    if {$v ni $s} {
 	return 0
     } else {
 	return 1

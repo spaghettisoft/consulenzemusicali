@@ -4,7 +4,7 @@ ad_page_contract {
     @param orderyby The parameter to order everything in the page by.
     @param owned_by Display packages owned by whom.
     @author Jon Salz (jsalz@arsdigita.com)
-    @cvs-id $Id: index.tcl,v 1.24.8.3 2013/09/29 11:10:38 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.24.8.4 2013/10/11 11:43:46 gustafn Exp $
 } {
     { orderby "package_key" }
     { owned_by "everyone" }
@@ -94,8 +94,8 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     set package_url [export_vars -base version-view {version_id}]
     set maintained [ad_decode $distribution_uri "" "Locally" "Externally"]
     
-    if { $installed_p eq "t" } {
-		if { $enabled_p eq "t" } {
+    if { $installed_p == "t" } {
+		if { $enabled_p == "t" } {
 		    set status "Enabled"
 		} else {
 		    set status "Disabled"
@@ -108,7 +108,7 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     
     set file_link_list [list]
     lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
-    if { $installed_p eq "t" && $enabled_p eq "t" } {
+    if { $installed_p == "t" && $enabled_p == "t" } {
         if {!$performance_p} {
             lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
         } 

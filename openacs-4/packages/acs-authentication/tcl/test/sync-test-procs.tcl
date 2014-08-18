@@ -3,7 +3,7 @@ ad_library {
 
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 05 September 2003
-    @cvs-id $Id: sync-test-procs.tcl,v 1.19.10.1 2013/09/30 18:26:48 gustafn Exp $
+    @cvs-id $Id: sync-test-procs.tcl,v 1.19.10.2 2013/10/17 08:51:56 gustafn Exp $
 }
 
 aa_register_case -cats {api db} sync_start_end {
@@ -965,7 +965,7 @@ aa_register_case -cats {api smoke} sync_http_get_document {
 aa_register_case -cats {api web} sync_file_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
-    set path "[acs_root_dir]/www/SYSTEM/dbtest.tcl"
+    set path "$::acs::rootdir/www/SYSTEM/dbtest.tcl"
 
     aa_log "Getting path '$path'"
 

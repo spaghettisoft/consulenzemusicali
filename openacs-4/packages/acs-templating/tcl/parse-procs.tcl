@@ -11,7 +11,7 @@ ad_library {
   @author Karl Goldstein
   @author Stanislav Freidin
 
-  @cvs-id $Id: parse-procs.tcl,v 1.48.2.2 2013/09/29 18:35:20 gustafn Exp $
+  @cvs-id $Id: parse-procs.tcl,v 1.48.2.7 2013/10/14 06:02:38 gustafn Exp $
 }
 
 namespace eval template {}
@@ -50,13 +50,12 @@ ad_proc -public template::adp_include {
 } {
   # set the stack frame at which the template is being parsed so that
   # other procedures can reference variables cleanly
-  variable parse_level
-  lappend parse_level [expr {[info level] - $uplevel}]
+  lappend ::template::parse_level [expr {[info level] - $uplevel}]
 
   set __adp_out [template::adp_parse [template::util::url_to_file $src] $varlist]
 
   # pop off parse level
-  template::util::lpop parse_level
+  template::util::lpop ::template::parse_level
 
   return $__adp_out
 }
@@ -100,8 +99,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   
   # set the stack frame at which the template is being parsed so that
   # other procedures can reference variables cleanly
-  variable parse_level
-  lappend parse_level [info level]
+  lappend ::template::parse_level [info level]
   
   # execute the code to prepare the data sources for a template
   set return_code [catch { 
@@ -178,12 +176,11 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     return $__adp_output				; # empty in non-templated page
   } return_value]
 
-  global errorInfo errorCode
-  set s_errorInfo $errorInfo
-  set s_errorCode $errorCode
+  set s_errorInfo $::errorInfo
+  set s_errorCode $::errorCode
 
   # Always pop off the parse_level no matter how we exit
-  template::util::lpop parse_level
+  template::util::lpop ::template::parse_level
 
   switch $return_code {
     0 - 2 {
@@ -253,20 +250,12 @@ ad_proc -public template::adp_eval { coderef } {
 
     @return The output produced by the compiled template code.
 } {
-  upvar $coderef code
+  upvar $coderef code __adp_output output
+  lappend ::template::parse_level [expr {[info level]-1}]
 
-  eval "uplevel {
+  uplevel $code
 
-    variable ::template::parse_level
-    lappend ::template::parse_level \[info level\]
-
-    $code
-
-    template::util::lpop ::template::parse_level
-  }"
-
-  upvar __adp_output output
-
+  template::util::lpop ::template::parse_level
   return $output
 }
 
@@ -286,15 +275,14 @@ ad_proc -public template::adp_level { { up "" } } {
 } {
   set result ""
 
-  variable parse_level
   # when serving a page, this variable is always defined.
   # but we need to check it for the case of isolated compilation
 
-  if { [info exists parse_level] } {
+  if { [info exists ::template::parse_level] } {
     if {$up eq ""} {
-      set result [lindex $parse_level end]
+      set result [lindex $::template::parse_level end]
     } else {
-      set result [lindex $parse_level [llength $parse_level]-$up]
+      set result [lindex $::template::parse_level [llength $::template::parse_level]-$up]
     }
   }
 
@@ -305,8 +293,7 @@ ad_proc -public template::adp_level { { up "" } } {
 ad_proc -public template::adp_levels {} {
     @return all stack frame levels
 } {
-  variable parse_level
-  if { [info exists parse_level] } {return $parse_level}
+  if { [info exists ::template::parse_level] } {return $::template::parse_level}
   return ""
 }
 
@@ -334,11 +321,13 @@ ad_proc -private template::adp_prepare {} {
       code::tcl::$__adp_stub
 
       # propagate aborting
-      global request_aborted
-      if {[info exists request_aborted]} {
+      if {[info exists ::request_aborted]} {
 	ns_log warning "propagating abortion from $__adp_remember_stub.tcl\
-          (status [lindex $request_aborted 0]): '[lindex $request_aborted 1]')"
-	adp_abort
+          (status [lindex $::request_aborted 0]): '[lindex $::request_aborted 1]')"
+	unset ::request_aborted
+        ad_script_abort
+        #adp_abort
+        return 0
       }
      
       # if the file has changed than prepare again
@@ -387,9 +376,10 @@ ad_proc -private template::adp_init { type file_stub } {
   set pkg_id [apm_package_id_from_key acs-templating]
   set refresh_cache [parameter::get -package_id $pkg_id -parameter RefreshCache -default "as needed"]
 
-  if {$proc_name eq {} || $refresh_cache ne "never" } {
+  if {$proc_name eq "" || $refresh_cache ne "never" } {
     set mtime [file mtime $file_stub.$type]
-    if {$proc_name eq {} || $mtime != [$proc_name]
+    if {$proc_name eq "" 
+	|| $mtime != [$proc_name]
 	|| $refresh_cache eq "always"} {
 
       # either the procedure does not already exist or is not up-to-date
@@ -777,7 +767,7 @@ ad_proc -private template::current_tag {} {
 } {
   variable tag_stack
 
-  return [lindex [lindex $tag_stack end] 1]
+  return [lindex $tag_stack end 1]
 }
     
 ad_proc -private template::enclosing_tag { 
@@ -864,8 +854,8 @@ ad_proc -private template::get_attribute { tag params name { default "ERROR" } }
 } {
   set value [ns_set iget $params $name]
 
-  if {$value eq {}} {
-    if { [string equal $default {ERROR}] } {
+  if {$value eq ""} {
+    if { $default eq "ERROR" } {
       error "Missing [string toupper $name] property\
              in [string toupper $tag] tag"
     } else {

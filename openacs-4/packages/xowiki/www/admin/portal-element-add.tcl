@@ -3,7 +3,7 @@
 
   @author Gustaf Neumann (gustaf.neumann@wu-wien.ac.at)
   @creation-date Oct 23, 2005
-  @cvs-id $Id: portal-element-add.tcl,v 1.14 2012/09/13 16:05:33 victorg Exp $
+  @cvs-id $Id: portal-element-add.tcl,v 1.14.2.1 2014/02/11 11:58:20 gustafn Exp $
 
   @param object_type show objects of this class and its subclasses
 } -parameter {
@@ -31,7 +31,7 @@ if {$page eq ""} {
   # for the time being, we add the portlet on the first page (page 0)
   set portal_page_id [portal::get_page_id -portal_id $portal_id -sort_key 0]
   
-  if {[db_string check_unique_name_on_page {
+  if {[xo::dc get_value check_unique_name_on_page {
     select 1 from portal_element_map
     where page_id     = :portal_page_id 
     and   pretty_name = :page_title

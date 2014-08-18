@@ -3,7 +3,7 @@
 
   @author Gustaf Neumann (gustaf.neumann@wu-wien.ac.at)
   @creation-date Nov 16, 2006
-  @cvs-id $Id: set-publish-state.tcl,v 1.9 2012/09/13 16:05:33 victorg Exp $
+  @cvs-id $Id: set-publish-state.tcl,v 1.9.2.1 2014/02/11 11:58:20 gustafn Exp $
 
   @param object_type 
   @param query
@@ -13,7 +13,7 @@
   {-return_url "."}
 }
 
-set item_id [db_string get_item_id \
+set item_id [xo::dc get_value get_item_id \
     {select item_id from cr_revisions where revision_id = :revision_id}]
 
 ns_cache flush xotcl_object_cache ::$item_id

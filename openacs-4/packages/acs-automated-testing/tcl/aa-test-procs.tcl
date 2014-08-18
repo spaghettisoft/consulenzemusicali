@@ -16,7 +16,7 @@ ad_library {
     
     @author Peter Harper (peter.harper@open-msg.com)
     @creation-date 21 June 2001
-    @cvs-id $Id: aa-test-procs.tcl,v 1.38.6.1 2013/08/27 11:50:27 gustafn Exp $
+    @cvs-id $Id: aa-test-procs.tcl,v 1.38.6.3 2013/10/17 08:54:59 gustafn Exp $
 }
 
 # LARS: We do this here, because if we do it in the -init file, then we cannot register 
@@ -56,7 +56,7 @@ ad_proc -public aa_stub {
         # If a stub for this procedure hasn't already been defined, take a copy
         # of the original procedure and add it to the aa_stub_names list.
         #
-        if {[lsearch -exact $aa_stub_names $proc_name] == -1} {
+        if {$proc_name ni $aa_stub_names} {
             lappend aa_stub_names $proc_name
             proc ${proc_name}_unstubbed [info args $proc_name] [info body $proc_name]
         }
@@ -144,7 +144,7 @@ ad_proc -public aa_register_init_class {
     #
     # Work out the package key
     #
-    set package_root [file join [acs_root_dir] packages]
+    set package_root [file join $::acs::rootdir packages]
     set package_rel [string replace [info script] \
                          0 [string length $package_root]]
     if {![info exists package_key]} {
@@ -215,7 +215,7 @@ ad_proc -public aa_register_component {
     #
     # Work out the package key
     #
-    set package_root [file join [acs_root_dir] packages]
+    set package_root [file join $::acs::rootdir packages]
     set package_rel [string replace [info script] \
                          0 [string length $package_root]]
     set package_key [lindex [file split $package_rel] 0]
@@ -339,14 +339,14 @@ ad_proc -public aa_register_case {
     set case_error ""
 
     set allowed_error_levels { notice warning metatest error }
-    if { [lsearch $allowed_error_levels $error_level] == -1 } {
+    if {$error_level ni $allowed_error_levels} {
         set error_level metatest
         append case_error "error_level must be one of following: $allowed_error_levels.\n\n"
     }
 
     set allowed_categories [nsv_get aa_test categories]
     foreach cat $cats {
-        if { [lsearch $allowed_categories $cat] == -1 } {
+        if {$cat ni $allowed_categories} {
             set error_level metatest
             append case_error "cats must contain only the following: $allowed_categories. You had a '$cat' in there.\n\n"
         }
@@ -355,7 +355,7 @@ ad_proc -public aa_register_case {
     #
     # Work out the package_key.
     #
-    set package_root [file join [acs_root_dir] packages]
+    set package_root [file join $::acs::rootdir packages]
     set package_rel [string replace [info script] \
                          0 [string length $package_root]]
     set package_key [lindex [file split $package_rel] 0]
@@ -517,8 +517,8 @@ ad_proc -public aa_runseries {
     {-security_risk 0}
     -quiet:boolean
     {-testcase_id ""}
-    by_package_key
-    by_category
+    {by_package_key ""}
+    {by_category ""}
 } {
     Runs a series of testcases.
 
@@ -559,22 +559,22 @@ ad_proc -public aa_runseries {
             # try to disqualify the test case
 
             # if category is specified, 
-            if { [exists_and_not_null by_package_key] && $by_package_key != $package_key } {
+            if { $by_package_key ne "" && $by_package_key ne $package_key } {
                 continue
             }
 
             # is it the wrong category?
-            if { [exists_and_not_null by_category] && [lsearch $categories $by_category] < 0 } {
+            if { $by_category ne "" && $by_category ni $categories } {
                 continue
             }
 
             # if we don't want stress, then the test must not be stress
-            if { ! $stress && [lsearch $categories "stress"] >= 0 } {
+            if { ! $stress && "stress" in $categories "stress" } {
                 continue
             }
             
             # if we don't want security risks, then the test must not be stress
-            if { ! $security_risk && [lsearch $categories "security_risk"] >= 0 } {
+            if { ! $security_risk && "security_risk" in $categories } {
                 continue
             }
             

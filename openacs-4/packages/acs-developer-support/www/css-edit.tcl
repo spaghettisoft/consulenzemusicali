@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2007-09-29
-    @cvs-id $Id: css-edit.tcl,v 1.2 2010/12/05 13:45:21 jeffd Exp $
+    @cvs-id $Id: css-edit.tcl,v 1.2.2.1 2013/10/26 09:34:14 gustafn Exp $
 } {
     {file_location}
     {css_location}
@@ -41,7 +41,7 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	if {$item_id ne ""} {
 	    append revision_html "<ol>"
 	    db_foreach revision {select revision_id, publish_date, description from cr_revisions where item_id = :item_id order by publish_date desc} {
-		if { [content::revision::is_live -revision_id $revision_id] eq "t" } {
+		if { [content::revision::is_live -revision_id $revision_id] == "t" } {
 		    set make_live "<strong>that's live!</strong>"
 		} else {
 		    set return_url_2 [ad_return_url]

@@ -4,7 +4,7 @@ ad_library {
     
     @author Eric Lorenzo (eric@openforce.net)
     @creation-date 22 March 2002
-    @cvs-id $Id: acs-mail-lite-procs.tcl,v 1.90.2.1 2013/08/28 22:53:44 michaels Exp $
+    @cvs-id $Id: acs-mail-lite-procs.tcl,v 1.90.2.3 2013/12/02 08:14:30 gustafn Exp $
 
 }
 
@@ -401,7 +401,7 @@ namespace eval acs_mail_lite {
         }
 
         # Set the message_id
-        set message_id "[mime::uniqueID]"
+        set message_id [mime::uniqueID]
 
         # Set the date
         set message_date [acs_mail_lite::utils::build_date]
@@ -410,7 +410,7 @@ namespace eval acs_mail_lite {
         set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type -- $body]
 
         # Add attachments if any
-        if {[exists_and_not_null file_ids]} {
+        if {$file_ids ne ""} {
             set item_ids [list]
             
             # Check if we are dealing with revisions or items.
@@ -425,13 +425,13 @@ namespace eval acs_mail_lite {
 
             db_foreach get_file_info {} {
                 lappend tokens [mime::initialize \
-                                    -param [list name "[ad_quotehtml $title]"] \
+                                    -param [list name [ad_quotehtml $title]] \
                                     -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $title] \
                                     -canonical $mime_type \
                                     -file "[cr_fs_path]$filename"]
             }
-            set tokens [mime::initialize -canonical "multipart/mixed" -parts "$tokens"]
+            set tokens [mime::initialize -canonical "multipart/mixed" -parts $tokens]
         }
 
         ### Add the headers
@@ -447,7 +447,7 @@ namespace eval acs_mail_lite {
 
         # Add extra headers
         foreach header $extraheaders {
-            mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+            mime::setheader $tokens [lindex $header 0] [lindex $header 1]
         }
 
         # Rollout support
@@ -467,7 +467,7 @@ namespace eval acs_mail_lite {
                     # if any of the recipient is not in the allowed list
                     # email message has to be sent to the log instead
 
-                    if { [lsearch -exact $allowed_addr $recipient] eq -1 } {
+                    if {$recipient ni $allowed_addr} {
                         set send_mode "log"
                         set notice "logging email because one of the recipient ($recipient) is not in the EmailAllow list"
                         break
@@ -492,8 +492,8 @@ namespace eval acs_mail_lite {
         }
 
         # Prepare the headers list of recipients
-        set headers_list [list [list From "$from_addr"] \
-                              [list Reply-To "$reply_to"] \
+        set headers_list [list [list From $from_addr] \
+                              [list Reply-To $reply_to] \
                               [list To [join $to_addr ","]]]
 
         if { $cc_addr ne "" } {
@@ -527,7 +527,7 @@ namespace eval acs_mail_lite {
 
             # Add recipients to headers
             foreach header $headers_list {
-                mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+                mime::setheader $tokens [lindex $header 0] [lindex $header 1]
             }
 
             # Retrieve the email message as a string
@@ -537,7 +537,7 @@ namespace eval acs_mail_lite {
             mime::finalize $tokens -subordinates all
 
             # Send the email message to the log
-            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnveloppe sender: $originator\n\n$packaged\n**********"
+            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnvelope sender: $originator\n\n$packaged\n**********"
 
         } else {
 
@@ -587,7 +587,7 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
 
-    ad_proc -public -deprecated sendmail {
+    ad_proc -public -deprecated ::ns_sendmail {
         to 
         from 
         subject 
@@ -599,7 +599,6 @@ namespace eval acs_mail_lite {
         Replacement for ns_sendmail for backward compability.
 
     } {
-
 
         ns_log Warning "ns_sendmail is no longer supported in OpenACS. Use acs_mail_lite::send instead."
 

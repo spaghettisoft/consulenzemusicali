@@ -1,7 +1,7 @@
 ad_page_contract {
     Display information about one procedure.
     
-    @cvs-id $Id: proc-view.tcl,v 1.6.16.3 2013/09/13 13:01:03 gustafn Exp $
+    @cvs-id $Id: proc-view.tcl,v 1.6.16.4 2013/10/16 20:08:08 gustafn Exp $
 } {
     proc
     source_p:optional,integer,trim
@@ -19,7 +19,7 @@ ad_page_contract {
 set title $proc
 
 set context [list]
-if { [exists_and_not_null version_id] } {
+if { $version_id ne "" } {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info

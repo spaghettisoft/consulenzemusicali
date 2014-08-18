@@ -3,7 +3,7 @@
 
   @author Gustaf Neumann (gustaf.neumann@wu-wien.ac.at)
   @creation-date Aug 11, 2006
-  @cvs-id $Id: export.tcl,v 1.21 2013/07/20 15:48:35 gustafn Exp $
+  @cvs-id $Id: export.tcl,v 1.21.2.1 2014/02/11 11:58:19 gustafn Exp $
 
   @param object_type 
 } -parameter {
@@ -18,7 +18,7 @@ set folder_id [::$package_id folder_id]
 #
 if {$objects eq ""} {
   set sql [$object_type instance_select_query -folder_id $folder_id -with_subtypes true]
-  db_foreach instance_select $sql { set items($item_id) 1 }
+  xo::dc foreach instance_select $sql { set items($item_id) 1 }
 } else {
   foreach o $objects {
     $package_id get_lang_and_name -default_lang [::xo::cc lang] -path $o lang stripped_name

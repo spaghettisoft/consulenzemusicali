@@ -1,12 +1,17 @@
 ad_library {
     This is the table, dimensional bar and sort tools.
     an example of their use can be found in /acs-examples
-    @cvs-id $Id: table-display-procs.tcl,v 1.20.8.7 2013/09/29 19:23:18 gustafn Exp $
+    @cvs-id $Id: table-display-procs.tcl,v 1.20.8.11 2013/12/05 11:16:43 gustafn Exp $
 }
     
 # Dimensional selection bars.
 #
-ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}} {
+ad_proc ad_dimensional {
+    option_list 
+    {url {}} 
+    {options_set ""} 
+    {optionstype url}
+} {
     Generate an option bar as in the ticket system; 
     <ul>
       <li> option_list -- the structure with the option data provided 
@@ -100,7 +105,12 @@ ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}}
     append html "</tr>\n</table>\n"
 }
 
-ad_proc ad_dimensional_sql {option_list {what "where"} {joiner "and"} {options_set ""}} {
+ad_proc ad_dimensional_sql {
+    option_list 
+    {what "where"} 
+    {joiner "and"} 
+    {options_set ""}
+} {
     see ad_dimensional for the format of option_list
     <p>
     Given what clause we are asking for and the joiner this returns 
@@ -179,31 +189,29 @@ ad_proc ad_dimensional_set_variables {option_list {options_set ""}} {
 }
 
 ad_proc -deprecated ad_table { 
-    {
-        -Torder_target_url {}
-        -Torderby {}
-	-Tasc_order_img {^}
-	-Tdesc_order_img {v}
-        -Tmissing_text "<em>No data found.</em>"
-        -Tsuffix {}
-        -Tcolumns {}
-        -Taudit {}
-        -Trows_per_band 1
-        -Tband_colors {{} "#ececec"}
-        -Tband_classes {{even} {odd}}
-        -Trows_per_page 0
-        -Tmax_rows 0
-        -Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}
-        -Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}
-        -Ttable_break_html "<br><br>"
-        -Tpre_row_code {}
-        -Trow_code {[subst $Trow_default]}
-        -Tpost_data_ns_sets {}
-        -Textra_vars {}
-	-Textra_rows {}
-	-bind {}
-        -dbn {}
-    }
+    {-Torder_target_url {}}
+    {-Torderby {}}
+    {-Tasc_order_img {^}}
+    {-Tdesc_order_img {v}}
+    {-Tmissing_text "<em>No data found.</em>"}
+    {-Tsuffix {}}
+    {-Tcolumns {}}
+    {-Taudit {}}
+    {-Trows_per_band 1}
+    {-Tband_colors {{} "#ececec"}}
+    {-Tband_classes {{even} {odd}}}
+    {-Trows_per_page 0}
+    {-Tmax_rows 0}
+    {-Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}}
+    {-Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}}
+    {-Ttable_break_html "<br><br>"}
+    {-Tpre_row_code {}}
+    {-Trow_code {[subst $Trow_default]}}
+    {-Tpost_data_ns_sets {}}
+    {-Textra_vars {}}
+    {-Textra_rows {}}
+    {-bind {}}
+    {-dbn {}}
     statement_name sql_qry Tdatadef
 } {
 
@@ -336,10 +344,8 @@ ad_proc -deprecated ad_table {
 	foreach Ti $Tcolumn_list {
 	    set Tcol [lindex $Tdatadef $Ti]
 	    if { ( [ns_set find $selection [lindex $Tcol 0]] < 0
-		   && ([empty_string_p [lindex $Tcol 2]] || 
-	               ([lindex $Tcol 2] ne "sort_by_pos" )
-	              )
-	         )
+		   && ([lindex $Tcol 2] eq "" || [lindex $Tcol 2] ne "sort_by_pos")
+		   )
 		 || [lindex $Tcol 2] eq "no_sort" 
 	     } {
 		
@@ -441,10 +447,10 @@ ad_proc -deprecated ad_table {
             }
             # do this check since we would like the ability to band with
             # page background as well
-            if {$Tn_bands && ![empty_string_p [lindex $Tband_colors $Tband_color]]} {
+            if {$Tn_bands && [lindex $Tband_colors $Tband_color] ne ""} {
                 append Trow_default " style=\"background-color:[lindex $Tband_colors $Tband_color]\""
             }
-            if {$Tn_band_classes && ![empty_string_p [lindex $Tband_classes $Tband_class]]} {
+            if {$Tn_band_classes && [lindex $Tband_classes $Tband_class] ne ""} {
                 append Trow_default " class=\"[lindex $Tband_classes $Tband_class]\""
             }
 
@@ -502,9 +508,7 @@ ad_proc -deprecated ad_table {
 }
 
 ad_proc ad_table_column_list {
-    { 
-        -sortable all
-    }
+    { -sortable all }
     datadef columns
 } {
     build a list of pointers into the list of column definitions
@@ -517,8 +521,8 @@ ad_proc ad_table_column_list {
     if {$columns eq ""} {
         for {set i 0} {$i < [llength $datadef]} {incr i} {
             if {$sortable eq "all" 
-                || ($sortable eq "t" && [lindex [lindex $datadef $i] 2] != "no_sort")
-                || ($sortable eq "f" && [lindex [lindex $datadef $i] 2] == "no_sort")
+                || ($sortable == "t" && [lindex $datadef $i 2] ne "no_sort")
+                || ($sortable == "f" && [lindex $datadef $i 2] eq "no_sort")
             } {
                 lappend column_list $i
             } 
@@ -527,8 +531,8 @@ ad_proc ad_table_column_list {
         set colnames {}
         foreach col $datadef { 
             if {$sortable eq "all" 
-                || ($sortable eq "t" && [lindex $col 2] ne "no_sort")
-                || ($sortable eq "f" && [lindex $col 2] eq "no_sort")
+                || ($sortable == "t" && [lindex $col 2] ne "no_sort")
+                || ($sortable == "f" && [lindex $col 2] eq "no_sort")
             } {
                 lappend colnames [lindex $col 0]
             } else {
@@ -547,7 +551,7 @@ ad_proc ad_table_column_list {
     return $column_list
 }
 
-ad_proc ad_sort_primary_key orderby {
+ad_proc ad_sort_primary_key {orderby} {
     return the primary (first) key of an order spec
     used by 
 } {
@@ -579,7 +583,15 @@ ad_proc ad_table_span {str {td_html "align=\"left\""}} {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
-ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {columns {}} {allowed {}}} {
+ad_proc ad_table_form {
+    datadef 
+    {type select} 
+    {return_url {}} 
+    {item_group {}} 
+    {item {}} 
+    {columns {}} 
+    {allowed {}}
+} {
     builds a form for chosing the columns to display 
     <p>
     columns is a list of the currently selected columns.
@@ -642,12 +654,12 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         # select table
         set options "<option value=\"\">---</option>"
         foreach opt $sel_list { 
-            append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
+            append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
         }
     
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
-                set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
+                set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
             } else { 
                 set out $options
@@ -658,16 +670,16 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         # radio button table
         append html "<tr><th>Col \#</th>"
         foreach opt $sel_list { 
-            append html "<th>[lindex [lindex $datadef $opt] 1]</th>"
+            append html "<th>[lindex $datadef $opt 1]</th>"
         }
         append html "</tr>"
 
         foreach opt $sel_list { 
-            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex [lindex $datadef $opt] 0]\"></td>"
+            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex $datadef $opt 0]\"></td>"
         }
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
-                set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
+                set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "( type=\"radio\" )(value=\"$match\">)" $options "\\1 checked=\"checked\" \\2" out
             } else { 
                 set out $options
@@ -681,7 +693,15 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
     return $html
 }
 
-ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {sort_spec {}} {allowed {}}} {
+ad_proc ad_table_sort_form {
+    datadef 
+    {type select} 
+    {return_url {}} 
+    {item_group {}} 
+    {item {}} 
+    {sort_spec {}} 
+    {allowed {}}
+} {
     builds a form for setting up custom sorts.
     <p>
     <ul>
@@ -765,7 +785,7 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
 
     set options "<option value=\"\">---</option>"
     foreach opt $sel_list { 
-        append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
+        append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
     }
     
     for {set i 0} { $i < $max_columns} {incr i} {
@@ -816,7 +836,7 @@ ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
                     }
 
                     # tack on the order by clause 
-                    if {![empty_string_p [lindex $order_spec 2]] && ([lindex $order_spec 2] ne "sort_by_pos" )} {
+                    if {[lindex $order_spec 2] ne "" && [lindex $order_spec 2] ne "sort_by_pos"} {
                         append order_by_clause "[subst [lindex $order_spec 2]]"
                     } else { 
                         append order_by_clause "$sort_key $order"
@@ -929,7 +949,7 @@ ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_
 }
     
 
-ad_proc ad_custom_page_defaults defaults { 
+ad_proc ad_custom_page_defaults {defaults} { 
     set the page defaults. If the form is 
     empty do a returnredirect with the defaults set
 } {
@@ -1007,7 +1027,7 @@ ad_proc ad_table_orderby_sql {datadef orderby order} {
     set orderclause "order by $orderby $order"
     foreach col $datadef {
         if {$orderby eq [lindex $col 0] } {
-            if {![empty_string_p [lindex $col 2]]} {
+            if {[lindex $col 2] ne ""} {
                 set orderclause [subst [lindex $col 2]]
             }
         }

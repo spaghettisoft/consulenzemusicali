@@ -6,7 +6,7 @@ ad_library {
 
     @author <yourname> (<your email>)
     @creation-date 2007-09-17
-    @cvs-id $Id: proxy-procs.tcl,v 1.4 2010/03/17 22:03:55 victorg Exp $
+    @cvs-id $Id: proxy-procs.tcl,v 1.4.6.1 2013/11/02 18:26:13 gustafn Exp $
 }
 
 # First check that ns_proxy is configured
@@ -31,7 +31,8 @@ if {![catch {set handler [ns_proxy get exec_proxy]}]} {
 	return $return_string
     }
 
-    # Now rename exec
-    rename exec real_exec
+    # Now rename exec; protect cases, where file is loaded multiple times
+    if {[info commands ::real_exec] eq ""} {rename exec real_exec}
+
     ad_proc exec {args} {This is the wrapped version of exec} {proxy::exec -call $args}
 }

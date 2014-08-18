@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Peter Marklund (peter@collaboraid.biz)
     @creation-date 8 October 2002
-    @cvs-id $Id: version-i18n-process.tcl,v 1.3 2002/10/29 08:14:24 peterm Exp $  
+    @cvs-id $Id: version-i18n-process.tcl,v 1.3.22.1 2013/10/17 08:44:30 gustafn Exp $  
 } {
     version_id:integer,notnull    
     {files:multiple}
@@ -32,9 +32,9 @@ if { ! $replace_text_p } {
 # Process one adp at a time interactively
 set file [lindex $files 0]
 
-set full_file_name "[acs_root_dir]/$file"
+set full_file_name "$::acs::rootdir/$file"
 
-set adp_report_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$file" report]
+set adp_report_list [lang::util::replace_adp_text_with_message_tags "$::acs::rootdir/$file" report]
 set adp_replace_list [lindex $adp_report_list 0]
 set adp_no_replace_list [lindex $adp_report_list 1]
 

@@ -7,10 +7,10 @@ ad_page_contract {
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @author Don Baccus (simplified it by using cr utility)
     @creation-date 18 December 2000
-    @cvs-id $Id: index.vuh,v 1.10.4.2 2013/09/08 08:11:58 gustafn Exp $
+    @cvs-id $Id: index.vuh,v 1.10.4.3 2014/07/29 11:37:29 gustafn Exp $
 } {
-    file_id:integer,optional
-    version_id:integer,optional
+    file_id:naturalnum,optional
+    version_id:naturalnum,optional
 } -validate {
     either_one {
 	if { ! [info exists file_id] && ! [info exists version_id] } {

@@ -3,7 +3,7 @@
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          
-# $Id: data-procs.tcl,v 1.17 2012/12/08 17:50:20 gustafn Exp $
+# $Id: data-procs.tcl,v 1.17.2.2 2013/10/26 09:19:59 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -364,7 +364,7 @@ ad_proc -public template::data::validate::textdate {
     upvar 2 $message_ref message $value_ref textdate
     
     set error_msg [list]
-    if { [exists_and_not_null textdate] } {
+    if { ([info exists textdate] && $textdate ne "") } {
 	if { [regexp {^[0-9]{4}-[0-9]{2}-[0-9]{2}$} $textdate match] } {
 	    if { [catch { clock scan "${textdate}" }] } {
 		# the textdate is formatted properly the template::data::transform::textdate proc
@@ -380,7 +380,7 @@ ad_proc -public template::data::validate::textdate {
 		    set maxdays [template::util::date::get_property days_in_month $datelist]
 		    if { $day < 1 || $day > $maxdays } {
 			set month_pretty [template::util::date::get_property long_month_name $datelist]
-			if { $month == "2" } {
+			if { $month == 2 } {
 			    # February has a different number of days depending on the year
 			    append month_pretty " ${year}"
 			}
@@ -488,7 +488,7 @@ ad_proc -public template::data::validate::enumeration {
   
   # unique list
   set list [split $value ,]
-  set result [expr [llength $list] == [llength [lsort -unique $list]]]
+  set result [expr {[llength $list] == [llength [lsort -unique $list]]}]
   
   if { ! $result } {
     set message "Invalid enumeration. \"$value\" does not contain unique values."

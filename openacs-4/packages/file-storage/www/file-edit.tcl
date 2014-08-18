@@ -3,12 +3,12 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 5 Dec 2000
-    @cvs-id $Id: file-edit.tcl,v 1.10.4.1 2013/09/06 16:01:48 gustafn Exp $
+    @cvs-id $Id: file-edit.tcl,v 1.10.4.3 2014/07/29 11:24:03 gustafn Exp $
 } {
-    file_id:integer,notnull
+    file_id:naturalnum,notnull
 } -validate {
     valid_file -requires {file_id} {
-        if ![fs_file_p $file_id] {
+        if {![fs_file_p $file_id]} {
             ad_complain "[_ file-storage.lt_The_specified_file_is]"
         }
     }
@@ -54,9 +54,9 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 ad_form -extend -form {
     {submit:text(submit) {label $submit_label}}
 } -on_submit {
-    if [catch {
+    if {[catch {
         db_dml edit_title {}
-    } errmsg] {
+    } errmsg]} {
         if { [db_string duplicate_check {}] } {
             ad_return_complaint 1 "[_ file-storage.lt_It_appears_that_there]"
         } else {

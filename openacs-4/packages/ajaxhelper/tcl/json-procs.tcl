@@ -5,7 +5,7 @@
 #
 #   Copyright 2006 ActiveState Software Inc.
 #
-#   $Id: json-procs.tcl,v 1.1 2007/09/08 14:21:22 hamiltonc Exp $
+#   $Id: json-procs.tcl,v 1.1.2.1 2013/10/06 13:21:40 gustafn Exp $
 #
 #   modified by Dave Bauer
 
@@ -195,7 +195,7 @@ proc json::_json2dict {{txtvar txt}} {
         # but it may be 0.xxx
         string is double -failindex last $txt
         if {$last > 0} {
-        set num [string range $txt 0 [expr {$last - 1}]]
+        set num [string range $txt 0 $last-1]
         set txt [string range $txt $last end]
         switch -- $state {
             TOP {

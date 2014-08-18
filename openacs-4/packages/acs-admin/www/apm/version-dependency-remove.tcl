@@ -2,7 +2,7 @@ ad_page_contract {
     Adds a dependency to a version of a package. 
     @author Jon Salz (jsalz@arsdigita.com)
     @creation-date 17 April 2000
-    @cvs-id $Id: version-dependency-remove.tcl,v 1.5.4.1 2013/09/09 16:44:17 gustafn Exp $
+    @cvs-id $Id: version-dependency-remove.tcl,v 1.5.4.2 2013/10/07 16:48:16 gustafn Exp $
 } {
     {version_id:integer}
     {dependency_id:integer}
@@ -23,7 +23,7 @@ db_transaction {
 	}
 
 	default {
-	    ad_return complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
+	    ad_return_complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
 	}
     }
     apm_package_install_spec $version_id

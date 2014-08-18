@@ -4,15 +4,15 @@ ad_page_contract {
     @author Ben Adida (ben@openforce.net)    
     @author arjun (arjun@openforce.net)
     @creation-date 01 April 2002
-    @cvs-id $Id: simple-add.tcl,v 1.13.4.1 2013/09/06 16:01:48 gustafn Exp $
+    @cvs-id $Id: simple-add.tcl,v 1.13.4.3 2014/07/29 11:24:04 gustafn Exp $
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
     {type "fs_url"}
     {title ""}
     {lock_title_p 0}
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }
@@ -28,7 +28,7 @@ permission::require_permission -object_id $folder_id -privilege write
 # set templating datasources
 
 set pretty_name "URL"
-if {[empty_string_p $pretty_name]} {
+if {$pretty_name eq ""} {
     return -code error "[_ file-storage.No_such_type]"
 }
 
@@ -38,7 +38,7 @@ set context [fs_context_bar_list -final [_ file-storage.Add_pretty_name [list pr
 # double-click protection
 
 # if title isn't passed in ignore lock_title_p
-if {[empty_string_p $title]} {
+if {$title eq ""} {
     set lock_title_p 0
 }
 

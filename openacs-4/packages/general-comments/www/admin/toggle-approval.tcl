@@ -8,7 +8,7 @@ ad_page_contract {
     @author Phong Nguyen (phong@arsdigita.com)
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: toggle-approval.tcl,v 1.2 2001/06/14 19:52:22 pascals Exp $
+    @cvs-id $Id: toggle-approval.tcl,v 1.2.26.1 2013/10/03 08:41:29 gustafn Exp $
 } {
     comment_id:integer,notnull
     {revision_id {}}
@@ -22,7 +22,7 @@ set live_revision [db_string get_live_revision \
 # if the user did not pass in a revision_id, then
 # assume that the user wishes to toggle the approval
 # state of the latest revision
-if { [empty_string_p $revision_id] } {
+if { $revision_id eq "" } {
     set revision_id [db_string get_latest_revision \
         "select content_item.get_latest_revision(:comment_id) from dual"]
 }

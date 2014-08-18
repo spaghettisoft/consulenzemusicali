@@ -7,7 +7,7 @@ ad_library {
 
   @author Gustaf Neumann (neumann@wu-wien.ac.at)
   @creation-date 2006-08-06
-  @cvs-id $Id: context-procs.tcl,v 1.63.2.2 2013/09/30 11:38:40 gustafn Exp $
+  @cvs-id $Id: context-procs.tcl,v 1.63.2.4 2014/02/14 17:52:52 gustafn Exp $
 }
 
 namespace eval ::xo {
@@ -47,7 +47,7 @@ namespace eval ::xo {
     }
     if {$actual_query eq " "} {
       if {[ns_conn isconnected]} {
-	set actual_query [ns_conn query]
+        set actual_query [ns_conn query]
       }
       #my log "--CONN ns_conn query = <$actual_query>"
     }
@@ -76,13 +76,13 @@ namespace eval ::xo {
     # get the query parameters (from the form if necessary)
     if {[my istype ::xo::ConnectionContext]} {
       foreach param [array names ""] {
-	#my log "--cc check $param [info exists passed_args($param)]"
-	set name [string range $param 1 end]
-	if {![info exists passed_args($param)] &&
-	    [my exists_form_parameter $name]} {
-	  #my log "--cc adding passed_args(-$name) [my form_parameter $name]"
-	  set passed_args($param) [my form_parameter $name]
-	}
+        #my log "--cc check $param [info exists passed_args($param)]"
+        set name [string range $param 1 end]
+        if {![info exists passed_args($param)] &&
+            [my exists_form_parameter $name]} {
+          #my log "--cc adding passed_args(-$name) [my form_parameter $name]"
+          set passed_args($param) [my form_parameter $name]
+        }
       }
     }
     
@@ -90,7 +90,7 @@ namespace eval ::xo {
     if {[info exists caller_parameters]} {
       #my log "--cc caller_parameters=$caller_parameters"
       array set caller_param $caller_parameters
-    
+      
       foreach param [array names caller_param] {
         if {[info exists ($param)]} { 
           set passed_args($param) $caller_param($param) 
@@ -211,19 +211,23 @@ namespace eval ::xo {
   }
 
   ConnectionContext proc require {
-    -url
-    {-package_id 0} 
-    {-parameter ""}
-    {-user_id -1}
-    {-actual_query " "}
-    {-keep_cc false}
-  } {
+                                  -url
+                                  {-package_id 0} 
+                                  {-parameter ""}
+                                  {-user_id -1}
+                                  {-actual_query " "}
+                                  {-keep_cc false}
+                                } {
     set exists_cc [my isobject ::xo::cc]
 
     # if we have a connection context and we want to keep it, do
     # nothing and return.
     if {$exists_cc && $keep_cc} {
       return
+    }
+
+    if {[info exists ::ds_show_p] && [ds_database_enabled_p]} {
+      ::xo::dc profile on
     }
 
     if {![info exists url]} {
@@ -248,8 +252,8 @@ namespace eval ::xo {
       my create ::xo::cc \
           -package_id $package_id \
           [list -parameter_declaration $parameter] \
-	  -user_id $user_id \
-	  -actual_query $actual_query \
+          -user_id $user_id \
+          -actual_query $actual_query \
           -locale $locale \
           -url $url
       #::xo::show_stack
@@ -259,7 +263,7 @@ namespace eval ::xo {
       #my msg "--cc ::xo::cc reused $url -package_id $package_id"
       ::xo::cc configure \
           -url $url \
-	  -actual_query $actual_query \
+          -actual_query $actual_query \
           -locale $locale \
           [list -parameter_declaration $parameter]
       #if {$package_id ne ""} {
@@ -296,13 +300,13 @@ namespace eval ::xo {
       } else {
         my set user_id 0
         my set untrusted_user_id 0
-	array set ::ad_conn [list user_id $user_id untrusted_user_id $user_id session_id ""]
+        array set ::ad_conn [list user_id $user_id untrusted_user_id $user_id session_id ""]
       }
     } else {
       my set user_id $user_id
       my set untrusted_user_id $user_id
       if {![info exists ::ad_conn(user_id)]} {
-	array set ::ad_conn [list user_id $user_id untrusted_user_id $user_id session_id ""]
+        array set ::ad_conn [list user_id $user_id untrusted_user_id $user_id session_id ""]
       }
     }
   }
@@ -455,11 +459,11 @@ namespace eval ::xo {
     #my set $key
   }
   
-#   ConnectionContext instproc destroy {} {
-#     my log "--i destroy [my url]"
-#     #::xo::show_stack
-#     next
-#   }
+  #   ConnectionContext instproc destroy {} {
+  #     my log "--i destroy [my url]"
+  #     #::xo::show_stack
+  #     next
+  #   }
 
 
   ConnectionContext instproc load_form_parameter {} {
@@ -562,3 +566,10 @@ namespace eval ::xo {
   }
 
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 2
+#    indent-tabs-mode: nil
+# End:

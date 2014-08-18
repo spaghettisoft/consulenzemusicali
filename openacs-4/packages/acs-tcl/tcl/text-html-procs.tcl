@@ -4,7 +4,7 @@ ad_library {
     
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
-    @cvs-id $Id: text-html-procs.tcl,v 1.65.6.7 2013/09/29 20:24:03 gustafn Exp $
+    @cvs-id $Id: text-html-procs.tcl,v 1.65.6.12 2014/07/30 22:23:27 gustafn Exp $
 }
 
 
@@ -149,35 +149,35 @@ ad_proc -public util_convert_line_breaks_to_html {
     Convert line breaks to <p> and <br> tags, respectively.
 } {
     # Remove any leading or trailing whitespace
-    regsub {^[\s]*} $text {} text
-    regsub {[\s]*$} $text {} text
+    regsub {^[\s]+} $text {} text
+    regsub {[\s]+$} $text {} text
 
     # Make sure all line breaks are single \n's
     regsub -all {\r\n} $text "\n" text
     regsub -all {\r} $text "\n" text
     
     # Remove whitespace before \n's
-    regsub -all {[ \t]*\n} $text "\n" text
+    regsub -all {[ \t]+\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1<p>\2} text
-
-    # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    # Lars: This must be done after we've made P tags, because otherwise the line
-    # breaks will already have been converted into BR's.
+    regsub -all {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
     # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
     if { $includes_html_p } {
-        foreach tag { ul ol li blockquote p div table tr td th } {
-            regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
-            regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
-        }
+	set tags [join { ul ol li blockquote p div table tr td th } |]
+        regsub -all -nocase "\\s*(</?($tags)\\s*\[^>\]*>)\\s*" $text {\1} text
+
+        #foreach tag { ul ol li blockquote p div table tr td th } {
+        #    regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
+        #    regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
+        #}
     }
 
+    # Convert _single_ CRLF's to <br>'s to preserve line breaks
     regsub -all {\n} $text "<br>\n" text
 
     # Add line breaks to P tags
-    regsub -all {</p>} $text "</p>\n" text
+    #regsub -all {</p>} $text "</p>\n" text
 
     return $text
 }
@@ -644,7 +644,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
     # Loop over the attributes.
     # We maintain counter is so that we don't accidentally enter an infinite loop
     set count 0
-    while { $i < [string length $html] && ![string equal [string index $html $i] {>}] } {
+    while { $i < [string length $html] && [string index $html $i] ne ">" } {
         if { [incr count] > 3000 } {
             error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
         }
@@ -669,7 +669,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
             # If there is an equal sign, we're expecting the next token to be a value
             if { [lindex $equal_sign_idx 1] - [lindex $equal_sign_idx 0] < 0 } {
                 # No equal sign, no value
-                lappend attributes $attr_name
+		lappend attributes [list $attr_name]
                 if { [info exists attribute_array] } {
                     set attribute_array_var($attr_name) {}
                 }
@@ -780,16 +780,18 @@ ad_proc ad_html_security_check { html } {
                 set attr_count 0
                 foreach attribute $attr_list {
                     incr attr_count
-                    set attr_name [lindex $attribute 0]
-                    set attr_value [lindex $attribute 1]
+
+		    lassign $attribute attr_name attr_value
                     
-                    if { ![info exists allowed_attribute($attr_name)] && ![info exists allowed_attribute(*)] } {
+                    if { ![info exists allowed_attribute($attr_name)] 
+			 && ![info exists allowed_attribute(*)] } {
                         return "The attribute '$attr_name' is not allowed for $tagname tags"
                     }
             
                     if { [string tolower $attr_name] ne "style" } {
                         if { [regexp {^\s*([^\s:]+):\/\/} $attr_value match protocol] } {
-                            if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
+                            if { ![info exists allowed_protocol([string tolower $protocol])] 
+				 && ![info exists allowed_protocol(*)] } {
                                 return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
                 You have a '$protocol' protocol in there."
                             }
@@ -856,11 +858,12 @@ ad_proc -public ad_html_to_text {
         #     - alpha or
         #     - a slash, and then alpha
         # Otherwise, it's probably just a lone < character
-        if { $i >= $length - 1 || \
-                 (![string is alpha [string index $html $i+1]] && \
-		      [string index $html $i+1] ne "!" && \
-                      ("/" ne [string index $html $i+1] || \
-                           ![string is alpha [string index $html $i+2]])) } {
+        if { $i >= $length - 1 || 
+	     (![string is alpha [string index $html $i+1]] 
+	      && [string index $html $i+1] ne "!" 
+	      && ("/" ne [string index $html $i+1] || 
+		  ![string is alpha [string index $html $i+2]])) 
+	 } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
@@ -1318,7 +1321,7 @@ ad_proc util_expand_entities_ie_style { html } {
         incr i
         if { $match_p } {
             # remove trailing semicolon
-            if { [string equal [string index $html $i] {;}] } {
+            if {[string index $html $i] eq ";"} {
                 set html [string replace $html $i $i]
             }
         }
@@ -1400,8 +1403,8 @@ ad_proc -public ad_html_text_convertable_p {
     set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
     set valid_tos { text/plain text/html }
     # Validate procedure input
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
+    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
     return [expr {$from in $valid_froms && $to in $valid_tos}]
 }
 
@@ -1479,8 +1482,8 @@ ad_proc -public ad_html_text_convert {
     }
     
     # For backwards compatibility
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
+    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
 
     if { ![ad_html_text_convertable_p -from $from -to $to] } {
         error "Illegal mime types for conversion - from: $from to: $to"
@@ -1590,7 +1593,7 @@ ad_proc -public ad_convert_to_html {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if {$html_p eq "t"} {
+    if {$html_p == "t"} {
         set from "text/html"
     } else {
         set from "text/plain"
@@ -1611,7 +1614,7 @@ ad_proc -public ad_convert_to_text {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if {$html_p eq "t"} {
+    if {$html_p == "t"} {
         set from "text/html"
     } else {
         set from "text/plain"
@@ -1767,7 +1770,7 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     @see ad_convert_to_html
 
 }  {
-    if { $html_p eq "t" } {
+    if { $html_p == "t" } {
         return $raw_string
     } else {
         return [ad_text_to_html $raw_string]

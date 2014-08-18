@@ -6,7 +6,7 @@ ad_page_contract {
     @author Phong Nguyen <phong@arsdigita.com>
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: comment-add-3.tcl,v 1.9.8.2 2013/09/06 17:37:19 gustafn Exp $
+    @cvs-id $Id: comment-add-3.tcl,v 1.9.8.4 2013/10/26 09:29:55 gustafn Exp $
 } {
     comment_id:integer,notnull
     object_id:integer,notnull
@@ -47,7 +47,7 @@ general_comment_new \
     -category $category \
     -content $content
 
-if { [string equal $attach_p "f"] && ![empty_string_p $return_url] } {
+if { $attach_p == "f" && $return_url ne "" } {
     ad_returnredirect $return_url
 } else {
     ad_returnredirect "view-comment?[export_vars { comment_id return_url }]"

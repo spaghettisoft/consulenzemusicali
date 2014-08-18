@@ -4,7 +4,7 @@ ad_library {
     @author Branimir Dolicki (bdolicki@branimir.com)
 
     @creation-date 06 February 2004
-    @cvs-id $Id: category-form-procs.tcl,v 1.6.6.1 2013/09/29 12:04:41 gustafn Exp $
+    @cvs-id $Id: category-form-procs.tcl,v 1.6.6.2 2013/10/03 07:56:57 gustafn Exp $
 }
 
 namespace eval category::ad_form {}
@@ -28,7 +28,7 @@ ad_proc -public category::ad_form::add_widgets {
     
     foreach tree $category_trees {
 	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
-        if {[lsearch -exact $excluded_trees $tree_id] > -1} { 
+        if {$tree_id in $excluded_trees} { 
             continue
         } 
 	set options ""
@@ -71,7 +71,7 @@ ad_proc -public category::ad_form::get_categories {
         upvar #[template::adp_level] \
           __category__ad_form__$element_name\_${tree_id} my_category_ids
         if {[info exists my_category_ids]} { 
-            eval lappend category_ids $my_category_ids
+            lappend category_ids {*}$my_category_ids
         } else { 
             ns_log Warning "category::ad_form::get_categories: __category__ad_form__$element_name\_${tree_id} for tree $tree_id not found"
         }

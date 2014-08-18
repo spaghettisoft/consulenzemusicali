@@ -4,7 +4,7 @@ ad_library {
 
     @author swoodcock@scholastic.co.uk
     @creation-date Sun Jul 22 13:51:26 BST 2001
-    @cvs-id $Id: plpgsql-utility-procs.tcl,v 1.5 2011/07/07 10:46:02 gustafn Exp $
+    @cvs-id $Id: plpgsql-utility-procs.tcl,v 1.5.2.2 2013/10/27 14:26:46 gustafn Exp $
     
 }
 
@@ -58,8 +58,8 @@ namespace eval plpgsql_utility {
 	# For each real arg, append default or supplied arg value
 	set pieces [list]
 	foreach row $real_args {
-	    set arg_name [lindex $row 0]
-	    set arg_default [lindex $row 1]
+	    lassign $row arg_name arg_default
+
 	    if { [info exists user_supplied($arg_name)] } {
 		lappend pieces "${prepend}$user_supplied($arg_name)"
 	    } else {
@@ -154,7 +154,7 @@ namespace eval plpgsql_utility {
 		set default ""
 	    } else {
 		if { [string index $dft 0] eq "'" } {
-		    set dft [string range $dft 1 [expr {[string length $dft] - 2}]]
+		    set dft [string range $dft 1 [string length $dft]-2]
 		}
 		set default ";${dft}"
 	    }

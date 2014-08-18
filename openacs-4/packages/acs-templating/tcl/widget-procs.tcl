@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
      
-# $Id: widget-procs.tcl,v 1.50.8.1 2013/09/13 12:02:23 gustafn Exp $
+# $Id: widget-procs.tcl,v 1.50.8.4 2013/10/11 09:49:13 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -182,7 +182,7 @@ ad_proc -private template::data::transform::party_search {
         set element(options) [concat $options { { "Search again..." ":search:" } }]
         if { ![info exists value] } {
             # set value to first item
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
         }
 
         if { ![ns_queryexists $element_id:confirmed_p] } {
@@ -811,7 +811,7 @@ ad_proc -public template::data::transform::search {
         } elseif { $option_count == 1 } {
 
             # only one option so just reset the value
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
 
         } else {
 
@@ -820,7 +820,7 @@ ad_proc -public template::data::transform::search {
             template::element::set_error $element(form_id) $element_id \
                 "More than one match was found for \"$value\".<br>Please\nchoose one from the list."
 
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
         }
     }
 
@@ -927,7 +927,7 @@ ad_proc -public template::widget::block {
 		set required_p [lindex $question 1]
 		append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
 		foreach choice [lindex $question 2] {
-		    if {[lsearch -exact $value $choice]==-1} {
+		    if {$choice ni $value} {
 			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
 		    } else {
 			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
@@ -1033,7 +1033,7 @@ ad_proc -public template::widget::select_text {
     }
 
     set output {}
-    if { [string equal $element(mode) "edit"] } {
+    if {$element(mode) eq "edit"} {
 	# edit mode
 	set element(value) $select
 	append output [template::widget::menu $element(name) $element(options) $select attributes $element(mode)]
@@ -1149,7 +1149,7 @@ ad_proc -public template::widget::radio_text {
     set radio_text "<input type=radio name=$element(name)"
 
     foreach name [array names attributes] {
-        if { [string equal $attributes($name) {}] } {
+        if {$attributes($name) eq {}} {
             append radio_text " $name"
         } else {
             append radio_text " $name=\"$attributes($name)\""
@@ -1275,7 +1275,7 @@ ad_proc -public template::widget::checkbox_text {
     set checkbox_text "<input type=checkbox name=$element(name)"
 
     foreach name [array names attributes] {
-	if { [string equal $attributes($name) {}] } {
+	if {$attributes($name) eq {}} {
 	    append checkbox_text " $name"
 	} else {
 	    append checkbox_text " $name=\"$attributes($name)\""

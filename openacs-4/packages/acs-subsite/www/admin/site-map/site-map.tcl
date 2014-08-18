@@ -3,7 +3,7 @@ ad_page_contract {
     @author rhs@mit.edu
     @author bquinn@arsidigta.com
     @creation-date 2000-09-09
-    @cvs-id $Id: site-map.tcl,v 1.6.8.6 2013/09/09 17:25:31 gustafn Exp $
+    @cvs-id $Id: site-map.tcl,v 1.6.8.7 2013/10/10 21:00:46 gustafn Exp $
     
 } {
     {expand:integer,multiple ""}
@@ -52,7 +52,7 @@ set context [list [list "." "Site Map"] $page_title]
 set user_id [ad_conn user_id]
 
 db_foreach path_select {} {
-    if {$node_id != $root_id && $admin_p eq "t"} {
+    if {$node_id != $root_id && $admin_p == "t"} {
 	append head "<a href=.?[export_vars -url {expand:multiple {root_id $node_id}}]>"
     }
     if {$name eq ""} {
@@ -61,11 +61,11 @@ db_foreach path_select {} {
 	append head $name
     }
     
-    if {$node_id != $root_id && $admin_p eq "t"} {
+    if {$node_id != $root_id && $admin_p == "t"} {
 	append head "</a>"
     }
     
-    if {$directory_p eq "t"} {
+    if {$directory_p == "t"} {
 	append head "/"
     }
 } if_no_rows {
@@ -182,7 +182,7 @@ db_foreach nodes_select {} {
     set permissions_url ""
     if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue } 
         
-    if {$directory_p eq "t"} {
+    if {$directory_p == "t"} {
 	set add_folder_url "?[export_vars -url {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]"
 	if {$object_id eq ""} {
 	    set mount_url "mount?[export_vars -url {expand:multiple root_id node_id}]"

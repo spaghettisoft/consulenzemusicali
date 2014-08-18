@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Jon Salz [jsalz@arsdigita.com]
     @creation-date 9 May 2000
-    @cvs-id $Id: version-files.tcl,v 1.16.8.2 2013/09/28 12:10:01 gustafn Exp $
+    @cvs-id $Id: version-files.tcl,v 1.16.8.3 2013/10/11 11:43:47 gustafn Exp $
 } {
     {version_id:integer}
 }
@@ -58,7 +58,7 @@ foreach path [apm_get_package_files -package_key $package_key] {
 	for { set j 0 } { $j < $i } { incr j } {
 	    append body "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 	}
-	if { $installed_p eq "f" || [file exists "[acs_package_root_dir $package_key]/$path"] || $i < [llength $components] - 1} { 
+	if { $installed_p == "f" || [file exists "[acs_package_root_dir $package_key]/$path"] || $i < [llength $components] - 1} { 
 	    # Either we're not looking at an installed package, or the file still exists,
 	    # so don't use <strike> when writing the name.
 	    append body [lindex $components $i]
@@ -80,7 +80,7 @@ foreach path [apm_get_package_files -package_key $package_key] {
 		<td width="40">&nbsp;</td>
 	    }]
 
-	    if { $installed_p eq "t" } {
+	    if { $installed_p == "t" } {
 		set server_rel_path "packages/$package_key/$path"
 		if { [apm_file_watchable_p $server_rel_path] } {
 		    if { [nsv_exists apm_reload_watch $server_rel_path] } {
@@ -118,13 +118,13 @@ append body {</table>
     </blockquote>
 }
 
-if { $installed_p eq "t" } {
+if { $installed_p == "t" } {
     append body [subst {<ul>
 	<li><a href="package-watch?[export_vars -url {package_key return_url}]">watch all files</a></li>
 	<li><a href="package-watch-cancel?[export_vars -url {package_key return_url}]">cancel all watches</a></li>
     }]
 
-    if {$tagged_p eq "t"} {
+    if {$tagged_p == "t"} {
 	append body [subst {
 	    <li><a href="archive/[file tail $version_uri]?version_id=$version_id">Download a tarball from the package archive</a>
 	}]
@@ -133,7 +133,7 @@ if { $installed_p eq "t" } {
     append body "</ul>"
 
 } elseif { [info exists tagged_p] } {
-    if { $tagged_p eq "t" } {
+    if { $tagged_p == "t" } {
 	append body [subst {<ul>
 	    <li><a href="archive/[file tail $version_uri]?version_id=$version_id">Download a tarball from the package archive</a>
         </ul>

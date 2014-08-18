@@ -6,7 +6,7 @@ ad_page_contract {
     @author Phong Nguyen <phong@arsdigita.com>
     @author Pascal Scheffers (pascal@scheffers.net)
     @creation-date 2000-10-12
-    @cvs-id $Id: comment-add.tcl,v 1.5.20.1 2013/09/06 16:01:49 gustafn Exp $
+    @cvs-id $Id: comment-add.tcl,v 1.5.20.2 2013/10/03 08:41:29 gustafn Exp $
 } { 
     object_id:integer,notnull
     { object_name "[acs_object_name $object_id]" }
@@ -33,7 +33,7 @@ permission::require_permission -object_id $object_id -privilege general_comments
 # ad_page_contract does not set object_name to
 # [acs_object_name $object_id] if object_name is passed
 # in as an empty string.
-if { [empty_string_p $object_name] } {
+if { $object_name eq "" } {
     set object_name [acs_object_name $object_id]
 }
 

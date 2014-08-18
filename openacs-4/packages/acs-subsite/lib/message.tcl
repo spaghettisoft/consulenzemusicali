@@ -3,9 +3,9 @@ ad_page_contract {
     and if no title is present uses "Message".  Used to inform of actions
     in registration etc.
 
-    @cvs-id $Id: message.tcl,v 1.1 2005/03/25 23:59:10 jeffd Exp $
+    @cvs-id $Id: message.tcl,v 1.1.16.1 2013/10/05 13:02:11 gustafn Exp $
 }
-if {![exists_and_not_null title]} {
+if {(![info exists title] || $title eq "")} {
     set page_title Message
 }
 set context [list $title]

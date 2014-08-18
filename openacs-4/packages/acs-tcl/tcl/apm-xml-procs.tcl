@@ -6,7 +6,7 @@ ad_library {
     @author Ben Adida (ben@mit.edu)
     @author Bart Teeuwisse (bart.teeuwisse@thecodemill.biz)
     @creation-date Fri Oct  6 21:47:39 2000
-    @cvs-id $Id: apm-xml-procs.tcl,v 1.30 2010/10/17 21:06:09 donb Exp $
+    @cvs-id $Id: apm-xml-procs.tcl,v 1.30.4.3 2014/08/12 17:37:29 gustafn Exp $
 } 
 
 ad_proc -private apm_required_attribute_value { element attribute } {
@@ -183,18 +183,18 @@ ad_proc -public apm_read_package_info_file { path } {
     $type]</code> NOTE: Files are no longer stored in info files but are always retrieved
     directly from the file system. This element in the array will always be the empty list.
     <li><code>callbacks</code>: an array list of callbacks of the package
-    on the form <code>[list callback_type1 proc_name1 callback_type2 proc_name2 ...] 
+    on the form <code>[list callback_type1 proc_name1 callback_type2 proc_name2 ...]</code> 
     <li>Element and attribute values directly from the XML specification:
     <code>package.key</code>,
     <code>package.url</code>,
     <code>package.type</code>
+    <code>package-name</code>,
     <code>pretty-plural</code>
     <code>initial-install-p</code>
     <code>singleton-p</code>
     <code>auto-mount</code>
-    <code>name</code> (the version name, e.g., <code>3.3a1</code>,
+    <code>name</code> (the version name, e.g., <code>3.3a1</code>),
     <code>url</code> (the version URL),
-    <code>package-name</code>,
     <code>option</code>,
     <code>summary</code>,
     <code>description</code>,
@@ -216,8 +216,6 @@ ad_proc -public apm_read_package_info_file { path } {
     descriptive error.
 
 } {
-    global ad_conn
-
     # If the .info file hasn't changed since last read (i.e., has the same
     # mtime), return the cached info list.
     set mtime [file mtime $path]
@@ -257,17 +255,16 @@ ad_proc -public apm_read_package_info_file { path } {
 	apm_log APMDebug "XML: the root name is $root_name"
 	error "Expected <package> as root node"
     }
-    set properties(package.key) [apm_required_attribute_value $package key]
-    set properties(package.url) [apm_required_attribute_value $package url]
-    set properties(package.type) [apm_attribute_value -default "apm_application" $package type]
-    set properties(package-name) [apm_tag_value $package package-name]
-    set properties(initial-install-p) [apm_tag_value -default "f" $package initial-install-p]
-    set properties(auto-mount) [apm_tag_value -default "" $package auto-mount]
-    set properties(singleton-p) [apm_tag_value -default "f" $package singleton-p]
+    set properties(package.key)          [apm_required_attribute_value $package key]
+    set properties(package.url)          [apm_required_attribute_value $package url]
+    set properties(package.type)         [apm_attribute_value -default "apm_application" $package type]
+    set properties(package-name)         [apm_tag_value $package package-name]
+    set properties(initial-install-p)    [apm_tag_value -default "f" $package initial-install-p]
+    set properties(auto-mount)           [apm_tag_value -default "" $package auto-mount]
+    set properties(singleton-p)          [apm_tag_value -default "f" $package singleton-p]
     set properties(implements-subsite-p) [apm_tag_value -default "f" $package implements-subsite-p]
-    set properties(inherit-templates-p) [apm_tag_value -default "t" $package inherit-templates-p]
-    set properties(pretty-plural) [apm_tag_value -default "$properties(package-name)s" $package pretty-plural]
-
+    set properties(inherit-templates-p)  [apm_tag_value -default "t" $package inherit-templates-p]
+    set properties(pretty-plural)        [apm_tag_value -default "$properties(package-name)s" $package pretty-plural]
 
     set versions [xml_node_get_children_by_name $package version]
 
@@ -277,8 +274,7 @@ ad_proc -public apm_read_package_info_file { path } {
     set version [lindex $versions 0]
     
     set properties(name) [apm_required_attribute_value $version name]
-    set properties(url) [apm_required_attribute_value $version url]
-
+    set properties(url)  [apm_required_attribute_value $version url]
 
     # Set an entry in the properties array for each of these tags.
     foreach property_name { summary description release-date vendor } {
@@ -296,6 +292,7 @@ ad_proc -public apm_read_package_info_file { path } {
 
     foreach { property_name attribute_name } {
 	vendor url
+	license url
 	description format
     } {
 	set node [xml_node_get_first_child_by_name $version $property_name]
@@ -325,7 +322,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	    set service_uri [apm_required_attribute_value $node url]
 	    set service_version [apm_required_attribute_value $node version]
             # Package always provides itself, we'll add that below, so don't add it here
-            if { $dependency_type ne "provides" || ![string equal $service_uri $properties(package.key)] } {
+            if { $dependency_type ne "provides" || $service_uri ne $properties(package.key) } {
                 lappend properties($dependency_type) [list $service_uri $service_version]
             }
 	}
@@ -354,7 +351,7 @@ ad_proc -public apm_read_package_info_file { path } {
                 continue
             }
             
-            if { [lsearch -exact [apm_supported_callback_types] $type] < 0 } {
+            if {$type ni [apm_supported_callback_types]} {
                 # The callback type is not supported
                 ns_log Error "package info file $path contains an unsupported callback type $type - ignoring. Valid values are [apm_supported_callback_types]"
                 continue

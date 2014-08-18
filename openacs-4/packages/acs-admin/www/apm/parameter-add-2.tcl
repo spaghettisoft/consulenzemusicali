@@ -3,7 +3,7 @@ ad_page_contract {
     @author Todd Nightingale (tnight@arsdigita.com)
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 10 September 2000
-    @cvs-id $Id: parameter-add-2.tcl,v 1.9.6.1 2013/08/27 11:44:43 gustafn Exp $
+    @cvs-id $Id: parameter-add-2.tcl,v 1.9.6.2 2013/10/11 11:43:46 gustafn Exp $
 } {
     version_id:naturalnum,notnull
     parameter_id:naturalnum,notnull
@@ -51,7 +51,7 @@ db_transaction {
 }
 
 # LARS hack
-set sections [lindex [lindex [apm_parameter_section_slider $package_key] 0] 3]
+set sections [lindex [apm_parameter_section_slider $package_key] 0 3]
 foreach section $sections {
     if {$section_name eq [lindex $section 1]} {
         set section_name [lindex $section 0]

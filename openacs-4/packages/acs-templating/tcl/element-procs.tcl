@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
 #
-# $Id: element-procs.tcl,v 1.32.2.3 2013/09/29 18:49:59 gustafn Exp $
+# $Id: element-procs.tcl,v 1.32.2.9 2013/11/25 09:35:59 gustafn Exp $
 #
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -44,7 +44,7 @@ ad_proc -public template::element { command form_id element_id args } {
     
     @see template::form
 } {
-  eval template::element::$command $form_id $element_id $args
+  template::element::$command $form_id $element_id {*}$args
 }
 
 ad_proc -public template::element::create { form_id element_id args } {
@@ -139,7 +139,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     @see template::widget
     @see template::data::validate
     @see template::form::create
-	@see template::form::section
+    @see template::form::section
 } {
   set level [template::adp_level]
 
@@ -172,11 +172,12 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # set the form section
   set opts(section) $form_properties(section)
-	if { $opts(section) ne "" } {
-		set opts(sec_fieldset) $form_properties(sec_fieldset)
-		set opts(sec_legend) $form_properties(sec_legend)
-		set opts(sec_legendtext) $form_properties(sec_legendtext)
-	}
+  if { $opts(section) ne "" } {
+    array set opts {sec_fieldset "" sec_legend "" sec_legendtext ""}
+    if {[info exists form_properties(sec_fieldset)]}   {set opts(sec_fieldset)   $form_properties(sec_fieldset)}
+    if {[info exists form_properties(sec_legend)]}     {set opts(sec_legend)     $form_properties(sec_legend)}
+    if {[info exists form_properties(sec_legendtext)]} {set opts(sec_legendtext) $form_properties(sec_legendtext)}
+  }
 
   template::util::get_opts $args
 
@@ -188,8 +189,7 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # If the widget is a submit widget, remember it
   # All submit widgets are optional
-  if { $opts(widget) eq "submit" || \
-       [string equal $opts(widget) "button"] } {
+  if { $opts(widget) eq "submit" || $opts(widget) eq "button" } {
     set form_properties(has_submit) 1
     set opts(optional) 1
     if { ! [info exists opts(value)] } { set opts(value) $opts(label) }
@@ -197,8 +197,7 @@ ad_proc -public template::element::create { form_id element_id args } {
   }
 
   # If the widget is a checkbox or radio widget, set attributes
-    if { $opts(widget) eq "radio" || \
-             [string equal $opts(widget) "checkbox"] } {
+    if { $opts(widget) eq "radio" || $opts(widget) eq "checkbox" } {
 
         # If there's no legend text, no point to generate the fieldset
         if { ![info exists opts(legendtext)] } {
@@ -218,7 +217,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                 append fs_options " class=\"form-fieldset\""
             }
             foreach name [array names fs_attributes] {
-                if {$fs_attributes($name) eq {}} {
+                if {$fs_attributes($name) eq ""} {
                     append fs_options " $name"
                 } else {
                     append fs_options " $name=\"$fs_attributes($name)\""
@@ -228,12 +227,12 @@ ad_proc -public template::element::create { form_id element_id args } {
 
             # set legend attributes
             if { ![info exists opts(legend)] } {
-                set opts(legend) {}
+                set opts(legend) ""
             }
             array set lg_attributes $opts(legend)
             set lg_options ""
             foreach name [array names lg_attributes] {
-                if {$lg_attributes($name) eq {}} {
+                if {$lg_attributes($name) eq ""} {
                     append lg_options " $name"
                 } else {
                     append lg_options " $name=\"$lg_attributes($name)\""
@@ -269,7 +268,7 @@ ad_proc -public template::element::create { form_id element_id args } {
       if {[info exists opts(value)] } {
           set val $opts(value)
       } else { 
-          set val {}
+          set val ""
       }
       template::element::create $opts(form_id) $opts(id):sig \
           -datatype text \
@@ -296,7 +295,7 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
 
   template::util::get_opts $args
 
-    if { [string equal $opts(widget) "hidden"] 
+    if { $opts(widget) eq "hidden"
          && [info exists opts(sign)] 
          && $opts(sign) 
          && [info exists opts(value)] } {
@@ -427,7 +426,7 @@ ad_proc -private template::element::validate { form_id element_id } {
   set is_optional [info exists element(optional)]
 
   # if the element is optional and the value is an empty string, then ignore
-  if { $is_optional && [string equal [lindex $values 0] {}] } {
+  if { $is_optional && [lindex $values 0] eq "" } {
     set values [list]
 
     # also clobber the value(s) for a submit widget
@@ -439,13 +438,13 @@ ad_proc -private template::element::validate { form_id element_id } {
 
   # if no values were submitted then look for values specified in the
   # declaration (either values or value)
-  if { ! [llength $values] && [info exists element(values)] } {
+  if { [llength $values] == 0 && [info exists element(values)] } {
     set values $element(values)
   }
 
   # set a label for use in the template
   set label $element(label)
-  if {$label eq {}} {
+  if {$label eq ""} {
     set label $element(name)
   }
 
@@ -454,13 +453,13 @@ ad_proc -private template::element::validate { form_id element_id } {
   set is_inform [expr {$element(widget) eq "inform" || ($element(mode) ne "edit" && $element(mode) ne "" )}]
 
   # Check for required element
-  if { ! $is_inform  && ! $is_optional && ! [llength $values] } {
+  if { ! $is_inform  && ! $is_optional && ![llength $values] } {
 
     # no value was submitted for a required element
     set formerror($element_id) [_ acs-templating.Element_is_required]
     set formerror($element_id:required) [_ acs-templating.Element_is_required]
 
-    if { [lsearch -exact {hidden submit} $element(widget)] > -1 } {
+    if {$element(widget) in {hidden submit}} {
        ns_log Warning "template::element::validate: No value for hidden/submit element $label"
      }
   }
@@ -597,7 +596,7 @@ ad_proc -public template::element::querygetall { element_ref } {
 
   set transform_proc "::template::data::transform::$datatype"
 
-  if {[info commands $transform_proc] eq {}} {
+  if {[info commands $transform_proc] eq ""} {
 
     set values [ns_querygetall $element(id)]
 
@@ -747,8 +746,13 @@ ad_proc -private template::element::copy_value_to_values_if_defined {} {
     define values from value, if the latter is more defined
 } {
   upvar opts opts
-  # values is always defined, init to "" from template::element::defaults
+  # opts(values) is always defined, init to "" from template::element::defaults
   if { [info exists opts(value)] && [llength $opts(values)] == 0 } {
+      #
+      # GN: the following test is broken, since "opts(value)" is never
+      # empty; ... but changing this to a comparison with $opts(value)
+      # breaks eg ad_form.
+      #
     if { [string equal opts(value) {}] } {
       set opts(values) [list]
     } else {

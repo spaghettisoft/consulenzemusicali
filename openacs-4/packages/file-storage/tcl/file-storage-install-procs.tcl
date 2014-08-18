@@ -4,7 +4,7 @@ ad_library {
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2003-11-09
-    @cvs-id $Id: file-storage-install-procs.tcl,v 1.13 2009/12/05 02:08:14 donb Exp $
+    @cvs-id $Id: file-storage-install-procs.tcl,v 1.13.2.1 2013/10/03 08:33:57 gustafn Exp $
     
 }
 
@@ -166,7 +166,7 @@ ad_proc -private ::install::xml::action::file-storage-folder { node } {
 
     set folder_id [fs::new_folder -name $name -pretty_name $pretty_name -parent_id $root -creation_user [ad_conn user_id] -creation_ip 127.0.0.1]
 
-    if {![string equal $id ""]} {
+    if {$id ne "" } {
       set ::install::xml::ids($id) $folder_id
     }
 }

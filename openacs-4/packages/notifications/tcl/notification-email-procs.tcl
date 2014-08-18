@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 2002-06-20
     @author Ben Adida <ben@openforce.biz>
-    @cvs-id $Id: notification-email-procs.tcl,v 1.37.2.2 2013/09/18 08:57:40 gustafn Exp $
+    @cvs-id $Id: notification-email-procs.tcl,v 1.37.2.3 2013/10/03 08:14:20 gustafn Exp $
 
 }
 
@@ -262,7 +262,7 @@ namespace eval notification::email {
             # walk through the headers and extract each one
             set is_auto_reply_p 0
             while {$line ne ""} {
-                set next_line [lindex $file [expr {$i + 1}]]
+                set next_line [lindex $file $i+1]
                 if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
                     set end_of_headers_p 1
                 }

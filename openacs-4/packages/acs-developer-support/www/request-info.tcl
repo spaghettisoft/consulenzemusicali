@@ -1,4 +1,4 @@
-# $Id: request-info.tcl,v 1.18.2.1 2013/09/30 11:09:27 gustafn Exp $
+# $Id: request-info.tcl,v 1.18.2.4 2014/02/11 11:34:35 gustafn Exp $
 # File:        request-info.tcl
 # Author:      Jon Salz <jsalz@mit.edu>
 # Description: Displays information about a page request.
@@ -256,12 +256,12 @@ if { ![info exists property(db)] } {
 	}
 
         if { $command ne "getrow" || [template::util::is_true $getrow_p] } {
-            multirow append dbreqs $handle $command $sql [expr { $end - $start }] $value
+            multirow append dbreqs $handle [lindex $command 0] $sql [format %.2f [expr { $end - $start }]] $value
         }
 
     }
 
-    multirow sort dbreqs -integer -decreasing duration_ms
+    multirow sort dbreqs -real -decreasing duration_ms
 
     template::list::create \
         -name dbreqs \
@@ -330,7 +330,7 @@ if { [info exists property(prof)] } {
         }
 
         if { $page_fragment_cache_p } {
-            if { [string match *.adp $tag]} {
+            if { [string match "*.adp" $tag]} {
                 append file_links " <a href=\"send?output=$request:[ns_urlencode $tag]\" title=\"output\">o</a>"
                 if {[ns_cache get ds_page_bits "$request:$tag" dummy]} {
                     set size [string length $dummy]

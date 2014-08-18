@@ -337,11 +337,11 @@ database updates when the form is submitted and validated:
 
 <programlisting>
 
-if [template::form is_valid new_note] {
+if {[template::form is_valid new_note]} {
   set user_id [ad_conn user_id]
   set peeraddr [ad_conn peeraddr]
 
-  if [info exists note_id] {
+  if {[info exists note_id]} {
     db_dml note_update {
       update notes
       set title = :title,
@@ -432,7 +432,7 @@ We also saw how to use the templating system's forms API in a simple
 way, to create forms based pages with minimal duplication of code.
 </para>
 
-<para><phrase role="cvstag">($Id: subsites.xml,v 1.8 2006/07/17 05:38:37 torbenb Exp $)</phrase></para>
+<para><phrase role="cvstag">($Id: subsites.xml,v 1.8.12.1 2013/10/13 10:33:55 gustafn Exp $)</phrase></para>
 
 </sect2>
 

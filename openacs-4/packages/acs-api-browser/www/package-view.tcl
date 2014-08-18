@@ -7,7 +7,7 @@ ad_page_contract {
         <code>procs</code> or <code>content</code>.
     @author Jon Salz (jsalz@mit.edu)
     @creation-date 3 Jul 2000
-    @cvs-id $Id: package-view.tcl,v 1.7.2.3 2013/09/15 12:04:31 gustafn Exp $
+    @cvs-id $Id: package-view.tcl,v 1.7.2.4 2013/10/16 20:08:07 gustafn Exp $
 } {
     version_id
     { public_p "" }
@@ -137,8 +137,7 @@ switch $kind {
                 for { set n_same_components 0 } \
                         { $n_same_components < [llength $last_components] } \
                         { incr n_same_components } {
-                    if { ![string equal [lindex $last_components $n_same_components] \
-                            [lindex $components $n_same_components]] } {
+                    if { [lindex $last_components $n_same_components] ne [lindex $components $n_same_components] } {
                         break
                     }
                 }

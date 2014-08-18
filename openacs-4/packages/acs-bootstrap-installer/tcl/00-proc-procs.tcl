@@ -294,6 +294,7 @@ proc ad_proc args {
     if { [llength $arg_list] > 0 } {
         set first_arg [lindex $arg_list 0]
         if { [llength $first_arg] == 0 || [llength $first_arg] > 2 } {
+	    ns_log Warning "Convert old (deprecated) style proc: $proc_name"
             set new_arg_list [list]
             foreach { switch default_value } $first_arg {
                 lappend new_arg_list [list $switch $default_value]
@@ -415,8 +416,9 @@ proc ad_proc args {
 
     # Backward compatibility: set proc_doc and proc_source_file
     nsv_set proc_doc $proc_name [lindex $doc_elements(main) 0]
-    if { [nsv_exists proc_source_file $proc_name] \
-	    && [nsv_get proc_source_file $proc_name] ne [info script]  } {
+    if { [nsv_exists proc_source_file $proc_name] 
+	 && [nsv_get proc_source_file $proc_name] ne [info script]  
+     } {
         ns_log Warning "Multiple definition of $proc_name in [nsv_get proc_source_file $proc_name] and [info script]"
     }
     nsv_set proc_source_file $proc_name [info script]
@@ -852,7 +854,7 @@ ad_library {
 
     @creation-date 7 Jun 2000
     @author Jon Salz (jsalz@mit.edu)
-    @cvs-id $Id: 00-proc-procs.tcl,v 1.41.2.10 2013/10/16 19:37:01 gustafn Exp $
+    @cvs-id $Id: 00-proc-procs.tcl,v 1.41.2.11 2013/12/05 11:04:13 gustafn Exp $
 }
 
 ad_proc -public empty_string_p {query_string} {

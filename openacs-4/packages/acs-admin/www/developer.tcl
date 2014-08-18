@@ -4,10 +4,8 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
 
     @creation-date September 21, 2003
-    @cvs-id $Id: developer.tcl,v 1.1 2003/09/21 19:21:47 lars Exp $
+    @cvs-id $Id: developer.tcl,v 1.1.22.1 2013/10/17 08:44:30 gustafn Exp $
 }
 
 set page_title "Developer's Administration"
 set context [list $page_title]
-
-set acs_root_dir [acs_root_dir]

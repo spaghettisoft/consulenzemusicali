@@ -3,7 +3,7 @@
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 
-# $Id: paginator-procs.tcl,v 1.19.2.3 2013/09/29 18:49:59 gustafn Exp $
+# $Id: paginator-procs.tcl,v 1.19.2.6 2013/10/16 11:01:10 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -35,7 +35,7 @@ ad_proc -public template::paginator { command args } {
     @see template::paginator::get_row_last
     @see template::paginator::reset
 } {
-  eval paginator::$command $args
+  paginator::$command {*}$args
 }
 
 ad_proc -public template::paginator::create { statement_name name query args } {
@@ -110,7 +110,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     # recommended. Unfortunately, several places in OpenACS have this
     # problem.
     #
-    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
+    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  set title [lindex $opts(printing_prefs) 0]
 	  set stylesheet [lindex $opts(printing_prefs) 1]
@@ -228,7 +228,8 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
       set i 0
       set page_size $properties(pagesize)
       set context_ids [list]
-      
+      set row_ids ""
+
       foreach row $ids {
 
           lappend row_ids [lindex $row 0]
@@ -241,11 +242,6 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
 
       set properties(context_ids) $context_ids
       cache set $name:$query:context_ids $context_ids $properties(timeout)
-
-
-      if { [template::util::is_nil row_ids] } {
-          set row_ids ""
-      }
 
       set properties(row_ids) $row_ids
 
@@ -667,7 +663,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   # If the paginator is contextual, set the context
   if { [info exists properties(context_ids)] } {
     foreach elm { next_page previous_page next_group previous_group } {
-      if { [exists_and_not_null info($elm)] } {
+      if { ([info exists info($elm)] && $info($elm) ne "") } {
         set info(${elm}_context) [lindex $properties(context_ids) $info($elm)-1]
       }
     }

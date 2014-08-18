@@ -3,13 +3,13 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 10 November 2000
-    @cvs-id $Id: version-delete.tcl,v 1.12.8.1 2013/09/06 16:01:49 gustafn Exp $
+    @cvs-id $Id: version-delete.tcl,v 1.12.8.3 2014/07/29 11:24:04 gustafn Exp $
 } {
-    version_id:integer,notnull
+    version_id:naturalnum,notnull
     {confirmed_p "f"}
 } -validate {
     valid_version -requires {version_id} {
-	if ![fs_version_p $version_id] {
+	if {![fs_version_p $version_id]} {
 	    ad_complain [_ file-storage.lt_version_not_valid]
 	}
     }

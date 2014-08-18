@@ -3,7 +3,7 @@ ad_library {
   
   @author Gustaf Neumann (neumann@wu-wien.ac.at)
   @creation-date 2007-09-24
-  @cvs-id $Id: 06-package-procs.tcl,v 1.29 2011/08/11 13:04:24 gustafn Exp $
+  @cvs-id $Id: 06-package-procs.tcl,v 1.29.6.3 2014/02/15 00:32:31 gustafn Exp $
 }
 
 namespace eval ::xo {
@@ -22,7 +22,7 @@ namespace eval ::xo {
   } {
     my instvar package_key
     if {[info exists privilege]} {
-      set sql [::xo::db::sql select -vars package_id \
+      set sql [::xo::dc select -vars package_id \
                    -from "apm_packages, acs_object_party_privilege_map ppm, site_nodes s" \
                    -where {
                      package_key = :package_key 
@@ -31,7 +31,7 @@ namespace eval ::xo {
                      and ppm.party_id = :party_id
                      and ppm.privilege = :privilege
                    } -limit 1]
-      db_string [my qn get_package_id] $sql
+      ::xo::dc get_value get_package_id $sql
     } else {
       ::xo::parameter get_package_id_from_package_key -package_key $package_key
     }
@@ -44,18 +44,18 @@ namespace eval ::xo {
   } {
     my instvar package_key
     if {$include_unmounted} {
-      set result [db_list [my qn get_xowiki_packages] {select package_id \
-        from apm_packages where package_key = :package_key}]
+      set result [::xo::dc list get_xowiki_packages {select package_id \
+                                                         from apm_packages where package_key = :package_key}]
     } else {
-      set result [db_list [my qn get_mounted_packages] {select package_id \
-        from apm_packages p, site_nodes s  \
-        where package_key = :package_key and s.object_id = p.package_id}]
+      set result [::xo::dc list get_mounted_packages {select package_id \
+                                                          from apm_packages p, site_nodes s  \
+                                                          where package_key = :package_key and s.object_id = p.package_id}]
     }
     if {$closure} {
       foreach subclass [my info subclass] {
-	foreach id [$subclass instances -include_unmounted $include_unmounted -closure true] {
-	  lappend result $id
-	}
+        foreach id [$subclass instances -include_unmounted $include_unmounted -closure true] {
+          lappend result $id
+        }
       }
     }
     return [lsort -integer $result]
@@ -120,7 +120,7 @@ namespace eval ::xo {
     } else {
       my require -url $url $package_id
     }
-      
+    
     #
     # In case the login expired, we can force an early login to
     # prevent later login redirects, which can cause problems
@@ -129,9 +129,9 @@ namespace eval ::xo {
     # might not require the real user_id.
     #
     #my msg "force [$package_id force_refresh_login] &&\
-    #	[::xo::cc set untrusted_user_id] != [::xo::cc user_id]"
+        #    [::xo::cc set untrusted_user_id] != [::xo::cc user_id]"
     if {[$package_id force_refresh_login] && 
-	[::xo::cc set untrusted_user_id] != [::xo::cc user_id]} {
+        [::xo::cc set untrusted_user_id] != [::xo::cc user_id]} {
       auth::require_login
     }
 
@@ -201,7 +201,7 @@ namespace eval ::xo {
   #
   # get apm_package class  #### missing in acs_attributes: instance_name, default_locale
   #::xo::db::Class get_class_from_db -object_type apm_package
- 
+  
   #ns_log notice [::xo::db::apm_package serialize]
   #ns_log notice =======================================
 
@@ -219,7 +219,7 @@ namespace eval ::xo {
         url 
         {context ::xo::cc}
         package_url
-	{force_refresh_login false}
+        {force_refresh_login false}
       }
 
   ::xo::Package instforward query_parameter        {%my set context} %proc
@@ -237,7 +237,7 @@ namespace eval ::xo {
     #my log "--get_parameter <$attribute> <$default> returned <$param>"
     return $param
   }
- 
+  
   ::xo::Package instproc init args {
     my instvar id url
     set package_url [lindex [site_node::get_url_from_object_id -object_id $id] 0]
@@ -248,7 +248,7 @@ namespace eval ::xo {
       my package_key $info(package_key)
       my instance_name $info(instance_name)
     } else {
-      db_1row [my qn package_info] {
+      ::xo::dc 1row package_info {
         select package_key, instance_name from apm_packages where package_id = :id
       }
       my package_key $package_key
@@ -333,7 +333,7 @@ namespace eval ::xo {
       eval [::xo::cc set __continuation]
     } else {
       if {[string length $text] > 1} {
-	set status_code [expr {[::xo::cc exists status_code] ? [::xo::cc set status_code] : 200}]
+        set status_code [expr {[::xo::cc exists status_code] ? [::xo::cc set status_code] : 200}]
         #my log "REPLY [my set delivery] 200 [my set mime_type]"
         [my set delivery] $status_code [my set mime_type] $text
       }
@@ -374,7 +374,14 @@ namespace eval ::xo {
     #my log "--after adp"
     return $text
   }
- 
+  
   #ns_log notice [::xo::Package serialize]
 
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 2
+#    indent-tabs-mode: nil
+# End:

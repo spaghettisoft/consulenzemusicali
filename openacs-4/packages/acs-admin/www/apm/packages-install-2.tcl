@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date Mon Oct  9 00:13:43 2000
-    @cvs-id $Id: packages-install-2.tcl,v 1.12.4.6 2013/09/28 12:10:00 gustafn Exp $
+    @cvs-id $Id: packages-install-2.tcl,v 1.12.4.8 2013/10/11 11:43:46 gustafn Exp $
 } {
     {install:multiple ""}
     {enable:multiple ""}
@@ -38,7 +38,7 @@ foreach spec_file $spec_files {
     lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
             $package(embeds) $package(extends) $package(provides) $package(requires) ""]
     
-    if { [lsearch -exact $install $package(package.key)] != -1 } {
+    if {$package(package.key) in $install} {
         # This is a package which we should install
         lappend install_spec_files $spec_file
     }
@@ -87,7 +87,7 @@ if {![info exists install_spec_files]} {
 	    </form>
 	}]
 	
-    } elseif { ([lindex $dependency_results 0] == 1) || $force_p eq "t" } {
+    } elseif { ([lindex $dependency_results 0] == 1) || $force_p == "t" } {
 
 	### Check passed!  Initiate install.
 

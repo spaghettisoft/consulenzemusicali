@@ -1,7 +1,7 @@
 ad_page_contract {
     @author Neophytos Demetriou <k2pts@cytanet.com.cy>
     @creation-date September 01, 2001
-    @cvs-id $Id: search.tcl,v 1.37.2.3 2013/09/30 10:58:54 gustafn Exp $
+    @cvs-id $Id: search.tcl,v 1.37.2.4 2013/10/26 08:56:56 gustafn Exp $
 } {
     q:trim
     {t:trim ""}
@@ -164,7 +164,7 @@ set count $result(count)
 
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
-for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
+for { set __i 0 } { $__i < $high - $low + 1 } { incr __i } {
     if {[catch {
         set object_id [lindex $result(ids) $__i]
         if {$object_id eq ""} {

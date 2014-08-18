@@ -3,7 +3,7 @@ ad_library {
 
     @author John Prevost <jmp@arsdigita.com>
     @creation-date 2000-09-01
-    @cvs-id $Id: acs-messaging-procs.tcl,v 1.7 2009/07/12 01:08:30 donb Exp $
+    @cvs-id $Id: acs-messaging-procs.tcl,v 1.7.6.1 2013/10/02 10:16:05 gustafn Exp $
 }
 
 ad_proc -public acs_message_p {
@@ -133,7 +133,7 @@ ad_proc -private acs_messaging_timezone_offset {
 } {
     Returns a best guess of the timezone offset for the machine.
 } {
-    return [format "%+05d" [expr ([lindex [ns_localtime] 2] - [lindex [ns_gmtime] 2]) * 100]]
+    return [format "%+05d" [expr {([lindex [ns_localtime] 2] - [lindex [ns_gmtime] 2]) * 100]}]
 }
 
 ad_proc -private acs_messaging_process_queue {

@@ -3,15 +3,15 @@ ad_page_contract {
 
     @author Kevin Scaldeferri (kevin@arsdigita.com)
     @creation-date 6 Nov 2000
-    @cvs-id $Id: simple-add-2.tcl,v 1.8.4.1 2013/09/06 16:01:48 gustafn Exp $
+    @cvs-id $Id: simple-add-2.tcl,v 1.8.4.3 2014/07/29 11:24:03 gustafn Exp $
 } {
-    folder_id:integer,notnull
+    folder_id:naturalnum,notnull
     title:notnull,trim
     description
     url:notnull,trim
 } -validate {
     valid_folder -requires {folder_id:integer} {
-	if ![fs_folder_p $folder_id] {
+	if {![fs_folder_p $folder_id]} {
 	    ad_complain "[_ file-storage.lt_The_specified_parent_]"
 	}
     }

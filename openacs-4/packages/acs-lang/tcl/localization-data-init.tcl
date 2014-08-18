@@ -7,7 +7,7 @@ ad_library {
 
     @creation-date 10 September 2000
     @author Jeff Davis (davis@xarg.net)
-    @cvs-id $Id: localization-data-init.tcl,v 1.18 2007/01/10 21:22:04 gustafn Exp $
+    @cvs-id $Id: localization-data-init.tcl,v 1.18.10.1 2013/10/02 09:10:22 gustafn Exp $
 }
 
 # Monetary amounts
@@ -122,9 +122,9 @@ namespace eval ::lang::util {
     # Straight (localian) lookups
     set percent_match(a) {[lindex [lc_get -locale $locale "abday"] $lc_time_day_no]}
     set percent_match(A) {[lindex [lc_get -locale $locale "day"] $lc_time_day_no]}
-    set percent_match(b) {[lindex [lc_get -locale $locale "abmon"] [expr {$lc_time_month-1}]]}
-    set percent_match(h) {[lindex [lc_get -locale $locale "abmon"] [expr {$lc_time_month-1}]]}
-    set percent_match(B) {[lindex [lc_get -locale $locale "mon"] [expr {$lc_time_month-1}]]}
+    set percent_match(b) {[lindex [lc_get -locale $locale "abmon"] $lc_time_month-1]}
+    set percent_match(h) {[lindex [lc_get -locale $locale "abmon"] $lc_time_month-1]}
+    set percent_match(B) {[lindex [lc_get -locale $locale "mon"] $lc_time_month-1]}
     set percent_match(p) {[lc_time_name_meridian $locale $lc_time_hours]}
 
     # Finally, static string replacements

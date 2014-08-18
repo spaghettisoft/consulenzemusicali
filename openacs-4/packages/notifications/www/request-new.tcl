@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Ben Adida (ben@openforce.net)
     @creation-date 2002-05-24
-    @cvs-id $Id: request-new.tcl,v 1.11.6.1 2013/08/27 12:20:39 gustafn Exp $
+    @cvs-id $Id: request-new.tcl,v 1.11.6.2 2013/10/11 18:12:55 gustafn Exp $
 } {
     type_id:integer,notnull
     object_id:integer,notnull
@@ -36,7 +36,7 @@ ad_form -name subscribe -export {type_id object_id return_url} -form {
     {delivery_method_id:integer(select)    
         {label "[_ notifications.Delivery_Method]"}
         {options $delivery_methods}
-        {value {[lindex [lindex $delivery_methods 0] 1]}}
+        {value {[lindex $delivery_methods 0 1]}}
     }
 } -on_submit {
 

@@ -6,7 +6,7 @@ ad_page_contract {
     @author Oumi Mehrotra (oumi@arsdigita.com)
 
     @creation-date 2001-02-23
-    @cvs-id $Id: change-join-policy-2.tcl,v 1.2.10.4 2013/09/09 16:44:19 gustafn Exp $
+    @cvs-id $Id: change-join-policy-2.tcl,v 1.2.10.5 2013/10/10 21:00:46 gustafn Exp $
 } {
     group_type:notnull
     default_join_policy:notnull
@@ -24,7 +24,7 @@ if { ![db_0or1row select_pretty_name {
     return
 }
 
-if {$dynamic_p ne "t" } {
+if {$dynamic_p != "t" } {
     ad_return_error "Cannot administer group type" "Group type \"$group_type\" can only be administered by programmers"
 }
 

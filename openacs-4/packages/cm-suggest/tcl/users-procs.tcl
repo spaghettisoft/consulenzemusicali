@@ -140,6 +140,7 @@ ad_proc -public cmit::group::get_subsite_group_id {
 ad_proc -public cmit::group::get_not_cached {
     -group_id:required
     -array:required
+    {-locale ""}
 } {
     Returns group datas
 } {
@@ -158,7 +159,9 @@ ad_proc -public cmit::group::get_not_cached {
 	      and o.object_id = :group_id
     " -column_array row
     # Get localized group name
-    set row(group_name) [_ [string trim $row(group_name) #]]
+    set translation_key [string trim $row(group_name) #]
+    set group_name [_ $translation_key]
+    set row(group_name) [lang::message::lookup $locale $translation_key $group_name]
 
     set thumbnail_id $row(thumbnail_id)
     
@@ -177,12 +180,13 @@ ad_proc -public cmit::group::get_not_cached {
 ad_proc -public cmit::group::get {
     -group_id:required
     -array:required
+    {-locale ""}
 } {
     Returns group datas
 } {
     upvar $array row
         
-    set array [util_memoize [list cmit::group::get_not_cached -group_id $group_id -array row]]
+    set array [util_memoize [list cmit::group::get_not_cached -group_id $group_id -locale $locale -array row]]
     array set row $array
     
     return $array

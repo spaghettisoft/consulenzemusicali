@@ -4,7 +4,7 @@
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          Stanislav Freidin (sfreidin@arsdigita.com)
 
-# $Id: util-procs.tcl,v 1.26.2.3 2013/09/13 13:32:10 gustafn Exp $
+# $Id: util-procs.tcl,v 1.26.2.8 2013/11/25 09:36:38 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -38,8 +38,8 @@ ad_proc -public template::util::get_opts { argv } {
     # Get the next arg
     set next [lindex $argv [incr i]]
 
-    if { [string index $next 0] ne "-" ||
-         ! [regexp {[a-zA-Z*]} [string index $next 1] match] } {
+    if { [string index $next 0] ne "-" 
+	 || ![regexp {[a-zA-Z*]} [string index $next 1] match] } {
       
       # the next arg was not a switch so assume it is a parameter 
       set opts($opt) $next
@@ -492,7 +492,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 
   } else {
 
-    set path [get_server_root]/$url
+    set path $::acs::rootdir/$url
   }
 
   return [ns_normalizepath $path]
@@ -516,7 +516,7 @@ ad_proc -public template::util::get_url_directory { url } {
 } {
   set directory $url
 
-  set lastchar [string range $url [expr {[string length $url]-1}] end]
+  set lastchar [string range $url [string length $url]-1 end]
 
   if {$lastchar ne "/" } {
 
@@ -669,7 +669,11 @@ ad_proc -deprecated -public template::util::multirow_foreach { name code_text } 
   
 }
 
-ad_proc -public template::util::get_param { name {section {}} {key {}} } {
+ad_proc -public template::util::get_param { 
+    name 
+    {section ""} 
+    {key ""} 
+} {
     Retreive a stored parameter, or "" if no such parameter
     If section/key are present, read the parameter from the specified
     section.key in the INI file, and cache them under the given name
@@ -678,10 +682,10 @@ ad_proc -public template::util::get_param { name {section {}} {key {}} } {
   if { ![nsv_exists __template_config $name] } {
 
     # Extract the parameter from the ini file if possible
-    if { ![template::util::is_nil section] } {
+    if { $section ne "" } {
 
       # Use the name if no key is specified
-      if { [template::util::is_nil key] } {
+      if { $key ne "" } {
         set key $name
       }
 
@@ -713,7 +717,7 @@ ad_proc -public template::util::nvl { value value_if_null } {
     Analogous to SQL NVL
 } {
 
-  if { [template::util::is_nil value] } {
+  if { $value ne "" } {
     return $value_if_null
   } else {
     return $value
@@ -752,7 +756,7 @@ ad_proc -public template::get_resource_path {} {
     Get the template directory
     The body is doublequoted, so it is interpreted when this file is read
 } "
-  return \"[file dir [file dir [info script]]]/resources\"
+  return \"[file dirname [file dirname [info script]]]/resources\"
 "
 
 

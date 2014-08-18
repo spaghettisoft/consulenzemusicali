@@ -3,7 +3,7 @@ ad_page_contract {
     @author rhs@mit.edu
     @author bquinn@arsidigta.com
     @creation-date 2000-09-09
-    @cvs-id $Id: index.tcl,v 1.27.4.7 2013/09/17 22:24:40 gustafn Exp $
+    @cvs-id $Id: index.tcl,v 1.27.4.8 2013/10/10 21:00:46 gustafn Exp $
     
 } {
     {expand:integer,multiple ""}
@@ -64,7 +64,7 @@ if {0 && $subsite_number > 100} {
 }
 
 db_foreach path_select {} {
-    if {$node_id != $root_id && $admin_p eq "t"} {
+    if {$node_id != $root_id && $admin_p == "t"} {
         append head [subst {<a href=".?[export_vars -url {expand:multiple {root_id $node_id}}]">}]
     }
     if {$name eq ""} {
@@ -73,11 +73,11 @@ db_foreach path_select {} {
 	append head $name
     }
     
-    if {$node_id != $root_id && $admin_p eq "t"} {
+    if {$node_id != $root_id && $admin_p == "t"} {
 	append head "</a>"
     }
     
-    if {$directory_p eq "t"} {
+    if {$directory_p == "t"} {
 	append head "/"
     }
 } if_no_rows {
@@ -210,7 +210,7 @@ db_foreach nodes_select {} {
 
     if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue } 
         
-    if {$directory_p eq "t"} {
+    if {$directory_p == "t"} {
 	set add_folder_url "?[export_vars -url {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]"
 	if {$object_id eq ""} {
 	    set mount_url "mount?[export_vars -url {expand:multiple root_id node_id}]"

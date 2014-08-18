@@ -3,7 +3,7 @@ ad_library {
 
     @author Ola Hansson (ola@polyxena.net)
     @creation-date 2003-09-21
-    @cvs-id $Id: spellcheck-procs.tcl,v 1.21.2.3 2013/09/23 09:41:52 gustafn Exp $
+    @cvs-id $Id: spellcheck-procs.tcl,v 1.21.2.4 2013/10/16 19:56:15 gustafn Exp $
 }
 
 namespace eval template {}
@@ -200,7 +200,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     # the HOME environment set, and setting env(HOME) doesn't appear
     # to work from AOLserver.
 
-    set spelling_wrapper [file join [acs_root_dir] bin webspell]
+    set spelling_wrapper [file join $::acs::rootdir bin webspell]
 
     if {![file executable $spelling_wrapper]} {
 	#
@@ -211,7 +211,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	if {!$no_abort_p} {
 	    ad_return_error "Webspell could not be executed" \
 		"Spell-checking is enabled but the spell-check wrapper\
-		 ([acs_root_dir]/bin/webspell) returns  not be executed.\
+		 ($::acs::rootdir/bin/webspell) returns  not be executed.\
 		 Check that the wrapper exists, and that its permissions are correct."
 	    ad_script_abort
 	} else {

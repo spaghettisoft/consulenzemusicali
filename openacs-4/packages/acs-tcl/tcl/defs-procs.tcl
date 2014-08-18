@@ -5,7 +5,7 @@ ad_library {
 
     @author Many others at ArsDigita and in the OpenACS community.
     @creation-date 2 April 1998
-    @cvs-id $Id: defs-procs.tcl,v 1.62.2.5 2013/09/28 15:38:30 gustafn Exp $
+    @cvs-id $Id: defs-procs.tcl,v 1.62.2.7 2013/10/16 11:08:15 gustafn Exp $
 }
 
 ad_proc -public ad_acs_version_no_cache {} {
@@ -404,19 +404,21 @@ ad_proc ad_return_exception_page {
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
 } {
-    set error_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnError" -default "/packages/acs-tcl/lib/ad-return-error"]
+    set error_template [parameter::get_from_package_key \
+			    -package_key "acs-tcl" \
+			    -parameter "ReturnError" \
+			    -default "/packages/acs-tcl/lib/ad-return-error"]
     set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] $error_template]
     if {$status > 399 
         && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
         && [string length $page] < 512 } { 
-        append page [string repeat " " [expr 513 - [string length $page]]]
+        append page [string repeat " " [expr {513 - [string length $page]}]]
     }
     
     ns_return $status text/html $page
 
     # raise abortion flag, e.g., for templating
-    global request_aborted
-    set request_aborted [list $status $title]
+    set ::request_aborted [list $status $title]
 }
 
 
@@ -456,8 +458,7 @@ ad_proc ad_return_forbidden {
     Title and explanation is optional. If neither is specified,
     then a default "Permission Denied" message will be displayed.
 } {
-    if { [template::util::is_nil title] 
-         && [template::util::is_nil explanation] } {
+    if { $title eq "" && $explanation eq "" } {
 	set title "Permission Denied"
 	set explanation "Sorry, you haven't been given access to this area."
     }

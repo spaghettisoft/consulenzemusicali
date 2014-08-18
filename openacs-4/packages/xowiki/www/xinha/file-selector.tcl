@@ -2,7 +2,7 @@ ad_page_contract {
   @author Guenter Ernst guenter.ernst@wu-wien.ac.at
   @author Gustaf Neumann neumann@wu-wien.ac.at
   @creation-date 13.10.2005
-  @cvs-id $Id: file-selector.tcl,v 1.15 2012/09/13 16:07:08 victorg Exp $
+  @cvs-id $Id: file-selector.tcl,v 1.15.2.1 2013/10/13 18:13:59 gustafn Exp $
 } {     
   {fs_package_id:integer,notnull,optional}
   {folder_id:integer,optional}
@@ -247,7 +247,7 @@ template::list::create \
       }
     }
 
-set order_by_clause [expr {[exists_and_not_null orderby] ?
+set order_by_clause [expr {([info exists orderby] && $orderby ne "") ?
                            [template::list::orderby_clause -orderby -name contents] :
                            " order by fs_objects.sort_key, fs_objects.name asc"}]
 

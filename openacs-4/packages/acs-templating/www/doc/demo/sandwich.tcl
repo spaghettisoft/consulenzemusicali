@@ -1,5 +1,5 @@
 ad_page_contract {
-  @cvs-id $Id: sandwich.tcl,v 1.3 2007/01/10 21:22:13 gustafn Exp $
+  @cvs-id $Id: sandwich.tcl,v 1.3.10.1 2013/10/10 21:20:11 gustafn Exp $
 } {
   {grid ""}
 } -properties {}
@@ -31,6 +31,6 @@ if { [form is_request sandwich] } {
 }
 
 # Choose standard or gridded output
-if {[element get_value sandwich grid] eq "t"} {
+if {[element get_value sandwich grid] == "t"} {
   ad_return_template sandwich-grid
 }

@@ -3,7 +3,7 @@
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 #          
-# $Id: request-procs.tcl,v 1.7 2007/01/10 21:22:12 gustafn Exp $
+# $Id: request-procs.tcl,v 1.7.10.1 2013/10/05 12:55:10 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -28,7 +28,7 @@ ad_proc -public template::request {
 } {
   Dispatch procedure for requests.
 } {
-  eval request::$command $args
+  request::$command {*}$args
 }
 
 ad_proc -public template::request::create { args } {
@@ -39,7 +39,7 @@ ad_proc -public template::request::create { args } {
                    Equivalent to calling set_param for each parameter, but
                    requiring slightly less typing.
 } {
-  eval template::form::create request $args
+  template::form::create request {*}$args
 
   set level [template::adp_level]
 
@@ -89,7 +89,7 @@ ad_proc -public template::request::set_param { name args } {
     @see template::element::create
 } {
   set level [template::adp_level]
-  eval template::element::create request $name $args
+  template::element::create request $name {*}$args
 
   # Set a local variable with the parameter value but no
   # clobber the variable if it already exists.

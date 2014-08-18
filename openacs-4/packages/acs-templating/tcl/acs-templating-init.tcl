@@ -3,7 +3,7 @@
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
 # Author: Karl Goldstein (karlg@arsdigita.com)
-# $Id: acs-templating-init.tcl,v 1.4 2005/01/13 13:56:00 jeffd Exp $
+# $Id: acs-templating-init.tcl,v 1.4.16.1 2013/10/07 16:42:30 gustafn Exp $
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
@@ -68,8 +68,6 @@ namespace eval template {
 
   namespace eval wizard {
     
-    # stack level at which wizard is created
-    variable parse_level
     # An array of default buttons and their names
     variable default_button_labels
     array set default_button_labels \
@@ -81,9 +79,6 @@ namespace eval template {
 
   namespace eval paginator {
     
-    # stack level at which paginator is created
-    variable parse_level
-
     # Default values for paginator properties
     variable defaults
     set defaults [list pagesize 20 timeout 600 groupsize 10 page_offset 0]
@@ -93,9 +88,6 @@ namespace eval template {
     namespace eval validate {}
     namespace eval transform {}
   }
-
-  # keep track of the stack frame in which a template is rendered at run-time
-  variable parse_level
 
   # used for compiling Tcl code from ADP template
   variable parse_list

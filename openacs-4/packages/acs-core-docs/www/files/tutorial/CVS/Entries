@@ -1,7 +1,6 @@
 /index.tcl/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /myfirstpackage-create.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /myfirstpackage-drop.sql/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
-/myfirstpackage-procs.tcl/1.5/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /note-delete.tcl/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /note-edit.tcl/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /note-list.adp/1.2/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
@@ -10,4 +9,5 @@
 /note.vuh/1.1/Tue Sep 17 21:24:21 2013//Topenacs-5-8-compat
 /index.adp/1.2.20.1/Tue Oct  1 23:26:18 2013//Topenacs-5-8-compat
 /note-edit.adp/1.2.20.1/Tue Oct  1 23:26:18 2013//Topenacs-5-8-compat
+/myfirstpackage-procs.tcl/1.5.10.1/Mon Aug 18 21:42:28 2014//Topenacs-5-8-compat
 D

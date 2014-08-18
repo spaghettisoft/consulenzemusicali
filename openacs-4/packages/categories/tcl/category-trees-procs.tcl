@@ -4,7 +4,7 @@ ad_library {
     @author Timo Hentschel (timo@timohentschel.de)
 
     @creation-date 16 April 2003
-    @cvs-id $Id: category-trees-procs.tcl,v 1.25.4.2 2013/09/29 12:04:41 gustafn Exp $
+    @cvs-id $Id: category-trees-procs.tcl,v 1.25.4.5 2013/10/26 09:31:10 gustafn Exp $
 }
 
 namespace eval category_tree {
@@ -366,12 +366,12 @@ namespace eval category_tree {
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
             } else {
                 incr right_ind 1
-                while {$right_ind == [lindex [lindex $stack 0] 0] && $cur_level > 0} {
+                while {$right_ind == [lindex $stack 0 0] && $cur_level > 0} {
                     incr cur_level -1
                     incr right_ind 1
                     set stack [lrange $stack 1 end]
                 }
-                set invalid_p [lindex [lindex $stack 0] 1]
+                set invalid_p [lindex $stack 0 1]
             }
         }
         if {$tree_id_old != 0} {
@@ -391,18 +391,18 @@ namespace eval category_tree {
         set tree [list]
         db_foreach flush_cache "" {
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
-            if { [expr {$right_ind - $left_ind}] > 1} {
+            if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
             } else {
                 incr right_ind 1
-                while {$right_ind == [lindex [lindex $stack 0] 0] && $cur_level > 0} {
+                while {$right_ind == [lindex $stack 0 0] && $cur_level > 0} {
                     incr cur_level -1
                     incr right_ind 1
                     set stack [lrange $stack 1 end]
                 }
-                set invalid_p [lindex [lindex $stack 0] 1]
+                set invalid_p [lindex $stack 0 1]
             }
         }
         if {[info exists category_id]} {
@@ -584,9 +584,9 @@ ad_proc -public category_tree::get_multirow {
 	template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
     }
     foreach mapped_tree $mapped_trees {
-        foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $mapped_tree { break }
+        lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p
         foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
-            foreach {category_id category_name deprecated_p level} $category { break }
+            lassign $category category_id category_name deprecated_p level
             if { $level > 1 } {
                 set pad "[string repeat "&nbsp;" [expr {2 * $level - 4}]].."
             } else { 

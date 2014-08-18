@@ -1,7 +1,7 @@
 ad_library {
     Provides procedures to spit out the navigational parts of the site.
 
-    @cvs-id $Id: navigation-procs.tcl,v 1.30.2.2 2013/09/29 19:23:18 gustafn Exp $
+    @cvs-id $Id: navigation-procs.tcl,v 1.30.2.4 2013/10/31 17:38:01 gustafn Exp $
     @author philg@mit.edu
     @creation-date 11/5/98 (adapted originally from the Cognet server)     
 }
@@ -124,8 +124,7 @@ ad_proc -public ad_context_bar_multirow {
     template::multirow create $multirow url label
 
     foreach elm [ad_context_node_list -from_node $from_node $node_id] {
-        set elm_0 [lindex $elm 0]
-        set elm_1 [lindex $elm 1]
+	lassign $elm elm_0 elm_1
         if { $node_id_url_end > 0 && [string match -nocase $node_id_url [string range $elm_0 0 ${node_id_url_end}-1] ] } {
             set elm_0 [string range $elm_0 $node_id_url_end end]
         }
@@ -181,7 +180,7 @@ ad_proc -public ad_context_bar {
 
     if {[llength $args] == 0} { 
         # fix last element to just be literal string
-        set context [lreplace $context end end [lindex [lindex $context end] 1]]
+        set context [lreplace $context end end [lindex $context end 1]]
     } else {
 	if {![string match "\{*" $args]} {
 	    # args is not a list, transform it into one.
@@ -387,7 +386,7 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
 	# the current url then select it
 	if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
  	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
-	} elseif {$highlight_url eq "" && [string match *$url_stub* [lindex $urls $counter]]} {
+	} elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $urls $counter]]} {
 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
 	} else {
 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\">$item"

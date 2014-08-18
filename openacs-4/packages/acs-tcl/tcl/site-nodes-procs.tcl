@@ -5,7 +5,7 @@ ad_library {
     @author rhs@mit.edu
     @author yon (yon@openforce.net)
     @creation-date 2000-09-06
-    @cvs-id $Id: site-nodes-procs.tcl,v 1.90.2.2 2013/09/29 14:55:33 gustafn Exp $
+    @cvs-id $Id: site-nodes-procs.tcl,v 1.90.2.4 2013/10/10 20:44:08 gustafn Exp $
 
 }
 
@@ -484,7 +484,7 @@ ad_proc -public site_node::get_from_url {
             if {[nsv_exists site_nodes $url]} {
                 array set node [nsv_get site_nodes $url]
 
-                if {$node(pattern_p) eq "t" && $node(object_id) ne ""} {
+                if {$node(pattern_p) == "t" && $node(object_id) ne ""} {
                     return [array get node]
                 }
             }
@@ -799,7 +799,7 @@ ad_proc -public site_node::closest_ancestor_package {
     if { $include_self_p && $package_key ne ""} {
         array set node_array [site_node::get -url $url]
 
-        if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
+        if {$node_array(package_key) in $package_key} {
             return $node_array($element)
         }
     }
@@ -1015,7 +1015,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     # Try the URL as is.
     if {[catch {nsv_get site_nodes $url} result] == 0} {
           array set node $result
-          if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+          if {$node(package_key) in $package_keys} {
               return $node(package_id)
           }
     }
@@ -1025,7 +1025,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
           append url "/"
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(package_key) in $package_keys} {
                     return $node(package_id)
               }
           }
