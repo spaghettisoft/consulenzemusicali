@@ -6,7 +6,7 @@ $(function() {
 	    cssSelectorAncestor: "#jp_container_@playlist_dom_id@"
     }, [
 	<multiple name="songs" delimiter=",">
-	  { mp3:"@songs.song_url@" }
+	  { mp3:"@songs.song_url;noquote@" }
 	</multiple>
     ],{
 	playlistOptions: {
